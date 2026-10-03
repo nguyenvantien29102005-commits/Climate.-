@@ -1,0 +1,6880 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>CLIMASCORE | Mô hình tác động 3D Cháy rừng</title>
+
+<style>
+/* =========================================================
+   CLIMASCORE — WILDFIRE IMPACT 3D LAB
+   ========================================================= */
+
+:root{
+    --bg:#031016;
+    --glass:rgba(6,22,28,.82);
+    --glass2:rgba(8,31,37,.90);
+    --line:rgba(255,255,255,.09);
+
+    --orange:#ff7b25;
+    --yellow:#ffd65c;
+    --red:#ff493d;
+    --cyan:#46e9ff;
+    --green:#4fe0a0;
+
+    --text:#f5fbfc;
+    --muted:#98afb6;
+
+    --shadow:0 25px 75px rgba(0,0,0,.42);
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    margin:0;
+    overflow:hidden;
+
+    background:#020c10;
+    color:var(--text);
+
+    font-family:
+    Inter,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+}
+
+button,
+input{
+    font:inherit;
+}
+
+button{
+    -webkit-tap-highlight-color:transparent;
+}
+
+/* =========================================================
+   CANVAS
+   ========================================================= */
+
+#app{
+    position:fixed;
+    inset:0;
+}
+
+canvas{
+    display:block;
+}
+
+/* =========================================================
+   TOP HEADER
+   ========================================================= */
+
+.topbar{
+    position:fixed;
+    z-index:100;
+
+    left:18px;
+    right:18px;
+    top:16px;
+
+    height:72px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:18px;
+
+    padding:12px 16px;
+
+    border-radius:21px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(6,21,27,.91),
+            rgba(9,29,33,.78)
+        );
+
+    backdrop-filter:blur(20px);
+
+    border:1px solid var(--line);
+
+    box-shadow:var(--shadow);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    min-width:0;
+}
+
+.brandIcon{
+    width:47px;
+    height:47px;
+
+    flex:none;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:15px;
+
+    font-size:24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffc24e,
+            #ff5b30
+        );
+
+    box-shadow:
+        0 8px 30px
+        rgba(255,88,30,.30);
+}
+
+.brandText{
+    min-width:0;
+}
+
+.brandText b{
+    display:block;
+    font-size:15px;
+    letter-spacing:.8px;
+}
+
+.brandText span{
+    display:block;
+    margin-top:3px;
+
+    color:#a8bbc1;
+    font-size:11px;
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.headerCenter{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+}
+
+.stageBtn{
+    border:1px solid var(--line);
+
+    color:#c1d0d4;
+
+    background:
+        rgba(255,255,255,.045);
+
+    padding:9px 12px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:12px;
+    font-weight:800;
+
+    transition:.2s;
+}
+
+.stageBtn:hover{
+    color:#fff;
+    border-color:
+        rgba(255,156,70,.35);
+}
+
+.stageBtn.active{
+    color:#130b04;
+
+    border-color:transparent;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffd760,
+            #ff7530
+        );
+
+    box-shadow:
+        0 7px 20px
+        rgba(255,105,35,.25);
+}
+
+.headerTools{
+    display:flex;
+    gap:8px;
+}
+
+.iconBtn{
+    width:42px;
+    height:42px;
+
+    border:1px solid var(--line);
+
+    border-radius:13px;
+
+    color:#fff;
+
+    background:
+        rgba(255,255,255,.045);
+
+    cursor:pointer;
+
+    display:grid;
+    place-items:center;
+
+    transition:.2s;
+}
+
+.iconBtn:hover{
+    transform:translateY(-2px);
+    background:
+        rgba(255,255,255,.09);
+}
+
+.iconBtn.active{
+    background:
+        rgba(70,233,255,.14);
+
+    border-color:
+        rgba(70,233,255,.35);
+
+    color:#6cecff;
+}
+
+/* =========================================================
+   LEFT PANEL
+   ========================================================= */
+
+.leftPanel{
+    position:fixed;
+
+    z-index:90;
+
+    left:18px;
+    top:104px;
+    bottom:20px;
+
+    width:320px;
+
+    overflow:auto;
+
+    padding-right:4px;
+
+    scrollbar-width:thin;
+    scrollbar-color:
+        rgba(255,255,255,.13)
+        transparent;
+}
+
+.panel{
+    border-radius:22px;
+
+    padding:17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(5,22,28,.88),
+            rgba(7,27,32,.76)
+        );
+
+    backdrop-filter:
+        blur(18px);
+
+    border:
+        1px solid var(--line);
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,.28);
+
+    margin-bottom:12px;
+}
+
+.panelTitle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    gap:10px;
+
+    margin-bottom:14px;
+}
+
+.panelTitle h3{
+    margin:0;
+
+    font-size:13px;
+    letter-spacing:.7px;
+}
+
+.panelTitle span{
+    padding:4px 8px;
+
+    border-radius:999px;
+
+    color:#6deaff;
+
+    background:
+        rgba(70,233,255,.08);
+
+    font-size:9px;
+    font-weight:900;
+
+    letter-spacing:1px;
+}
+
+.control{
+    margin-bottom:17px;
+}
+
+.control:last-child{
+    margin-bottom:0;
+}
+
+.controlHeader{
+    display:flex;
+    justify-content:space-between;
+
+    gap:10px;
+
+    margin-bottom:8px;
+
+    color:#a9bdc3;
+
+    font-size:11px;
+}
+
+.controlHeader strong{
+    color:#fff;
+    font-size:12px;
+}
+
+input[type="range"]{
+    width:100%;
+    height:5px;
+
+    appearance:none;
+
+    border-radius:999px;
+
+    outline:none;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(69,226,255,.8),
+            rgba(255,119,44,.9)
+        );
+}
+
+input[type="range"]::-webkit-slider-thumb{
+    appearance:none;
+
+    width:17px;
+    height:17px;
+
+    border-radius:50%;
+
+    background:#fff;
+
+    border:4px solid #179dd9;
+
+    box-shadow:
+        0 2px 10px rgba(0,0,0,.3);
+
+    cursor:pointer;
+}
+
+.toggleRow{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.toggle{
+    min-height:54px;
+
+    padding:9px;
+
+    border-radius:13px;
+
+    border:1px solid var(--line);
+
+    background:
+        rgba(255,255,255,.035);
+
+    color:#aabdc3;
+
+    cursor:pointer;
+
+    text-align:left;
+
+    transition:.2s;
+}
+
+.toggle b{
+    display:block;
+    color:#eaf5f7;
+
+    font-size:11px;
+    margin-bottom:2px;
+}
+
+.toggle small{
+    font-size:9px;
+}
+
+.toggle.on{
+    border-color:
+        rgba(69,227,255,.28);
+
+    background:
+        rgba(47,188,215,.10);
+}
+
+.toggle.on b{
+    color:#67eaff;
+}
+
+/* =========================================================
+   RIGHT DASHBOARD
+   ========================================================= */
+
+.rightPanel{
+    position:fixed;
+
+    z-index:90;
+
+    top:104px;
+    right:18px;
+    bottom:20px;
+
+    width:350px;
+
+    display:flex;
+    flex-direction:column;
+
+    gap:12px;
+
+    pointer-events:none;
+}
+
+.rightPanel > *{
+    pointer-events:auto;
+}
+
+.riskPanel{
+    padding:18px;
+
+    border-radius:23px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(7,24,29,.90),
+            rgba(9,29,33,.82)
+        );
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid var(--line);
+
+    box-shadow:var(--shadow);
+}
+
+.riskHead{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:13px;
+}
+
+.riskHead small{
+    color:#9fb1b7;
+    font-size:10px;
+    letter-spacing:1.2px;
+}
+
+.live{
+    display:flex;
+    align-items:center;
+    gap:6px;
+
+    color:#5ce4a7;
+    font-size:10px;
+    font-weight:900;
+}
+
+.liveDot{
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:#55e0a2;
+
+    box-shadow:
+        0 0 12px #55e0a2;
+
+    animation:pulseDot 1.2s infinite;
+}
+
+@keyframes pulseDot{
+    50%{
+        opacity:.35;
+    }
+}
+
+.riskMain{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:16px;
+}
+
+.riskLevel{
+    font-size:31px;
+    font-weight:950;
+    line-height:1;
+    letter-spacing:-1px;
+
+    color:#ffd45e;
+}
+
+.riskScore{
+    font-size:15px;
+    color:#a9bbc0;
+}
+
+.riskBar{
+    height:7px;
+    border-radius:999px;
+
+    margin-top:14px;
+
+    overflow:hidden;
+
+    background:
+        rgba(255,255,255,.07);
+}
+
+.riskBarFill{
+    width:0;
+    height:100%;
+
+    border-radius:inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            #4adf9d,
+            #f5da59,
+            #ff913b,
+            #ff443f
+        );
+
+    transition:
+        width .35s ease;
+}
+
+.metricGrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+
+    gap:8px;
+    margin-top:13px;
+}
+
+.metric{
+    padding:12px;
+
+    border-radius:15px;
+
+    background:
+        rgba(255,255,255,.038);
+
+    border:
+        1px solid
+        rgba(255,255,255,.055);
+}
+
+.metricLabel{
+    color:#8ca5ad;
+
+    font-size:9px;
+    letter-spacing:.7px;
+
+    text-transform:uppercase;
+}
+
+.metricValue{
+    margin-top:5px;
+
+    font-size:20px;
+    font-weight:900;
+}
+
+.metricUnit{
+    margin-left:2px;
+
+    color:#93abb2;
+
+    font-size:9px;
+    font-weight:500;
+}
+
+.impactPanel{
+    flex:1;
+
+    min-height:0;
+    overflow:auto;
+
+    padding:17px;
+
+    border-radius:23px;
+
+    background:
+        rgba(5,21,27,.88);
+
+    backdrop-filter:blur(18px);
+
+    border:
+        1px solid var(--line);
+
+    box-shadow:var(--shadow);
+
+    scrollbar-width:thin;
+    scrollbar-color:
+        rgba(255,255,255,.13)
+        transparent;
+}
+
+.impactTitle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:12px;
+}
+
+.impactTitle b{
+    font-size:12px;
+    letter-spacing:.8px;
+}
+
+.impactTitle span{
+    color:#ffaf5a;
+    font-size:10px;
+}
+
+.impactCard{
+    display:grid;
+    grid-template-columns:39px 1fr auto;
+
+    gap:10px;
+
+    align-items:center;
+
+    padding:11px;
+
+    margin-bottom:7px;
+
+    border-radius:14px;
+
+    background:
+        rgba(255,255,255,.033);
+
+    border:
+        1px solid
+        rgba(255,255,255,.055);
+}
+
+.impactIcon{
+    width:38px;
+    height:38px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:12px;
+
+    background:
+        rgba(255,119,40,.09);
+
+    font-size:19px;
+}
+
+.impactCard b{
+    display:block;
+    font-size:10px;
+    margin-bottom:3px;
+}
+
+.impactCard small{
+    display:block;
+
+    color:#8fa7af;
+    font-size:9px;
+    line-height:1.35;
+}
+
+.impactValue{
+    font-size:13px;
+    font-weight:900;
+}
+
+.impactLow{
+    color:#5cdfa2;
+}
+
+.impactMid{
+    color:#ffd25d;
+}
+
+.impactHigh{
+    color:#ff8145;
+}
+
+.impactExtreme{
+    color:#ff5149;
+}
+
+/* =========================================================
+   BOTTOM INFORMATION BAR
+   ========================================================= */
+
+.bottomBar{
+    position:fixed;
+
+    z-index:80;
+
+    left:355px;
+    right:383px;
+    bottom:20px;
+
+    min-height:74px;
+
+    display:flex;
+    align-items:center;
+
+    padding:12px 14px;
+
+    border-radius:20px;
+
+    background:
+        rgba(4,18,23,.82);
+
+    backdrop-filter:blur(17px);
+
+    border:
+        1px solid var(--line);
+
+    box-shadow:
+        0 18px 50px
+        rgba(0,0,0,.25);
+}
+
+.timeline{
+    width:100%;
+
+    display:grid;
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:7px;
+}
+
+.timeStep{
+    position:relative;
+
+    padding:9px 10px;
+
+    border-radius:12px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.055);
+
+    color:#8fa6ad;
+
+    background:
+        rgba(255,255,255,.025);
+
+    cursor:pointer;
+}
+
+.timeStep b{
+    display:block;
+    color:#cbd8db;
+
+    font-size:10px;
+}
+
+.timeStep small{
+    font-size:8px;
+}
+
+.timeStep.active{
+    background:
+        rgba(255,120,40,.10);
+
+    border-color:
+        rgba(255,126,45,.27);
+}
+
+.timeStep.active b{
+    color:#ffbb65;
+}
+
+/* =========================================================
+   FLOAT LABELS
+   ========================================================= */
+
+.label3D{
+    padding:6px 9px;
+
+    border-radius:10px;
+
+    border:
+        1px solid
+        rgba(255,255,255,.12);
+
+    background:
+        rgba(3,15,19,.78);
+
+    backdrop-filter:blur(8px);
+
+    color:white;
+
+    font-size:9px;
+
+    white-space:nowrap;
+
+    pointer-events:none;
+
+    box-shadow:
+        0 6px 20px rgba(0,0,0,.25);
+}
+
+.label3D b{
+    color:#63eaff;
+}
+
+/* =========================================================
+   WELCOME OVERLAY
+   ========================================================= */
+
+.intro{
+    position:fixed;
+    z-index:500;
+
+    inset:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding:25px;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(16,64,62,.35),
+            rgba(2,9,12,.96)
+        );
+
+    transition:
+        opacity .6s ease,
+        visibility .6s ease;
+}
+
+.intro.hidden{
+    opacity:0;
+    visibility:hidden;
+}
+
+.introCard{
+    width:min(760px,95vw);
+
+    padding:34px;
+
+    border-radius:30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(8,28,33,.96),
+            rgba(8,19,24,.94)
+        );
+
+    border:
+        1px solid
+        rgba(255,255,255,.10);
+
+    box-shadow:
+        0 30px 100px
+        rgba(0,0,0,.55);
+
+    text-align:center;
+}
+
+.introFire{
+    width:85px;
+    height:85px;
+
+    display:grid;
+    place-items:center;
+
+    margin:
+        0 auto 18px;
+
+    border-radius:25px;
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            #ffe36e,
+            #ff7431 55%,
+            #b52118
+        );
+
+    font-size:43px;
+
+    box-shadow:
+        0 0 60px
+        rgba(255,91,35,.26);
+}
+
+.introCard h1{
+    margin:0;
+
+    font-size:
+        clamp(30px,5vw,52px);
+
+    line-height:1;
+
+    letter-spacing:-2px;
+}
+
+.introCard h1 span{
+    color:#ff8a3d;
+}
+
+.introCard p{
+    max-width:620px;
+
+    margin:
+        15px auto 22px;
+
+    color:#9fb3ba;
+
+    font-size:13px;
+}
+
+.startBtn{
+    padding:13px 23px;
+
+    border:0;
+
+    border-radius:15px;
+
+    color:#180d04;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffdc61,
+            #ff7531
+        );
+
+    font-weight:950;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 12px 30px
+        rgba(255,109,38,.24);
+}
+
+.introHint{
+    margin-top:14px;
+
+    color:#6f8a92;
+    font-size:9px;
+}
+
+/* =========================================================
+   TOOLTIP / INFO
+   ========================================================= */
+
+.infoToast{
+    position:fixed;
+
+    z-index:200;
+
+    left:50%;
+    top:105px;
+
+    transform:
+        translateX(-50%)
+        translateY(-15px);
+
+    max-width:470px;
+
+    padding:12px 15px;
+
+    border-radius:15px;
+
+    background:
+        rgba(2,14,18,.88);
+
+    backdrop-filter:blur(15px);
+
+    border:
+        1px solid var(--line);
+
+    box-shadow:
+        0 15px 45px
+        rgba(0,0,0,.3);
+
+    color:#b5c8cd;
+
+    font-size:11px;
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:.3s;
+}
+
+.infoToast.show{
+    opacity:1;
+    visibility:visible;
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+}
+
+/* =========================================================
+   PERFORMANCE
+   ========================================================= */
+
+.performance{
+    position:fixed;
+
+    z-index:70;
+
+    right:385px;
+    top:102px;
+
+    padding:6px 9px;
+
+    border-radius:10px;
+
+    background:
+        rgba(2,13,18,.55);
+
+    color:#8aa0a8;
+
+    font-size:8px;
+
+    pointer-events:none;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:1100px){
+
+    .leftPanel{
+        width:270px;
+    }
+
+    .rightPanel{
+        width:300px;
+    }
+
+    .bottomBar{
+        left:305px;
+        right:333px;
+    }
+
+    .headerCenter{
+        display:none;
+    }
+
+}
+
+@media(max-width:760px){
+
+    .topbar{
+        left:8px;
+        right:8px;
+        top:8px;
+
+        height:62px;
+    }
+
+    .brandText span{
+        display:none;
+    }
+
+    .leftPanel{
+        left:8px;
+        right:8px;
+        top:auto;
+        bottom:8px;
+
+        width:auto;
+        height:235px;
+
+        display:flex;
+        gap:10px;
+
+        overflow-x:auto;
+        overflow-y:hidden;
+    }
+
+    .leftPanel .panel{
+        min-width:280px;
+        height:218px;
+        overflow:auto;
+    }
+
+    .rightPanel{
+        left:8px;
+        right:8px;
+        top:82px;
+        bottom:auto;
+
+        width:auto;
+
+        flex-direction:row;
+    }
+
+    .riskPanel{
+        width:100%;
+    }
+
+    .impactPanel{
+        display:none;
+    }
+
+    .bottomBar{
+        display:none;
+    }
+
+    .performance{
+        display:none;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div id="app"></div>
+
+
+<!-- ======================================================
+     INTRO SCREEN
+     ====================================================== -->
+
+<div class="intro" id="intro">
+
+    <div class="introCard">
+
+        <div class="introFire">
+            🔥
+        </div>
+
+        <h1>
+            WILDFIRE
+            <span>IMPACT 3D</span>
+        </h1>
+
+        <p>
+            Mô phỏng tác động của cháy rừng lên
+            thảm thực vật, không khí, đất, nước,
+            sinh cảnh và khu dân cư.
+            Hãy thay đổi gió, nhiệt độ,
+            độ ẩm, độ khô nhiên liệu và địa hình
+            để quan sát sự thay đổi của đám cháy.
+        </p>
+
+        <button
+            class="startBtn"
+            id="startExperience">
+
+            KHỞI ĐỘNG MÔ HÌNH 3D
+            &nbsp;→
+
+        </button>
+
+        <div class="introHint">
+
+            Âm thanh chỉ bắt đầu
+            sau khi bạn nhấn nút
+            do giới hạn tự động phát
+            của trình duyệt.
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     TOPBAR
+     ====================================================== -->
+
+<div class="topbar">
+
+    <div class="brand">
+
+        <div class="brandIcon">
+            🔥
+        </div>
+
+        <div class="brandText">
+
+            <b>
+                CLIMASCORE
+                • WILDFIRE IMPACT 3D
+            </b>
+
+            <span>
+                Mô hình tác động của thiên tai
+                — Phòng thí nghiệm mô phỏng giáo dục
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="headerCenter">
+
+        <button
+            class="stageBtn"
+            data-stage="0">
+
+            🌲 Trước cháy
+
+        </button>
+
+        <button
+            class="stageBtn active"
+            data-stage="1">
+
+            🔥 Đang cháy
+
+        </button>
+
+        <button
+            class="stageBtn"
+            data-stage="2">
+
+            🌫 Sau cháy
+
+        </button>
+
+        <button
+            class="stageBtn"
+            data-stage="3">
+
+            🌧 Hệ quả
+
+        </button>
+
+    </div>
+
+
+    <div class="headerTools">
+
+        <button
+            class="iconBtn active"
+            id="soundBtn"
+            title="Âm thanh">
+
+            🔊
+
+        </button>
+
+        <button
+            class="iconBtn"
+            id="topViewBtn"
+            title="Nhìn từ trên cao">
+
+            🛰️
+
+        </button>
+
+        <button
+            class="iconBtn"
+            id="resetCameraBtn"
+            title="Đặt lại góc nhìn">
+
+            🎥
+
+        </button>
+
+        <button
+            class="iconBtn"
+            id="pauseBtn"
+            title="Tạm dừng">
+
+            ⏸
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     LEFT CONTROL PANEL
+     ====================================================== -->
+
+<div class="leftPanel">
+
+    <div class="panel">
+
+        <div class="panelTitle">
+
+            <h3>
+                ⚙ ĐIỀU KIỆN CHÁY
+            </h3>
+
+            <span>
+                LIVE
+            </span>
+
+        </div>
+
+
+        <div class="control">
+
+            <div class="controlHeader">
+
+                <span>
+                    🌡 Nhiệt độ không khí
+                </span>
+
+                <strong id="tempText">
+                    36°C
+                </strong>
+
+            </div>
+
+            <input
+                id="temperature"
+                type="range"
+                min="18"
+                max="48"
+                value="36">
+
+        </div>
+
+
+        <div class="control">
+
+            <div class="controlHeader">
+
+                <span>
+                    💧 Độ ẩm tương đối
+                </span>
+
+                <strong id="humidityText">
+                    28%
+                </strong>
+
+            </div>
+
+            <input
+                id="humidity"
+                type="range"
+                min="10"
+                max="90"
+                value="28">
+
+        </div>
+
+
+        <div class="control">
+
+            <div class="controlHeader">
+
+                <span>
+                    🍂 Độ khô nhiên liệu
+                </span>
+
+                <strong id="drynessText">
+                    75%
+                </strong>
+
+            </div>
+
+            <input
+                id="dryness"
+                type="range"
+                min="10"
+                max="100"
+                value="75">
+
+        </div>
+
+
+        <div class="control">
+
+            <div class="controlHeader">
+
+                <span>
+                    🌲 Mật độ thảm thực vật
+                </span>
+
+                <strong id="vegetationText">
+                    72%
+                </strong>
+
+            </div>
+
+            <input
+                id="vegetation"
+                type="range"
+                min="20"
+                max="100"
+                value="72">
+
+        </div>
+
+    </div>
+
+
+
+    <div class="panel">
+
+        <div class="panelTitle">
+
+            <h3>
+                💨 GIÓ & ĐỊA HÌNH
+            </h3>
+
+            <span>
+                SPREAD
+            </span>
+
+        </div>
+
+
+        <div class="control">
+
+            <div class="controlHeader">
+
+                <span>
+                    💨 Tốc độ gió
+                </span>
+
+                <strong id="windText">
+                    24 km/h
+                </strong>
+
+            </div>
+
+            <input
+                id="wind"
+                type="range"
+                min="0"
+                max="70"
+                value="24">
+
+        </div>
+
+
+        <div class="control">
+
+            <div class="controlHeader">
+
+                <span>
+                    🧭 Hướng gió
+                </span>
+
+                <strong id="windDirText">
+                    45°
+                </strong>
+
+            </div>
+
+            <input
+                id="windDir"
+                type="range"
+                min="0"
+                max="359"
+                value="45">
+
+        </div>
+
+
+        <div class="control">
+
+            <div class="controlHeader">
+
+                <span>
+                    ⛰ Độ dốc
+                </span>
+
+                <strong id="slopeText">
+                    22°
+                </strong>
+
+            </div>
+
+            <input
+                id="slope"
+                type="range"
+                min="0"
+                max="40"
+                value="22">
+
+        </div>
+
+    </div>
+
+
+
+    <div class="panel">
+
+        <div class="panelTitle">
+
+            <h3>
+                🔥 CƯỜNG ĐỘ MÔ PHỎNG
+            </h3>
+
+            <span>
+                FIRE
+            </span>
+
+        </div>
+
+
+        <div class="control">
+
+            <div class="controlHeader">
+
+                <span>
+                    🔥 Cường độ nguồn lửa
+                </span>
+
+                <strong id="intensityText">
+                    70%
+                </strong>
+
+            </div>
+
+            <input
+                id="intensity"
+                type="range"
+                min="10"
+                max="100"
+                value="70">
+
+        </div>
+
+
+        <div class="control">
+
+            <div class="controlHeader">
+
+                <span>
+                    ⏱ Tốc độ thời gian
+                </span>
+
+                <strong id="speedText">
+                    ×1.0
+                </strong>
+
+            </div>
+
+            <input
+                id="simulationSpeed"
+                type="range"
+                min="25"
+                max="250"
+                value="100">
+
+        </div>
+
+
+        <div class="toggleRow">
+
+            <button
+                class="toggle on"
+                id="smokeToggle">
+
+                <b>
+                    🌫 Khói
+                </b>
+
+                <small>
+                    Hiển thị PM2.5
+                </small>
+
+            </button>
+
+            <button
+                class="toggle on"
+                id="emberToggle">
+
+                <b>
+                    ✨ Tàn lửa
+                </b>
+
+                <small>
+                    Bay theo gió
+                </small>
+
+            </button>
+
+            <button
+                class="toggle on"
+                id="labelToggle">
+
+                <b>
+                    📍 Chú thích
+                </b>
+
+                <small>
+                    Điểm tác động
+                </small>
+
+            </button>
+
+            <button
+                class="toggle on"
+                id="qualityToggle">
+
+                <b>
+                    ✨ Ultra
+                </b>
+
+                <small>
+                    Bloom + shadow
+                </small>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     RIGHT DASHBOARD
+     ====================================================== -->
+
+<div class="rightPanel">
+
+    <div class="riskPanel">
+
+        <div class="riskHead">
+
+            <small>
+                CHỈ SỐ NGUY CƠ TƯƠNG ĐỐI
+            </small>
+
+            <div class="live">
+
+                <div class="liveDot"></div>
+                SIMULATION
+
+            </div>
+
+        </div>
+
+
+        <div class="riskMain">
+
+            <div
+                class="riskLevel"
+                id="riskLevel">
+
+                RẤT CAO
+
+            </div>
+
+            <div class="riskScore">
+
+                <b id="riskScore">
+                    76
+                </b>
+                /100
+
+            </div>
+
+        </div>
+
+
+        <div class="riskBar">
+
+            <div
+                class="riskBarFill"
+                id="riskFill">
+            </div>
+
+        </div>
+
+
+        <div class="metricGrid">
+
+
+            <div class="metric">
+
+                <div class="metricLabel">
+                    Diện tích ảnh hưởng
+                </div>
+
+                <div class="metricValue">
+
+                    <span id="areaMetric">
+                        0.0
+                    </span>
+
+                    <span class="metricUnit">
+                        ha
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="metricLabel">
+                    Tốc độ lan tương đối
+                </div>
+
+                <div class="metricValue">
+
+                    <span id="spreadMetric">
+                        0.0
+                    </span>
+
+                    <span class="metricUnit">
+                        m/phút
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="metricLabel">
+                    Khói PM₂.₅
+                </div>
+
+                <div class="metricValue">
+
+                    <span id="pmMetric">
+                        0
+                    </span>
+
+                    <span class="metricUnit">
+                        μg/m³*
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="metric">
+
+                <div class="metricLabel">
+                    Sinh khối bị tác động
+                </div>
+
+                <div class="metricValue">
+
+                    <span id="biomassMetric">
+                        0
+                    </span>
+
+                    <span class="metricUnit">
+                        %
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <div class="impactPanel">
+
+        <div class="impactTitle">
+
+            <b>
+                HỆ QUẢ THIÊN TAI
+            </b>
+
+            <span id="stageLabel">
+                ĐANG CHÁY
+            </span>
+
+        </div>
+
+
+        <div class="impactCard">
+
+            <div class="impactIcon">
+                🌳
+            </div>
+
+            <div>
+
+                <b>
+                    THẢM THỰC VẬT
+                </b>
+
+                <small>
+                    Mất tán cây,
+                    cây cháy xém và chết.
+                </small>
+
+            </div>
+
+            <div
+                class="impactValue impactHigh"
+                id="forestImpact">
+
+                CAO
+
+            </div>
+
+        </div>
+
+
+        <div class="impactCard">
+
+            <div class="impactIcon">
+                🦌
+            </div>
+
+            <div>
+
+                <b>
+                    SINH CẢNH
+                </b>
+
+                <small>
+                    Nơi cư trú và nguồn thức ăn
+                    bị thu hẹp.
+                </small>
+
+            </div>
+
+            <div
+                class="impactValue impactHigh"
+                id="habitatImpact">
+
+                CAO
+
+            </div>
+
+        </div>
+
+
+        <div class="impactCard">
+
+            <div class="impactIcon">
+                🌫
+            </div>
+
+            <div>
+
+                <b>
+                    CHẤT LƯỢNG KHÔNG KHÍ
+                </b>
+
+                <small>
+                    Khói và hạt mịn
+                    lan theo gió.
+                </small>
+
+            </div>
+
+            <div
+                class="impactValue impactExtreme"
+                id="airImpact">
+
+                XẤU
+
+            </div>
+
+        </div>
+
+
+        <div class="impactCard">
+
+            <div class="impactIcon">
+                🫁
+            </div>
+
+            <div>
+
+                <b>
+                    SỨC KHỎE
+                </b>
+
+                <small>
+                    Nguy cơ hô hấp
+                    tăng khi tiếp xúc khói.
+                </small>
+
+            </div>
+
+            <div
+                class="impactValue impactHigh"
+                id="healthImpact">
+
+                CAO
+
+            </div>
+
+        </div>
+
+
+        <div class="impactCard">
+
+            <div class="impactIcon">
+                🟤
+            </div>
+
+            <div>
+
+                <b>
+                    ĐẤT
+                </b>
+
+                <small>
+                    Mất lớp phủ,
+                    tăng nguy cơ xói mòn.
+                </small>
+
+            </div>
+
+            <div
+                class="impactValue impactMid"
+                id="soilImpact">
+
+                VỪA
+
+            </div>
+
+        </div>
+
+
+        <div class="impactCard">
+
+            <div class="impactIcon">
+                💧
+            </div>
+
+            <div>
+
+                <b>
+                    NGUỒN NƯỚC
+                </b>
+
+                <small>
+                    Tro và bùn có thể
+                    theo dòng chảy xuống suối.
+                </small>
+
+            </div>
+
+            <div
+                class="impactValue impactMid"
+                id="waterImpact">
+
+                VỪA
+
+            </div>
+
+        </div>
+
+
+        <div class="impactCard">
+
+            <div class="impactIcon">
+                🏠
+            </div>
+
+            <div>
+
+                <b>
+                    KHU DÂN CƯ
+                </b>
+
+                <small>
+                    Nguy cơ lan tới
+                    vùng tiếp giáp rừng.
+                </small>
+
+            </div>
+
+            <div
+                class="impactValue impactMid"
+                id="communityImpact">
+
+                VỪA
+
+            </div>
+
+        </div>
+
+
+        <div class="impactCard">
+
+            <div class="impactIcon">
+                🌍
+            </div>
+
+            <div>
+
+                <b>
+                    CARBON
+                </b>
+
+                <small>
+                    Carbon trong sinh khối
+                    được giải phóng khi cháy.
+                </small>
+
+            </div>
+
+            <div
+                class="impactValue impactHigh"
+                id="carbonImpact">
+
+                CAO
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     BOTTOM TIMELINE
+     ====================================================== -->
+
+<div class="bottomBar">
+
+    <div class="timeline">
+
+        <div
+            class="timeStep"
+            data-stage="0">
+
+            <b>
+                01 — TRƯỚC CHÁY
+            </b>
+
+            <small>
+                Rừng và nhiên liệu tích tụ
+            </small>
+
+        </div>
+
+
+        <div
+            class="timeStep active"
+            data-stage="1">
+
+            <b>
+                02 — BÙNG PHÁT
+            </b>
+
+            <small>
+                Cháy lan + khói + tàn lửa
+            </small>
+
+        </div>
+
+
+        <div
+            class="timeStep"
+            data-stage="2">
+
+            <b>
+                03 — SAU CHÁY
+            </b>
+
+            <small>
+                Đất trơ + cây chết
+            </small>
+
+        </div>
+
+
+        <div
+            class="timeStep"
+            data-stage="3">
+
+            <b>
+                04 — HỆ QUẢ
+            </b>
+
+            <small>
+                Mưa → xói mòn → nước đục
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div
+    class="performance"
+    id="performance">
+
+    GPU MODE • ULTRA
+
+</div>
+
+
+<div
+    class="infoToast"
+    id="toast">
+</div>
+
+
+<!-- ======================================================
+     THREE.JS IMPORT MAP
+     ====================================================== -->
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three/examples/jsm/"
+  }
+}
+</script>
+
+
+<script type="module">
+
+/* =========================================================
+   IMPORTS
+   ========================================================= */
+
+import * as THREE from "three";
+
+import {
+    OrbitControls
+} from "three/addons/controls/OrbitControls.js";
+
+import {
+    EffectComposer
+} from "three/addons/postprocessing/EffectComposer.js";
+
+import {
+    RenderPass
+} from "three/addons/postprocessing/RenderPass.js";
+
+import {
+    UnrealBloomPass
+} from "three/addons/postprocessing/UnrealBloomPass.js";
+
+import {
+    CSS2DRenderer,
+    CSS2DObject
+} from "three/addons/renderers/CSS2DRenderer.js";
+
+
+/* =========================================================
+   GLOBAL STATE
+   ========================================================= */
+
+const state = {
+
+    stage:1,
+
+    running:true,
+
+    sound:true,
+
+    smoke:true,
+
+    embers:true,
+
+    labels:true,
+
+    ultra:true,
+
+    temperature:36,
+
+    humidity:28,
+
+    dryness:75,
+
+    vegetation:72,
+
+    wind:24,
+
+    windDir:45,
+
+    slope:22,
+
+    intensity:70,
+
+    speed:1,
+
+    simulationTime:0,
+
+    burnRadius:4,
+
+    maxBurnRadius:27
+
+};
+
+
+const app =
+    document.getElementById("app");
+
+
+/* =========================================================
+   SCENE
+   ========================================================= */
+
+const scene =
+    new THREE.Scene();
+
+
+scene.background =
+    new THREE.Color(0x07151b);
+
+
+scene.fog =
+    new THREE.FogExp2(
+        0x0a1b20,
+        0.012
+    );
+
+
+/* =========================================================
+   CAMERA
+   ========================================================= */
+
+const camera =
+    new THREE.PerspectiveCamera(
+        48,
+        innerWidth / innerHeight,
+        0.1,
+        350
+    );
+
+
+camera.position.set(
+    48,
+    33,
+    49
+);
+
+
+/* =========================================================
+   RENDERER
+   ========================================================= */
+
+const renderer =
+    new THREE.WebGLRenderer({
+
+        antialias:true,
+
+        powerPreference:
+            "high-performance"
+
+    });
+
+
+renderer.setSize(
+    innerWidth,
+    innerHeight
+);
+
+
+renderer.setPixelRatio(
+    Math.min(
+        devicePixelRatio,
+        2
+    )
+);
+
+
+renderer.shadowMap.enabled =
+    true;
+
+
+renderer.shadowMap.type =
+    THREE.PCFSoftShadowMap;
+
+
+renderer.outputColorSpace =
+    THREE.SRGBColorSpace;
+
+
+renderer.toneMapping =
+    THREE.ACESFilmicToneMapping;
+
+
+renderer.toneMappingExposure =
+    1.05;
+
+
+app.appendChild(
+    renderer.domElement
+);
+
+
+/* =========================================================
+   CSS LABEL RENDERER
+   ========================================================= */
+
+const labelRenderer =
+    new CSS2DRenderer();
+
+
+labelRenderer.setSize(
+    innerWidth,
+    innerHeight
+);
+
+
+labelRenderer.domElement.style.position =
+    "fixed";
+
+
+labelRenderer.domElement.style.inset =
+    "0";
+
+
+labelRenderer.domElement.style.pointerEvents =
+    "none";
+
+
+labelRenderer.domElement.style.zIndex =
+    "60";
+
+
+document.body.appendChild(
+    labelRenderer.domElement
+);
+
+
+/* =========================================================
+   POST PROCESSING
+   ========================================================= */
+
+const composer =
+    new EffectComposer(
+        renderer
+    );
+
+
+composer.addPass(
+    new RenderPass(
+        scene,
+        camera
+    )
+);
+
+
+const bloom =
+    new UnrealBloomPass(
+
+        new THREE.Vector2(
+            innerWidth,
+            innerHeight
+        ),
+
+        0.65,
+
+        0.55,
+
+        0.75
+    );
+
+
+composer.addPass(
+    bloom
+);
+
+
+/* =========================================================
+   CONTROLS
+   ========================================================= */
+
+const controls =
+    new OrbitControls(
+        camera,
+        renderer.domElement
+    );
+
+
+controls.target.set(
+    0,
+    4,
+    0
+);
+
+
+controls.enableDamping =
+    true;
+
+
+controls.dampingFactor =
+    .055;
+
+
+controls.minDistance =
+    14;
+
+
+controls.maxDistance =
+    120;
+
+
+controls.maxPolarAngle =
+    Math.PI * .485;
+
+
+/* =========================================================
+   LIGHTS
+   ========================================================= */
+
+const hemi =
+    new THREE.HemisphereLight(
+        0xb9ddff,
+        0x1f2515,
+        1.45
+    );
+
+
+scene.add(hemi);
+
+
+const sun =
+    new THREE.DirectionalLight(
+        0xffefd0,
+        2.1
+    );
+
+
+sun.position.set(
+    -25,
+    45,
+    20
+);
+
+
+sun.castShadow =
+    true;
+
+
+sun.shadow.mapSize.set(
+    2048,
+    2048
+);
+
+
+sun.shadow.camera.left =
+    -60;
+
+
+sun.shadow.camera.right =
+    60;
+
+
+sun.shadow.camera.top =
+    60;
+
+
+sun.shadow.camera.bottom =
+    -60;
+
+
+sun.shadow.camera.near =
+    1;
+
+
+sun.shadow.camera.far =
+    120;
+
+
+scene.add(sun);
+
+
+/* FIRE LIGHT */
+
+const fireLight =
+    new THREE.PointLight(
+        0xff5a18,
+        6,
+        34,
+        1.7
+    );
+
+
+fireLight.position.set(
+    -6,
+    5,
+    2
+);
+
+
+scene.add(
+    fireLight
+);
+
+
+/* =========================================================
+   TERRAIN FUNCTIONS
+   ========================================================= */
+
+function terrainHeight(x,z){
+
+    const hill1 =
+        Math.exp(
+            -(
+                ((x + 18) ** 2) / 420 +
+                ((z + 10) ** 2) / 360
+            )
+        ) * 11;
+
+
+    const hill2 =
+        Math.exp(
+            -(
+                ((x - 16) ** 2) / 520 +
+                ((z - 12) ** 2) / 470
+            )
+        ) * 8;
+
+
+    const waves =
+        Math.sin(x * .13) * 1.4 +
+        Math.cos(z * .11) * 1.1 +
+        Math.sin(
+            (x + z) * .07
+        ) * .8;
+
+
+    return (
+        hill1 +
+        hill2 +
+        waves -
+        2.5
+    );
+
+}
+
+
+/* =========================================================
+   TERRAIN
+   ========================================================= */
+
+const terrainGeometry =
+    new THREE.PlaneGeometry(
+        90,
+        90,
+        100,
+        100
+    );
+
+
+const pos =
+    terrainGeometry
+    .attributes
+    .position;
+
+
+for(
+    let i=0;
+    i<pos.count;
+    i++
+){
+
+    const x =
+        pos.getX(i);
+
+    const y =
+        pos.getY(i);
+
+
+    pos.setZ(
+        i,
+        terrainHeight(
+            x,
+            -y
+        )
+    );
+
+}
+
+
+terrainGeometry
+.computeVertexNormals();
+
+
+const terrainMaterial =
+    new THREE.MeshStandardMaterial({
+
+        color:0x31533a,
+
+        roughness:.96,
+
+        metalness:0,
+
+        vertexColors:false
+
+    });
+
+
+const terrain =
+    new THREE.Mesh(
+        terrainGeometry,
+        terrainMaterial
+    );
+
+
+terrain.rotation.x =
+    -Math.PI / 2;
+
+
+terrain.receiveShadow =
+    true;
+
+
+scene.add(
+    terrain
+);
+
+
+/* =========================================================
+   GROUND DETAIL / ROCKS
+   ========================================================= */
+
+const rocksGroup =
+    new THREE.Group();
+
+
+const rockGeo =
+    new THREE.DodecahedronGeometry(
+        .55,
+        0
+    );
+
+
+const rockMat =
+    new THREE.MeshStandardMaterial({
+
+        color:0x6a655a,
+
+        roughness:1
+
+    });
+
+
+for(
+    let i=0;
+    i<90;
+    i++
+){
+
+    const x =
+        THREE.MathUtils
+        .randFloatSpread(78);
+
+    const z =
+        THREE.MathUtils
+        .randFloatSpread(78);
+
+
+    const y =
+        terrainHeight(x,z);
+
+
+    const rock =
+        new THREE.Mesh(
+            rockGeo,
+            rockMat
+        );
+
+
+    const s =
+        THREE.MathUtils
+        .randFloat(
+            .35,
+            1.1
+        );
+
+
+    rock.scale.set(
+        s,
+        s * .7,
+        s
+    );
+
+
+    rock.position.set(
+        x,
+        y + .25,
+        z
+    );
+
+
+    rock.rotation.set(
+        Math.random(),
+        Math.random(),
+        Math.random()
+    );
+
+
+    rock.castShadow =
+        true;
+
+
+    rocksGroup.add(
+        rock
+    );
+
+}
+
+
+scene.add(
+    rocksGroup
+);
+
+
+/* =========================================================
+   TREES — INSTANCED FOREST
+   ========================================================= */
+
+const treeCount =
+    245;
+
+
+const treeData =
+    [];
+
+
+const trunkGeo =
+    new THREE.CylinderGeometry(
+        .18,
+        .30,
+        3.1,
+        7
+    );
+
+
+const trunkMat =
+    new THREE.MeshStandardMaterial({
+
+        color:0x55351d,
+
+        roughness:.95,
+
+        vertexColors:true
+
+    });
+
+
+const trunks =
+    new THREE.InstancedMesh(
+        trunkGeo,
+        trunkMat,
+        treeCount
+    );
+
+
+trunks.castShadow =
+    true;
+
+
+trunks.receiveShadow =
+    true;
+
+
+const crownGeo =
+    new THREE.ConeGeometry(
+        1.35,
+        4.4,
+        8
+    );
+
+
+const crownMat =
+    new THREE.MeshStandardMaterial({
+
+        color:0x1b6e42,
+
+        roughness:.9,
+
+        vertexColors:true
+
+    });
+
+
+const crowns =
+    new THREE.InstancedMesh(
+        crownGeo,
+        crownMat,
+        treeCount
+    );
+
+
+crowns.castShadow =
+    true;
+
+
+crowns.receiveShadow =
+    true;
+
+
+const matrix =
+    new THREE.Matrix4();
+
+
+const quat =
+    new THREE.Quaternion();
+
+
+const scale =
+    new THREE.Vector3();
+
+
+const color =
+    new THREE.Color();
+
+
+for(
+    let i=0;
+    i<treeCount;
+    i++
+){
+
+    let x;
+    let z;
+
+    let attempts=0;
+
+
+    do{
+
+        x =
+            THREE.MathUtils
+            .randFloatSpread(77);
+
+        z =
+            THREE.MathUtils
+            .randFloatSpread(77);
+
+        attempts++;
+
+    }
+    while(
+
+        (
+            x>18 &&
+            x<33 &&
+            z>17 &&
+            z<31
+        ) &&
+        attempts<30
+
+    );
+
+
+    const y =
+        terrainHeight(
+            x,
+            z
+        );
+
+
+    const s =
+        THREE.MathUtils
+        .randFloat(
+            .72,
+            1.35
+        );
+
+
+    treeData.push({
+
+        x,
+        z,
+        y,
+        s,
+
+        burn:0,
+
+        seed:
+            Math.random()
+
+    });
+
+
+    /* trunk */
+
+    scale.set(
+        s,
+        s,
+        s
+    );
+
+
+    matrix.compose(
+
+        new THREE.Vector3(
+            x,
+            y + 1.55*s,
+            z
+        ),
+
+        quat,
+
+        scale
+
+    );
+
+
+    trunks.setMatrixAt(
+        i,
+        matrix
+    );
+
+
+    color.set(
+        0x654024
+    );
+
+
+    trunks.setColorAt(
+        i,
+        color
+    );
+
+
+    /* crown */
+
+    matrix.compose(
+
+        new THREE.Vector3(
+            x,
+            y + 4.2*s,
+            z
+        ),
+
+        quat,
+
+        scale
+
+    );
+
+
+    crowns.setMatrixAt(
+        i,
+        matrix
+    );
+
+
+    const hueShift =
+        THREE.MathUtils
+        .randFloat(
+            -.025,
+            .025
+        );
+
+
+    color.setHSL(
+        .36 + hueShift,
+        .53,
+        .26
+    );
+
+
+    crowns.setColorAt(
+        i,
+        color
+    );
+
+}
+
+
+trunks.instanceMatrix
+.setUsage(
+    THREE.DynamicDrawUsage
+);
+
+
+crowns.instanceMatrix
+.setUsage(
+    THREE.DynamicDrawUsage
+);
+
+
+scene.add(
+    trunks,
+    crowns
+);
+
+
+/* =========================================================
+   HOUSE / WILDLAND URBAN INTERFACE
+   ========================================================= */
+
+const settlement =
+    new THREE.Group();
+
+
+const houseX=26;
+const houseZ=24;
+const houseY=
+    terrainHeight(
+        houseX,
+        houseZ
+    );
+
+
+const wall =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+            7,
+            3.6,
+            5.4
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+            color:0xd9c7aa,
+
+            roughness:.85
+
+        })
+
+    );
+
+
+wall.position.y=
+    1.8;
+
+
+wall.castShadow=
+    true;
+
+
+wall.receiveShadow=
+    true;
+
+
+settlement.add(
+    wall
+);
+
+
+const roof =
+    new THREE.Mesh(
+
+        new THREE.ConeGeometry(
+            5.25,
+            2.8,
+            4
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+            color:0x7e3127,
+
+            roughness:.85
+
+        })
+
+    );
+
+
+roof.rotation.y=
+    Math.PI/4;
+
+
+roof.position.y=
+    5;
+
+
+roof.scale.z=
+    .78;
+
+
+roof.castShadow=
+    true;
+
+
+settlement.add(
+    roof
+);
+
+
+const door =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+            1.2,
+            2.3,
+            .15
+        ),
+
+        new THREE.MeshStandardMaterial({
+            color:0x503526
+        })
+
+    );
+
+
+door.position.set(
+    0,
+    1.15,
+    2.75
+);
+
+
+settlement.add(
+    door
+);
+
+
+settlement.position.set(
+    houseX,
+    houseY,
+    houseZ
+);
+
+
+scene.add(
+    settlement
+);
+
+
+/* =========================================================
+   STREAM
+   ========================================================= */
+
+const streamCurve =
+    new THREE.CatmullRomCurve3([
+
+        new THREE.Vector3(
+            -35,
+            terrainHeight(-35,-22)+.15,
+            -22
+        ),
+
+        new THREE.Vector3(
+            -18,
+            terrainHeight(-18,-19)+.15,
+            -19
+        ),
+
+        new THREE.Vector3(
+            0,
+            terrainHeight(0,-24)+.15,
+            -24
+        ),
+
+        new THREE.Vector3(
+            18,
+            terrainHeight(18,-27)+.15,
+            -27
+        ),
+
+        new THREE.Vector3(
+            37,
+            terrainHeight(37,-24)+.15,
+            -24
+        )
+
+    ]);
+
+
+const streamGeo =
+    new THREE.TubeGeometry(
+        streamCurve,
+        110,
+        .65,
+        7,
+        false
+    );
+
+
+const streamMat =
+    new THREE.MeshPhysicalMaterial({
+
+        color:0x2c9eca,
+
+        roughness:.18,
+
+        transmission:.12,
+
+        transparent:true,
+
+        opacity:.82
+
+    });
+
+
+const stream =
+    new THREE.Mesh(
+        streamGeo,
+        streamMat
+    );
+
+
+scene.add(
+    stream
+);
+
+
+/* =========================================================
+   FIRE GROUP
+   ========================================================= */
+
+const fireGroup =
+    new THREE.Group();
+
+
+scene.add(
+    fireGroup
+);
+
+
+const flameMaterialA =
+    new THREE.MeshBasicMaterial({
+
+        color:0xff4b18,
+
+        transparent:true,
+
+        opacity:.92,
+
+        depthWrite:false,
+
+        blending:
+            THREE.AdditiveBlending
+
+    });
+
+
+const flameMaterialB =
+    new THREE.MeshBasicMaterial({
+
+        color:0xffd14c,
+
+        transparent:true,
+
+        opacity:.92,
+
+        depthWrite:false,
+
+        blending:
+            THREE.AdditiveBlending
+
+    });
+
+
+const flames =
+    [];
+
+
+for(
+    let i=0;
+    i<56;
+    i++
+){
+
+    const mat =
+        i%3===0
+        ? flameMaterialB
+        : flameMaterialA;
+
+
+    const geo =
+        new THREE.ConeGeometry(
+            THREE.MathUtils.randFloat(
+                .28,
+                .75
+            ),
+
+            THREE.MathUtils.randFloat(
+                1.6,
+                4
+            ),
+
+            7
+        );
+
+
+    const flame =
+        new THREE.Mesh(
+            geo,
+            mat
+        );
+
+
+    flame.userData = {
+
+        angle:
+            Math.random()
+            * Math.PI*2,
+
+        radius:
+            Math.sqrt(
+                Math.random()
+            ),
+
+        phase:
+            Math.random()
+            * Math.PI*2,
+
+        speed:
+            THREE.MathUtils
+            .randFloat(
+                2.5,
+                5
+            )
+
+    };
+
+
+    flames.push(
+        flame
+    );
+
+
+    fireGroup.add(
+        flame
+    );
+
+}
+
+
+/* =========================================================
+   PARTICLE TEXTURE
+   ========================================================= */
+
+function createSoftTexture(
+    centerColor,
+    edgeColor
+){
+
+    const canvas =
+        document.createElement(
+            "canvas"
+        );
+
+
+    canvas.width =
+        canvas.height =
+        128;
+
+
+    const ctx =
+        canvas.getContext("2d");
+
+
+    const grad =
+        ctx.createRadialGradient(
+            64,
+            64,
+            0,
+            64,
+            64,
+            62
+        );
+
+
+    grad.addColorStop(
+        0,
+        centerColor
+    );
+
+
+    grad.addColorStop(
+        1,
+        edgeColor
+    );
+
+
+    ctx.fillStyle=
+        grad;
+
+
+    ctx.fillRect(
+        0,
+        0,
+        128,
+        128
+    );
+
+
+    const texture =
+        new THREE.CanvasTexture(
+            canvas
+        );
+
+
+    texture.colorSpace =
+        THREE.SRGBColorSpace;
+
+
+    return texture;
+
+}
+
+
+/* =========================================================
+   SMOKE PARTICLES
+   ========================================================= */
+
+const smokeCount =
+    520;
+
+
+const smokePositions =
+    new Float32Array(
+        smokeCount * 3
+    );
+
+
+const smokeRandom =
+    [];
+
+
+for(
+    let i=0;
+    i<smokeCount;
+    i++
+){
+
+    smokeRandom.push({
+
+        phase:
+            Math.random(),
+
+        side:
+            THREE.MathUtils
+            .randFloatSpread(1),
+
+        drift:
+            THREE.MathUtils
+            .randFloat(
+                .6,
+                1.5
+            )
+
+    });
+
+}
+
+
+const smokeGeo =
+    new THREE.BufferGeometry();
+
+
+smokeGeo.setAttribute(
+
+    "position",
+
+    new THREE.BufferAttribute(
+        smokePositions,
+        3
+    )
+
+);
+
+
+const smokeTexture =
+    createSoftTexture(
+        "rgba(215,215,205,.65)",
+        "rgba(80,80,80,0)"
+    );
+
+
+const smokeMat =
+    new THREE.PointsMaterial({
+
+        size:4.8,
+
+        map:smokeTexture,
+
+        transparent:true,
+
+        opacity:.30,
+
+        depthWrite:false,
+
+        color:0xa8a59c,
+
+        blending:
+            THREE.NormalBlending
+
+    });
+
+
+const smokeParticles =
+    new THREE.Points(
+        smokeGeo,
+        smokeMat
+    );
+
+
+scene.add(
+    smokeParticles
+);
+
+
+/* =========================================================
+   EMBERS
+   ========================================================= */
+
+const emberCount =
+    240;
+
+
+const emberPositions =
+    new Float32Array(
+        emberCount*3
+    );
+
+
+const emberData =
+    [];
+
+
+for(
+    let i=0;
+    i<emberCount;
+    i++
+){
+
+    emberData.push({
+
+        life:
+            Math.random(),
+
+        side:
+            THREE.MathUtils
+            .randFloatSpread(1),
+
+        speed:
+            THREE.MathUtils
+            .randFloat(
+                .7,
+                1.6
+            )
+
+    });
+
+}
+
+
+const emberGeo =
+    new THREE.BufferGeometry();
+
+
+emberGeo.setAttribute(
+
+    "position",
+
+    new THREE.BufferAttribute(
+        emberPositions,
+        3
+    )
+
+);
+
+
+const emberTexture =
+    createSoftTexture(
+        "rgba(255,235,100,1)",
+        "rgba(255,70,10,0)"
+    );
+
+
+const emberMat =
+    new THREE.PointsMaterial({
+
+        size:.42,
+
+        map:emberTexture,
+
+        transparent:true,
+
+        opacity:.95,
+
+        depthWrite:false,
+
+        color:0xff9b3b,
+
+        blending:
+            THREE.AdditiveBlending
+
+    });
+
+
+const emberParticles =
+    new THREE.Points(
+        emberGeo,
+        emberMat
+    );
+
+
+scene.add(
+    emberParticles
+);
+
+
+/* =========================================================
+   CHARRED GROUND PATCH
+   ========================================================= */
+
+const burnPatchMat =
+    new THREE.MeshStandardMaterial({
+
+        color:0x211711,
+
+        roughness:1,
+
+        transparent:true,
+
+        opacity:.0,
+
+        depthWrite:false
+
+    });
+
+
+const burnPatch =
+    new THREE.Mesh(
+
+        new THREE.CircleGeometry(
+            1,
+            90
+        ),
+
+        burnPatchMat
+
+    );
+
+
+burnPatch.rotation.x=
+    -Math.PI/2;
+
+
+burnPatch.position.set(
+    -7,
+    terrainHeight(-7,2)+.10,
+    2
+);
+
+
+scene.add(
+    burnPatch
+);
+
+
+/* =========================================================
+   EROSION CHANNELS
+   ========================================================= */
+
+const erosionGroup =
+    new THREE.Group();
+
+
+scene.add(
+    erosionGroup
+);
+
+
+function createErosionLine(
+    startX,
+    startZ,
+    endX,
+    endZ
+){
+
+    const points=[];
+
+
+    for(
+        let i=0;
+        i<=25;
+        i++
+    ){
+
+        const t=
+            i/25;
+
+
+        const x=
+            THREE.MathUtils.lerp(
+                startX,
+                endX,
+                t
+            )
+            +
+            Math.sin(
+                t*11
+            )*.5;
+
+
+        const z=
+            THREE.MathUtils.lerp(
+                startZ,
+                endZ,
+                t
+            );
+
+
+        points.push(
+
+            new THREE.Vector3(
+
+                x,
+
+                terrainHeight(
+                    x,
+                    z
+                )+.15,
+
+                z
+
+            )
+
+        );
+
+    }
+
+
+    const curve =
+        new THREE.CatmullRomCurve3(
+            points
+        );
+
+
+    const geo =
+        new THREE.TubeGeometry(
+            curve,
+            50,
+            .12,
+            6,
+            false
+        );
+
+
+    const mat =
+        new THREE.MeshStandardMaterial({
+
+            color:0x5b321f,
+
+            roughness:1
+
+        });
+
+
+    const channel=
+        new THREE.Mesh(
+            geo,
+            mat
+        );
+
+
+    erosionGroup.add(
+        channel
+    );
+
+}
+
+
+createErosionLine(
+    -15,
+    3,
+    -20,
+    -19
+);
+
+
+createErosionLine(
+    -8,
+    8,
+    -12,
+    -20
+);
+
+
+createErosionLine(
+    1,
+    3,
+    2,
+    -22
+);
+
+
+erosionGroup.visible=
+    false;
+
+
+/* =========================================================
+   ASH / WATER POLLUTION
+   ========================================================= */
+
+const muddyWater =
+    new THREE.Mesh(
+
+        streamGeo,
+
+        new THREE.MeshStandardMaterial({
+
+            color:0x775337,
+
+            roughness:.5,
+
+            transparent:true,
+
+            opacity:0
+
+        })
+
+    );
+
+
+scene.add(
+    muddyWater
+);
+
+
+/* =========================================================
+   RAIN FOR CONSEQUENCE STAGE
+   ========================================================= */
+
+const rainCount=
+    750;
+
+
+const rainPos=
+    new Float32Array(
+        rainCount*3
+    );
+
+
+for(
+    let i=0;
+    i<rainCount;
+    i++
+){
+
+    rainPos[i*3]=
+        THREE.MathUtils
+        .randFloatSpread(70);
+
+    rainPos[i*3+1]=
+        THREE.MathUtils
+        .randFloat(
+            5,
+            40
+        );
+
+    rainPos[i*3+2]=
+        THREE.MathUtils
+        .randFloatSpread(70);
+
+}
+
+
+const rainGeo=
+    new THREE.BufferGeometry();
+
+
+rainGeo.setAttribute(
+
+    "position",
+
+    new THREE.BufferAttribute(
+        rainPos,
+        3
+    )
+
+);
+
+
+const rainMat=
+    new THREE.PointsMaterial({
+
+        color:0x88ddff,
+
+        size:.12,
+
+        transparent:true,
+
+        opacity:.65
+
+    });
+
+
+const rain=
+    new THREE.Points(
+        rainGeo,
+        rainMat
+    );
+
+
+rain.visible=false;
+
+
+scene.add(
+    rain
+);
+
+
+/* =========================================================
+   LABELS
+   ========================================================= */
+
+const labels=[];
+
+
+function makeLabel(
+    html,
+    x,
+    y,
+    z
+){
+
+    const div=
+        document.createElement(
+            "div"
+        );
+
+
+    div.className=
+        "label3D";
+
+
+    div.innerHTML=
+        html;
+
+
+    const label=
+        new CSS2DObject(
+            div
+        );
+
+
+    label.position.set(
+        x,
+        y,
+        z
+    );
+
+
+    scene.add(
+        label
+    );
+
+
+    labels.push(
+        label
+    );
+
+
+    return label;
+
+}
+
+
+makeLabel(
+    "🔥 <b>Mặt lửa</b><br>Vùng cháy hoạt động",
+    -7,
+    8,
+    2
+);
+
+
+makeLabel(
+    "🏠 <b>Vùng tiếp giáp</b><br>Rừng – khu dân cư",
+    26,
+    houseY+8,
+    24
+);
+
+
+makeLabel(
+    "💧 <b>Dòng suối</b><br>Nguy cơ tro & bùn sau cháy",
+    2,
+    terrainHeight(2,-24)+3,
+    -24
+);
+
+
+makeLabel(
+    "🌲 <b>Rừng chưa cháy</b><br>Nhiên liệu tiềm năng",
+    -28,
+    terrainHeight(-28,18)+8,
+    18
+);
+
+
+/* =========================================================
+   AUDIO — PROCEDURAL WEB AUDIO
+   ========================================================= */
+
+let audioCtx=null;
+
+let windGain=null;
+let fireGain=null;
+
+let audioStarted=false;
+
+
+function noiseBuffer(){
+
+    const length=
+        audioCtx.sampleRate*3;
+
+
+    const buffer=
+        audioCtx.createBuffer(
+            1,
+            length,
+            audioCtx.sampleRate
+        );
+
+
+    const data=
+        buffer.getChannelData(0);
+
+
+    for(
+        let i=0;
+        i<length;
+        i++
+    ){
+
+        data[i]=
+            Math.random()*2-1;
+
+    }
+
+
+    return buffer;
+
+}
+
+
+function initAudio(){
+
+    if(audioStarted)
+        return;
+
+
+    audioCtx=
+        new (
+            window.AudioContext ||
+            window.webkitAudioContext
+        )();
+
+
+    /* WIND */
+
+    const windSource=
+        audioCtx.createBufferSource();
+
+
+    windSource.buffer=
+        noiseBuffer();
+
+
+    windSource.loop=
+        true;
+
+
+    const windFilter=
+        audioCtx.createBiquadFilter();
+
+
+    windFilter.type=
+        "lowpass";
+
+
+    windFilter.frequency.value=
+        650;
+
+
+    windGain=
+        audioCtx.createGain();
+
+
+    windGain.gain.value=
+        .045;
+
+
+    windSource
+    .connect(
+        windFilter
+    )
+    .connect(
+        windGain
+    )
+    .connect(
+        audioCtx.destination
+    );
+
+
+    windSource.start();
+
+
+    /* FIRE */
+
+    const fireSource=
+        audioCtx.createBufferSource();
+
+
+    fireSource.buffer=
+        noiseBuffer();
+
+
+    fireSource.loop=
+        true;
+
+
+    const fireFilter=
+        audioCtx.createBiquadFilter();
+
+
+    fireFilter.type=
+        "bandpass";
+
+
+    fireFilter.frequency.value=
+        1800;
+
+
+    fireFilter.Q.value=
+        .6;
+
+
+    fireGain=
+        audioCtx.createGain();
+
+
+    fireGain.gain.value=
+        .08;
+
+
+    fireSource
+    .connect(
+        fireFilter
+    )
+    .connect(
+        fireGain
+    )
+    .connect(
+        audioCtx.destination
+    );
+
+
+    fireSource.start();
+
+
+    audioStarted=true;
+
+}
+
+
+/* RANDOM CRACKLING */
+
+function crackle(){
+
+    if(
+        !audioCtx ||
+        !state.sound ||
+        state.stage!==1
+    )
+        return;
+
+
+    const osc=
+        audioCtx.createOscillator();
+
+
+    const gain=
+        audioCtx.createGain();
+
+
+    osc.type=
+        "square";
+
+
+    osc.frequency.value=
+        THREE.MathUtils
+        .randFloat(
+            220,
+            1050
+        );
+
+
+    gain.gain.setValueAtTime(
+        0,
+        audioCtx.currentTime
+    );
+
+
+    gain.gain.linearRampToValueAtTime(
+
+        THREE.MathUtils
+        .randFloat(
+            .003,
+            .015
+        ),
+
+        audioCtx.currentTime+.005
+
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+
+        .0001,
+
+        audioCtx.currentTime+.045
+
+    );
+
+
+    osc.connect(
+        gain
+    )
+    .connect(
+        audioCtx.destination
+    );
+
+
+    osc.start();
+
+
+    osc.stop(
+        audioCtx.currentTime+.05
+    );
+
+}
+
+
+setInterval(
+    crackle,
+    125
+);
+
+
+/* =========================================================
+   FIRE SPREAD MODEL
+   ========================================================= */
+
+function calculateRisk(){
+
+    let score=0;
+
+
+    score +=
+        THREE.MathUtils
+        .mapLinear(
+            state.temperature,
+            18,
+            48,
+            0,
+            19
+        );
+
+
+    score +=
+        THREE.MathUtils
+        .mapLinear(
+            state.humidity,
+            90,
+            10,
+            0,
+            18
+        );
+
+
+    score +=
+        THREE.MathUtils
+        .mapLinear(
+            state.dryness,
+            10,
+            100,
+            0,
+            23
+        );
+
+
+    score +=
+        THREE.MathUtils
+        .mapLinear(
+            state.wind,
+            0,
+            70,
+            0,
+            18
+        );
+
+
+    score +=
+        THREE.MathUtils
+        .mapLinear(
+            state.slope,
+            0,
+            40,
+            0,
+            10
+        );
+
+
+    score +=
+        THREE.MathUtils
+        .mapLinear(
+            state.vegetation,
+            20,
+            100,
+            0,
+            12
+        );
+
+
+    return THREE.MathUtils.clamp(
+        score,
+        0,
+        100
+    );
+
+}
+
+
+function spreadRate(){
+
+    const dry=
+        state.dryness/100;
+
+
+    const wind=
+        state.wind/70;
+
+
+    const slope=
+        state.slope/40;
+
+
+    const veg=
+        state.vegetation/100;
+
+
+    return (
+        1.5
+        +
+        dry*6
+        +
+        wind*8
+        +
+        slope*5
+        +
+        veg*4
+    );
+
+}
+
+
+/* =========================================================
+   WIND VECTOR
+   ========================================================= */
+
+function getWindVector(){
+
+    const angle=
+        THREE.MathUtils
+        .degToRad(
+            state.windDir
+        );
+
+
+    return new THREE.Vector2(
+
+        Math.cos(angle),
+        Math.sin(angle)
+
+    );
+
+}
+
+
+/* =========================================================
+   TREE BURN UPDATE
+   ========================================================= */
+
+const healthyColor=
+    new THREE.Color(
+        0x1c6c42
+    );
+
+
+const dryColor=
+    new THREE.Color(
+        0x79612f
+    );
+
+
+const burnedColor=
+    new THREE.Color(
+        0x15110e
+    );
+
+
+const trunkHealthy=
+    new THREE.Color(
+        0x604023
+    );
+
+
+const trunkBurned=
+    new THREE.Color(
+        0x171310
+    );
+
+
+function updateTrees(){
+
+    const wind=
+        getWindVector();
+
+
+    const originX=
+        -7;
+
+
+    const originZ=
+        2;
+
+
+    const windStretch=
+        1 +
+        state.wind/50;
+
+
+    let burned=0;
+
+
+    treeData.forEach(
+        (
+            tree,
+            i
+        )=>{
+
+            const dx=
+                tree.x-originX;
+
+
+            const dz=
+                tree.z-originZ;
+
+
+            const forward=
+                dx*wind.x+
+                dz*wind.y;
+
+
+            const side=
+                -dx*wind.y+
+                dz*wind.x;
+
+
+            const directionalX=
+                forward /
+                (
+                    forward>0
+                    ? windStretch
+                    : 1.1
+                );
+
+
+            const dist=
+                Math.sqrt(
+                    directionalX*directionalX+
+                    side*side
+                );
+
+
+            let targetBurn=0;
+
+
+            if(
+                state.stage===0
+            ){
+
+                targetBurn=0;
+
+            }
+
+            else if(
+                state.stage===1
+            ){
+
+                const edge=
+                    state.burnRadius;
+
+
+                targetBurn=
+                    THREE.MathUtils
+                    .smoothstep(
+                        edge-dist,
+                        -1.5,
+                        4
+                    );
+
+            }
+
+            else{
+
+                targetBurn=
+                    dist <
+                    state.maxBurnRadius
+                    ? 1
+                    : 0;
+
+            }
+
+
+            tree.burn=
+                THREE.MathUtils.lerp(
+                    tree.burn,
+                    targetBurn,
+                    .08
+                );
+
+
+            if(
+                tree.burn>.45
+            ){
+
+                burned++;
+
+            }
+
+
+            const dryness=
+                state.dryness/100;
+
+
+            const base=
+                healthyColor
+                .clone()
+                .lerp(
+                    dryColor,
+                    dryness*.48
+                );
+
+
+            const crownColor=
+                base.lerp(
+                    burnedColor,
+                    tree.burn
+                );
+
+
+            crowns.setColorAt(
+                i,
+                crownColor
+            );
+
+
+            const trunkColor=
+                trunkHealthy
+                .clone()
+                .lerp(
+                    trunkBurned,
+                    tree.burn
+                );
+
+
+            trunks.setColorAt(
+                i,
+                trunkColor
+            );
+
+
+            const crownScale=
+                tree.s *
+                (
+                    1 -
+                    tree.burn*.56
+                );
+
+
+            matrix.compose(
+
+                new THREE.Vector3(
+
+                    tree.x,
+
+                    tree.y+
+                    4.2*
+                    tree.s,
+
+                    tree.z
+
+                ),
+
+                quat,
+
+                new THREE.Vector3(
+
+                    crownScale,
+
+                    crownScale,
+
+                    crownScale
+
+                )
+
+            );
+
+
+            crowns.setMatrixAt(
+                i,
+                matrix
+            );
+
+        }
+
+    );
+
+
+    crowns.instanceColor.needsUpdate=
+        true;
+
+
+    trunks.instanceColor.needsUpdate=
+        true;
+
+
+    crowns.instanceMatrix.needsUpdate=
+        true;
+
+
+    return burned/treeCount;
+
+}
+
+
+/* =========================================================
+   FIRE UPDATE
+   ========================================================= */
+
+function updateFire(
+    elapsed
+){
+
+    const visible=
+        state.stage===1;
+
+
+    fireGroup.visible=
+        visible;
+
+
+    fireLight.visible=
+        visible;
+
+
+    if(
+        !visible
+    )
+        return;
+
+
+    const wind=
+        getWindVector();
+
+
+    const radius=
+        state.burnRadius;
+
+
+    const stretch=
+        1+
+        state.wind/45;
+
+
+    const countScale=
+        state.intensity/100;
+
+
+    flames.forEach(
+        (
+            flame,
+            i
+        )=>{
+
+            const data=
+                flame.userData;
+
+
+            const r=
+                data.radius *
+                radius;
+
+
+            const forward=
+                Math.cos(
+                    data.angle
+                ) *
+                r *
+                stretch;
+
+
+            const side=
+                Math.sin(
+                    data.angle
+                ) *
+                r;
+
+
+            const x=
+                -7+
+                wind.x*forward
+                -
+                wind.y*side;
+
+
+            const z=
+                2+
+                wind.y*forward
+                +
+                wind.x*side;
+
+
+            const ground=
+                terrainHeight(
+                    x,
+                    z
+                );
+
+
+            const flicker=
+                1+
+                Math.sin(
+                    elapsed*
+                    data.speed+
+                    data.phase
+                )*.22;
+
+
+            flame.position.set(
+
+                x,
+
+                ground+
+                1.2*
+                flicker,
+
+                z
+
+            );
+
+
+            flame.rotation.z=
+                -wind.x*
+                state.wind/130;
+
+
+            flame.rotation.x=
+                wind.y*
+                state.wind/130;
+
+
+            const s=
+                (.65+
+                countScale*.75)
+                *
+                flicker;
+
+
+            flame.scale.set(
+                s,
+                s*
+                (
+                    .8+
+                    state.intensity/100
+                ),
+                s
+            );
+
+        }
+
+    );
+
+
+    fireLight.position.set(
+
+        -7,
+
+        terrainHeight(
+            -7,
+            2
+        )+4,
+
+        2
+
+    );
+
+
+    fireLight.intensity=
+        3+
+        state.intensity/12+
+        Math.sin(
+            elapsed*10
+        )*1.3;
+
+}
+
+
+/* =========================================================
+   SMOKE UPDATE
+   ========================================================= */
+
+function updateSmoke(
+    elapsed
+){
+
+    smokeParticles.visible=
+        state.smoke &&
+        (
+            state.stage===1 ||
+            state.stage===2
+        );
+
+
+    if(
+        !smokeParticles.visible
+    )
+        return;
+
+
+    const arr=
+        smokeGeo
+        .attributes
+        .position
+        .array;
+
+
+    const wind=
+        getWindVector();
+
+
+    const windScale=
+        state.wind/18;
+
+
+    for(
+        let i=0;
+        i<smokeCount;
+        i++
+    ){
+
+        const d=
+            smokeRandom[i];
+
+
+        const p=
+            (
+                d.phase+
+                elapsed*
+                .038*
+                d.drift
+            )%1;
+
+
+        const height=
+            p*34;
+
+
+        const spread=
+            1+
+            p*11;
+
+
+        const drift=
+            p*
+            17*
+            windScale;
+
+
+        const x=
+            -7+
+            wind.x*
+            drift+
+            Math.sin(
+                i*12.3+
+                elapsed
+            )*
+            d.side*
+            spread;
+
+
+        const z=
+            2+
+            wind.y*
+            drift+
+            Math.cos(
+                i*7.9+
+                elapsed*.8
+            )*
+            d.side*
+            spread;
+
+
+        arr[i*3]=
+            x;
+
+
+        arr[i*3+1]=
+            terrainHeight(
+                -7,
+                2
+            )
+            +
+            3+
+            height;
+
+
+        arr[i*3+2]=
+            z;
+
+    }
+
+
+    smokeGeo
+    .attributes
+    .position
+    .needsUpdate=
+        true;
+
+
+    smokeMat.opacity=
+        state.stage===2
+        ? .13
+        : .22+
+          state.intensity/650;
+
+}
+
+
+/* =========================================================
+   EMBER UPDATE
+   ========================================================= */
+
+function updateEmbers(
+    elapsed
+){
+
+    emberParticles.visible=
+        state.embers &&
+        state.stage===1;
+
+
+    if(
+        !emberParticles.visible
+    )
+        return;
+
+
+    const arr=
+        emberGeo
+        .attributes
+        .position
+        .array;
+
+
+    const wind=
+        getWindVector();
+
+
+    const speed=
+        3+
+        state.wind*.12;
+
+
+    for(
+        let i=0;
+        i<emberCount;
+        i++
+    ){
+
+        const d=
+            emberData[i];
+
+
+        const life=
+            (
+                d.life+
+                elapsed*
+                .15*
+                d.speed
+            )%1;
+
+
+        const travel=
+            life*
+            speed*
+            3;
+
+
+        arr[i*3]=
+
+            -7+
+            wind.x*
+            travel+
+            Math.sin(
+                i*3.7
+            )*
+            d.side*
+            3;
+
+
+        arr[i*3+1]=
+
+            terrainHeight(
+                -7,
+                2
+            )
+            +
+            2+
+            life*
+            10+
+            Math.sin(
+                life*Math.PI
+            )*
+            3;
+
+
+        arr[i*3+2]=
+
+            2+
+            wind.y*
+            travel+
+            Math.cos(
+                i*2.8
+            )*
+            d.side*
+            3;
+
+    }
+
+
+    emberGeo
+    .attributes
+    .position
+    .needsUpdate=
+        true;
+
+}
+
+
+/* =========================================================
+   RAIN UPDATE
+   ========================================================= */
+
+function updateRain(
+    delta
+){
+
+    rain.visible=
+        state.stage===3;
+
+
+    if(
+        !rain.visible
+    )
+        return;
+
+
+    const arr=
+        rainGeo
+        .attributes
+        .position
+        .array;
+
+
+    for(
+        let i=0;
+        i<rainCount;
+        i++
+    ){
+
+        arr[i*3+1]-=
+            delta*35;
+
+
+        if(
+            arr[i*3+1]<
+            terrainHeight(
+                arr[i*3],
+                arr[i*3+2]
+            )
+        ){
+
+            arr[i*3+1]=
+                THREE.MathUtils
+                .randFloat(
+                    20,
+                    42
+                );
+
+        }
+
+    }
+
+
+    rainGeo
+    .attributes
+    .position
+    .needsUpdate=
+        true;
+
+}
+
+
+/* =========================================================
+   STAGE VISUALS
+   ========================================================= */
+
+function updateStageVisuals(){
+
+    const s=
+        state.stage;
+
+
+    /* SKY */
+
+    if(s===0){
+
+        scene.background
+        .set(
+            0x163746
+        );
+
+
+        scene.fog.color
+        .set(
+            0x19383d
+        );
+
+
+        scene.fog.density=
+            .008;
+
+
+        terrainMaterial.color
+        .set(
+            0x345d3e
+        );
+
+
+        burnPatchMat.opacity=
+            0;
+
+
+        muddyWater.material.opacity=
+            0;
+
+
+        stream.material.opacity=
+            .82;
+
+
+        erosionGroup.visible=
+            false;
+
+    }
+
+
+    if(s===1){
+
+        scene.background
+        .set(
+            0x111b1c
+        );
+
+
+        scene.fog.color
+        .set(
+            0x252623
+        );
+
+
+        scene.fog.density=
+            .012;
+
+
+        terrainMaterial.color
+        .set(
+            0x3b5135
+        );
+
+
+        burnPatchMat.opacity=
+            .68;
+
+
+        muddyWater.material.opacity=
+            0;
+
+
+        stream.material.opacity=
+            .82;
+
+
+        erosionGroup.visible=
+            false;
+
+    }
+
+
+    if(s===2){
+
+        scene.background
+        .set(
+            0x1b2424
+        );
+
+
+        scene.fog.color
+        .set(
+            0x3a3a35
+        );
+
+
+        scene.fog.density=
+            .014;
+
+
+        terrainMaterial.color
+        .set(
+            0x3a3128
+        );
+
+
+        burnPatchMat.opacity=
+            .9;
+
+
+        muddyWater.material.opacity=
+            0;
+
+
+        stream.material.opacity=
+            .82;
+
+
+        erosionGroup.visible=
+            false;
+
+    }
+
+
+    if(s===3){
+
+        scene.background
+        .set(
+            0x263c49
+        );
+
+
+        scene.fog.color
+        .set(
+            0x33474e
+        );
+
+
+        scene.fog.density=
+            .013;
+
+
+        terrainMaterial.color
+        .set(
+            0x44392c
+        );
+
+
+        burnPatchMat.opacity=
+            .82;
+
+
+        muddyWater.material.opacity=
+            .78;
+
+
+        stream.material.opacity=
+            .20;
+
+
+        erosionGroup.visible=
+            true;
+
+    }
+
+
+    burnPatch.scale.set(
+
+        state.maxBurnRadius,
+
+        state.maxBurnRadius,
+
+        1
+
+    );
+
+
+    /* AUDIO */
+
+    updateAudio();
+
+
+    /* DASHBOARD LABEL */
+
+    const labels=[
+        "TRƯỚC CHÁY",
+        "ĐANG CHÁY",
+        "SAU CHÁY",
+        "HỆ QUẢ SAU MƯA"
+    ];
+
+
+    document
+    .getElementById(
+        "stageLabel"
+    )
+    .textContent=
+        labels[s];
+
+
+    /* BUTTONS */
+
+    document
+    .querySelectorAll(
+        "[data-stage]"
+    )
+    .forEach(
+        el=>{
+
+            el.classList.toggle(
+                "active",
+
+                Number(
+                    el.dataset.stage
+                )===s
+
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   AUDIO VOLUME UPDATE
+   ========================================================= */
+
+function updateAudio(){
+
+    if(
+        !audioStarted
+    )
+        return;
+
+
+    const targetWind=
+        state.sound
+        ? .01+
+          state.wind/700
+        : 0;
+
+
+    const targetFire=
+        state.sound &&
+        state.stage===1
+        ? .02+
+          state.intensity/700
+        : 0;
+
+
+    windGain.gain
+    .setTargetAtTime(
+
+        targetWind,
+
+        audioCtx.currentTime,
+
+        .1
+
+    );
+
+
+    fireGain.gain
+    .setTargetAtTime(
+
+        targetFire,
+
+        audioCtx.currentTime,
+
+        .1
+
+    );
+
+}
+
+
+/* =========================================================
+   DASHBOARD CALCULATIONS
+   ========================================================= */
+
+function updateDashboard(
+    burnedRatio
+){
+
+    const risk=
+        Math.round(
+            calculateRisk()
+        );
+
+
+    let name;
+
+
+    if(risk<25)
+        name="THẤP";
+
+    else if(risk<45)
+        name="TRUNG BÌNH";
+
+    else if(risk<65)
+        name="CAO";
+
+    else if(risk<82)
+        name="RẤT CAO";
+
+    else
+        name="CỰC ĐOAN";
+
+
+    const riskLevel=
+        document.getElementById(
+            "riskLevel"
+        );
+
+
+    riskLevel.textContent=
+        name;
+
+
+    const color=
+
+        risk<25
+        ? "#57dfa3"
+
+        :risk<45
+        ? "#f0d761"
+
+        :risk<65
+        ? "#ffab49"
+
+        :risk<82
+        ? "#ff7b3d"
+
+        :"#ff4c46";
+
+
+    riskLevel.style.color=
+        color;
+
+
+    document
+    .getElementById(
+        "riskScore"
+    )
+    .textContent=
+        risk;
+
+
+    document
+    .getElementById(
+        "riskFill"
+    )
+    .style.width=
+        risk+"%";
+
+
+    const area=
+
+        state.stage===0
+        ? 0
+
+        :
+        Math.PI*
+        state.burnRadius*
+        state.burnRadius*
+        .01;
+
+
+    document
+    .getElementById(
+        "areaMetric"
+    )
+    .textContent=
+        area.toFixed(1);
+
+
+    const spread=
+        state.stage===1
+        ? spreadRate()
+        : 0;
+
+
+    document
+    .getElementById(
+        "spreadMetric"
+    )
+    .textContent=
+        spread.toFixed(1);
+
+
+    const pm=
+
+        state.stage===1
+        ?
+        Math.round(
+            30+
+            state.intensity*3.1+
+            state.dryness*1.4
+        )
+
+        :
+
+        state.stage===2
+        ?
+        Math.round(
+            35+
+            state.intensity*.55
+        )
+
+        :
+        10;
+
+
+    document
+    .getElementById(
+        "pmMetric"
+    )
+    .textContent=
+        pm;
+
+
+    document
+    .getElementById(
+        "biomassMetric"
+    )
+    .textContent=
+        Math.round(
+            burnedRatio*100
+        );
+
+
+    updateImpactLevels(
+        risk,
+        burnedRatio,
+        pm
+    );
+
+}
+
+
+/* =========================================================
+   IMPACT LEVEL HELPERS
+   ========================================================= */
+
+function applyImpact(
+    id,
+    level
+){
+
+    const el=
+        document.getElementById(
+            id
+        );
+
+
+    el.className=
+        "impactValue";
+
+
+    if(level===0){
+
+        el.textContent=
+            "THẤP";
+
+        el.classList
+        .add(
+            "impactLow"
+        );
+
+    }
+
+
+    if(level===1){
+
+        el.textContent=
+            "VỪA";
+
+        el.classList
+        .add(
+            "impactMid"
+        );
+
+    }
+
+
+    if(level===2){
+
+        el.textContent=
+            "CAO";
+
+        el.classList
+        .add(
+            "impactHigh"
+        );
+
+    }
+
+
+    if(level===3){
+
+        el.textContent=
+            "RẤT CAO";
+
+        el.classList
+        .add(
+            "impactExtreme"
+        );
+
+    }
+
+}
+
+
+function updateImpactLevels(
+    risk,
+    burned,
+    pm
+){
+
+    const fireImpact=
+        Math.min(
+            3,
+            Math.floor(
+                risk/25
+            )
+        );
+
+
+    applyImpact(
+        "forestImpact",
+        Math.max(
+            state.stage===0
+            ?0
+            :1,
+            fireImpact
+        )
+    );
+
+
+    applyImpact(
+        "habitatImpact",
+        burned>.55
+        ?3
+        :burned>.25
+        ?2
+        :burned>.05
+        ?1
+        :0
+    );
+
+
+    applyImpact(
+        "airImpact",
+        pm>300
+        ?3
+        :pm>160
+        ?2
+        :pm>50
+        ?1
+        :0
+    );
+
+
+    applyImpact(
+        "healthImpact",
+        pm>250
+        ?3
+        :pm>120
+        ?2
+        :pm>35
+        ?1
+        :0
+    );
+
+
+    applyImpact(
+        "soilImpact",
+
+        state.stage===3
+        ?3
+
+        :state.stage===2
+        ?2
+
+        :state.stage===1
+        ?1
+
+        :0
+
+    );
+
+
+    applyImpact(
+        "waterImpact",
+
+        state.stage===3
+        ?3
+
+        :state.stage===2
+        ?1
+
+        :0
+
+    );
+
+
+    const houseDist=
+        41;
+
+
+    const proximity=
+
+        state.burnRadius>
+        houseDist*.65
+        ?3
+
+        :state.burnRadius>
+        houseDist*.45
+        ?2
+
+        :state.burnRadius>
+        houseDist*.30
+        ?1
+
+        :0;
+
+
+    applyImpact(
+        "communityImpact",
+        proximity
+    );
+
+
+    applyImpact(
+        "carbonImpact",
+
+        burned>.55
+        ?3
+
+        :burned>.25
+        ?2
+
+        :burned>.05
+        ?1
+
+        :0
+
+    );
+
+}
+
+
+/* =========================================================
+   UI BINDINGS
+   ========================================================= */
+
+function bindRange(
+    id,
+    stateKey,
+    textId,
+    formatter
+){
+
+    const input=
+        document.getElementById(
+            id
+        );
+
+
+    const output=
+        document.getElementById(
+            textId
+        );
+
+
+    input.addEventListener(
+        "input",
+        ()=>{
+
+            state[stateKey]=
+                Number(
+                    input.value
+                );
+
+
+            output.textContent=
+                formatter(
+                    state[stateKey]
+                );
+
+
+            if(
+                stateKey==="wind" ||
+                stateKey==="intensity"
+            ){
+
+                updateAudio();
+
+            }
+
+        }
+    );
+
+}
+
+
+bindRange(
+    "temperature",
+    "temperature",
+    "tempText",
+    v=>v+"°C"
+);
+
+
+bindRange(
+    "humidity",
+    "humidity",
+    "humidityText",
+    v=>v+"%"
+);
+
+
+bindRange(
+    "dryness",
+    "dryness",
+    "drynessText",
+    v=>v+"%"
+);
+
+
+bindRange(
+    "vegetation",
+    "vegetation",
+    "vegetationText",
+    v=>v+"%"
+);
+
+
+bindRange(
+    "wind",
+    "wind",
+    "windText",
+    v=>v+" km/h"
+);
+
+
+bindRange(
+    "windDir",
+    "windDir",
+    "windDirText",
+    v=>v+"°"
+);
+
+
+bindRange(
+    "slope",
+    "slope",
+    "slopeText",
+    v=>v+"°"
+);
+
+
+bindRange(
+    "intensity",
+    "intensity",
+    "intensityText",
+    v=>v+"%"
+);
+
+
+bindRange(
+    "simulationSpeed",
+    "speed",
+    "speedText",
+    v=>(v/100).toFixed(2)+"×"
+);
+
+
+document
+.getElementById(
+    "simulationSpeed"
+)
+.addEventListener(
+    "input",
+    e=>{
+
+        state.speed=
+            Number(
+                e.target.value
+            )/100;
+
+    }
+);
+
+
+/* =========================================================
+   TOGGLES
+   ========================================================= */
+
+function toggleButton(
+    id,
+    key
+){
+
+    const button=
+        document.getElementById(
+            id
+        );
+
+
+    button.addEventListener(
+        "click",
+        ()=>{
+
+            state[key]=
+                !state[key];
+
+
+            button.classList.toggle(
+                "on",
+                state[key]
+            );
+
+        }
+    );
+
+}
+
+
+toggleButton(
+    "smokeToggle",
+    "smoke"
+);
+
+
+toggleButton(
+    "emberToggle",
+    "embers"
+);
+
+
+toggleButton(
+    "labelToggle",
+    "labels"
+);
+
+
+document
+.getElementById(
+    "labelToggle"
+)
+.addEventListener(
+    "click",
+    ()=>{
+
+        labels.forEach(
+            label=>
+
+            label.visible=
+                state.labels
+        );
+
+    }
+);
+
+
+document
+.getElementById(
+    "qualityToggle"
+)
+.addEventListener(
+    "click",
+    e=>{
+
+        state.ultra=
+            !state.ultra;
+
+
+        e.currentTarget
+        .classList
+        .toggle(
+            "on",
+            state.ultra
+        );
+
+
+        bloom.enabled=
+            state.ultra;
+
+
+        renderer
+        .shadowMap
+        .enabled=
+            state.ultra;
+
+
+        renderer.setPixelRatio(
+
+            state.ultra
+            ?
+            Math.min(
+                devicePixelRatio,
+                2
+            )
+
+            :
+            1
+
+        );
+
+
+        document
+        .getElementById(
+            "performance"
+        )
+        .textContent=
+
+            state.ultra
+            ?
+            "GPU MODE • ULTRA"
+            :
+            "GPU MODE • PERFORMANCE";
+
+    }
+);
+
+
+/* =========================================================
+   STAGE BUTTONS
+   ========================================================= */
+
+document
+.querySelectorAll(
+    "[data-stage]"
+)
+.forEach(
+    button=>{
+
+        button.addEventListener(
+            "click",
+            ()=>{
+
+                const newStage=
+                    Number(
+                        button.dataset.stage
+                    );
+
+
+                setStage(
+                    newStage
+                );
+
+            }
+        );
+
+    }
+);
+
+
+function setStage(
+    newStage
+){
+
+    state.stage=
+        newStage;
+
+
+    if(newStage===0){
+
+        state.burnRadius=
+            3;
+
+    }
+
+
+    if(newStage===1){
+
+        state.burnRadius=
+            Math.max(
+                state.burnRadius,
+                4
+            );
+
+    }
+
+
+    if(newStage>=2){
+
+        state.burnRadius=
+            state.maxBurnRadius;
+
+    }
+
+
+    updateStageVisuals();
+
+
+    showToast(
+        [
+            "🌲 Quan sát cấu trúc rừng trước cháy và lượng nhiên liệu tiềm năng.",
+
+            "🔥 Gió, độ khô, nhiệt độ và địa hình đang ảnh hưởng hướng lan của lửa.",
+
+            "🌫 Sau cháy: thảm thực vật suy giảm, đất trơ và khói còn tồn lưu.",
+
+            "🌧 Khi mưa lớn xuất hiện sau cháy, mất lớp phủ có thể làm tăng dòng chảy và xói mòn."
+        ][newStage]
+    );
+
+}
+
+
+/* =========================================================
+   CAMERA BUTTONS
+   ========================================================= */
+
+document
+.getElementById(
+    "resetCameraBtn"
+)
+.addEventListener(
+    "click",
+    ()=>{
+
+        camera.position.set(
+            48,
+            33,
+            49
+        );
+
+
+        controls.target.set(
+            0,
+            4,
+            0
+        );
+
+
+        controls.update();
+
+    }
+);
+
+
+document
+.getElementById(
+    "topViewBtn"
+)
+.addEventListener(
+    "click",
+    ()=>{
+
+        camera.position.set(
+            0,
+            78,
+            .1
+        );
+
+
+        controls.target.set(
+            0,
+            0,
+            0
+        );
+
+
+        controls.update();
+
+    }
+);
+
+
+document
+.getElementById(
+    "pauseBtn"
+)
+.addEventListener(
+    "click",
+    e=>{
+
+        state.running=
+            !state.running;
+
+
+        e.currentTarget
+        .textContent=
+
+            state.running
+            ?"⏸"
+            :"▶";
+
+    }
+);
+
+
+/* =========================================================
+   SOUND
+   ========================================================= */
+
+document
+.getElementById(
+    "soundBtn"
+)
+.addEventListener(
+    "click",
+    e=>{
+
+        state.sound=
+            !state.sound;
+
+
+        e.currentTarget
+        .classList.toggle(
+            "active",
+            state.sound
+        );
+
+
+        e.currentTarget
+        .textContent=
+            state.sound
+            ?"🔊"
+            :"🔇";
+
+
+        updateAudio();
+
+    }
+);
+
+
+/* =========================================================
+   INTRO START
+   ========================================================= */
+
+document
+.getElementById(
+    "startExperience"
+)
+.addEventListener(
+    "click",
+    async()=>{
+
+        initAudio();
+
+
+        if(
+            audioCtx &&
+            audioCtx.state==="suspended"
+        ){
+
+            await audioCtx.resume();
+
+        }
+
+
+        document
+        .getElementById(
+            "intro"
+        )
+        .classList
+        .add(
+            "hidden"
+        );
+
+
+        updateAudio();
+
+    }
+);
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+let toastTimer;
+
+
+function showToast(
+    message
+){
+
+    const toast=
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent=
+        message;
+
+
+    toast.classList
+    .add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer=
+        setTimeout(
+            ()=>{
+
+                toast.classList
+                .remove(
+                    "show"
+                );
+
+            },
+            4300
+        );
+
+}
+
+
+/* =========================================================
+   SIMULATION CLOCK
+   ========================================================= */
+
+const clock=
+    new THREE.Clock();
+
+
+let treeUpdateAccumulator=0;
+
+
+function updateSimulation(
+    delta
+){
+
+    if(
+        !state.running
+    )
+        return;
+
+
+    const simDelta=
+        delta*
+        state.speed;
+
+
+    state.simulationTime+=
+        simDelta;
+
+
+    if(
+        state.stage===1
+    ){
+
+        const rate=
+            spreadRate();
+
+
+        state.burnRadius+=
+
+            simDelta*
+            rate*
+            .025;
+
+
+        state.burnRadius=
+            Math.min(
+
+                state.burnRadius,
+
+                state.maxBurnRadius
+
+            );
+
+    }
+
+
+    if(
+        state.stage>=2
+    ){
+
+        state.burnRadius=
+            state.maxBurnRadius;
+
+    }
+
+
+    if(
+        state.stage===0
+    ){
+
+        state.burnRadius=
+            3;
+
+    }
+
+
+    burnPatch.scale.set(
+
+        Math.max(
+            1,
+            state.burnRadius
+        ),
+
+        Math.max(
+            1,
+            state.burnRadius
+        ),
+
+        1
+
+    );
+
+
+    burnPatchMat.opacity=
+
+        state.stage===1
+        ?
+        Math.min(
+            .72,
+            state.burnRadius/25
+        )
+
+        :
+
+        state.stage>=2
+        ?
+        .9
+
+        :
+        0;
+
+
+    treeUpdateAccumulator+=
+        delta;
+
+
+    let burnedRatio=0;
+
+
+    if(
+        treeUpdateAccumulator>.08
+    ){
+
+        burnedRatio=
+            updateTrees();
+
+
+        treeUpdateAccumulator=0;
+
+
+        updateDashboard(
+            burnedRatio
+        );
+
+    }
+
+
+    updateFire(
+        state.simulationTime
+    );
+
+
+    updateSmoke(
+        state.simulationTime
+    );
+
+
+    updateEmbers(
+        state.simulationTime
+    );
+
+
+    updateRain(
+        simDelta
+    );
+
+}
+
+
+/* =========================================================
+   ANIMATE HOUSE DAMAGE
+   ========================================================= */
+
+function updateSettlement(){
+
+    if(
+        state.stage===1
+    ){
+
+        const danger=
+            THREE.MathUtils
+            .smoothstep(
+                state.burnRadius,
+                18,
+                28
+            );
+
+
+        wall.material.color.lerpColors(
+
+            new THREE.Color(
+                0xd9c7aa
+            ),
+
+            new THREE.Color(
+                0x66564a
+            ),
+
+            danger*.6
+
+        );
+
+
+        roof.material.color.lerpColors(
+
+            new THREE.Color(
+                0x7e3127
+            ),
+
+            new THREE.Color(
+                0x241a18
+            ),
+
+            danger*.8
+
+        );
+
+    }
+
+
+    if(
+        state.stage>=2
+    ){
+
+        wall.material.color.set(
+            0xa38d76
+        );
+
+
+        roof.material.color.set(
+            0x4b2a24
+        );
+
+    }
+
+
+    if(
+        state.stage===0
+    ){
+
+        wall.material.color.set(
+            0xd9c7aa
+        );
+
+
+        roof.material.color.set(
+            0x7e3127
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FIRE LIGHT FLICKER
+   ========================================================= */
+
+function updateEnvironment(
+    elapsed
+){
+
+    if(
+        state.stage===1
+    ){
+
+        sun.intensity=
+            1.4;
+
+
+        hemi.intensity=
+            1.05;
+
+
+        bloom.strength=
+            state.ultra
+            ?
+            .58+
+            state.intensity/170
+            :
+            0;
+
+    }
+
+    else if(
+        state.stage===3
+    ){
+
+        sun.intensity=
+            .85;
+
+
+        hemi.intensity=
+            1.15;
+
+
+        bloom.strength=
+            .25;
+
+    }
+
+    else{
+
+        sun.intensity=
+            2;
+
+
+        hemi.intensity=
+            1.4;
+
+
+        bloom.strength=
+            .34;
+
+    }
+
+
+    if(
+        state.stage===1
+    ){
+
+        fireLight.intensity*=
+
+            .93+
+            Math.sin(
+                elapsed*17
+            )*.05;
+
+    }
+
+}
+
+
+/* =========================================================
+   LOOP
+   ========================================================= */
+
+function animate(){
+
+    requestAnimationFrame(
+        animate
+    );
+
+
+    const delta=
+        Math.min(
+            clock.getDelta(),
+            .045
+        );
+
+
+    const elapsed=
+        clock.elapsedTime;
+
+
+    controls.update(
+        delta
+    );
+
+
+    updateSimulation(
+        delta
+    );
+
+
+    updateSettlement();
+
+
+    updateEnvironment(
+        elapsed
+    );
+
+
+    if(
+        state.ultra
+    ){
+
+        composer.render();
+
+    }
+
+    else{
+
+        renderer.render(
+            scene,
+            camera
+        );
+
+    }
+
+
+    labelRenderer.render(
+        scene,
+        camera
+    );
+
+}
+
+
+updateStageVisuals();
+
+
+updateTrees();
+
+
+updateDashboard(
+    0
+);
+
+
+animate();
+
+
+/* =========================================================
+   RESIZE
+   ========================================================= */
+
+addEventListener(
+    "resize",
+    ()=>{
+
+        camera.aspect=
+            innerWidth/
+            innerHeight;
+
+
+        camera.updateProjectionMatrix();
+
+
+        renderer.setSize(
+            innerWidth,
+            innerHeight
+        );
+
+
+        composer.setSize(
+            innerWidth,
+            innerHeight
+        );
+
+
+        labelRenderer.setSize(
+            innerWidth,
+            innerHeight
+        );
+
+    }
+);
+
+</script>
+
+</body>
+</html>

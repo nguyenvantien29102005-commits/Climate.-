@@ -1,0 +1,3198 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>CLIMASCORE | Wildfire Challenge</title>
+
+<style>
+
+/* =========================================================
+   CLIMASCORE — WILDFIRE CHALLENGE
+   CÂU HỎI TƯƠNG TÁC + CẢM NGHĨ
+   ========================================================= */
+
+:root{
+    --bg:#06131a;
+    --bg2:#0b2027;
+
+    --panel:#102832;
+    --panel2:#16343c;
+
+    --orange:#ff7c2c;
+    --yellow:#ffd45d;
+    --red:#ff4f48;
+    --cyan:#41e1ff;
+    --green:#4fdfa1;
+    --purple:#806dff;
+
+    --text:#f5fbfd;
+    --muted:#a7bec6;
+
+    --line:rgba(255,255,255,.09);
+
+    --shadow:0 25px 70px rgba(0,0,0,.35);
+
+    --radius:24px;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color:var(--text);
+
+    background:
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(255,108,38,.15),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 90% 10%,
+            rgba(52,218,255,.10),
+            transparent 28%
+        ),
+        var(--bg);
+
+    min-height:100vh;
+}
+
+button,
+textarea,
+input{
+    font:inherit;
+}
+
+
+/* =========================================================
+   TOP BAR
+   ========================================================= */
+
+.topbar{
+    position:sticky;
+    top:0;
+    z-index:100;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+
+    padding:13px 5%;
+
+    background:
+        rgba(6,19,26,.88);
+
+    backdrop-filter:blur(18px);
+
+    border-bottom:1px solid var(--line);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.brandIcon{
+    width:43px;
+    height:43px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffd55a,
+            #ff6030
+        );
+
+    font-size:23px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(255,90,30,.28);
+}
+
+.brandText b{
+    display:block;
+    font-size:14px;
+    letter-spacing:.7px;
+}
+
+.brandText span{
+    display:block;
+    margin-top:2px;
+
+    color:#93aab1;
+    font-size:10px;
+}
+
+.backBtn{
+    border:1px solid var(--line);
+
+    background:
+        rgba(255,255,255,.045);
+
+    color:#fff;
+
+    padding:9px 13px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero{
+    padding:70px 7% 40px;
+
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+    gap:30px;
+    align-items:center;
+}
+
+.heroTag{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+    padding:7px 12px;
+
+    border-radius:999px;
+
+    color:#ffc878;
+
+    background:
+        rgba(255,119,40,.10);
+
+    border:
+        1px solid rgba(255,119,40,.20);
+
+    font-size:12px;
+    font-weight:800;
+
+    margin-bottom:18px;
+}
+
+.hero h1{
+    margin:0;
+
+    font-size:
+        clamp(42px,6vw,74px);
+
+    line-height:.96;
+
+    letter-spacing:-3px;
+}
+
+.hero h1 span{
+    color:transparent;
+
+    background:
+        linear-gradient(
+            100deg,
+            #ffd35a,
+            #ff8835,
+            #ff4f49
+        );
+
+    -webkit-background-clip:text;
+    background-clip:text;
+}
+
+.hero p{
+    max-width:720px;
+    margin-top:18px;
+
+    color:#b3c6cc;
+
+    font-size:17px;
+}
+
+.heroVisual{
+    position:relative;
+
+    min-height:320px;
+
+    border-radius:32px;
+
+    overflow:hidden;
+
+    border:1px solid var(--line);
+
+    background:
+        linear-gradient(
+            #19333a,
+            #102224 55%,
+            #171c14 55%
+        );
+
+    box-shadow:var(--shadow);
+}
+
+.fireGlow{
+    position:absolute;
+
+    width:250px;
+    height:250px;
+
+    border-radius:50%;
+
+    right:12%;
+    bottom:-60px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,214,80,.55),
+            rgba(255,93,37,.30),
+            transparent 70%
+        );
+
+    animation:pulseGlow 2s infinite alternate;
+}
+
+@keyframes pulseGlow{
+    to{
+        transform:scale(1.08);
+    }
+}
+
+.bigFire{
+    position:absolute;
+    right:21%;
+    bottom:55px;
+
+    font-size:110px;
+
+    filter:
+        drop-shadow(
+            0 0 24px rgba(255,80,20,.65)
+        );
+
+    animation:fireFloat .8s infinite alternate;
+}
+
+@keyframes fireFloat{
+    to{
+        transform:
+            translateY(-8px)
+            scale(1.03);
+    }
+}
+
+.smokeCloud{
+    position:absolute;
+
+    width:170px;
+    height:100px;
+
+    right:18%;
+    top:55px;
+
+    border-radius:50%;
+
+    background:
+        rgba(100,106,104,.35);
+
+    filter:blur(7px);
+
+    animation:smokeMove 5s infinite linear;
+}
+
+@keyframes smokeMove{
+    to{
+        transform:
+            translate(-100px,-70px)
+            scale(1.5);
+
+        opacity:0;
+    }
+}
+
+.heroMini{
+    position:absolute;
+
+    left:20px;
+    right:20px;
+    bottom:18px;
+
+    padding:12px 14px;
+
+    border-radius:15px;
+
+    background:
+        rgba(2,12,15,.65);
+
+    backdrop-filter:blur(12px);
+
+    border:1px solid var(--line);
+
+    font-size:12px;
+    color:#d3e1e4;
+}
+
+
+/* =========================================================
+   MAIN WRAPPER
+   ========================================================= */
+
+main{
+    padding:20px 7% 90px;
+}
+
+.sectionIntro{
+    max-width:900px;
+    margin-bottom:25px;
+}
+
+.sectionTag{
+    color:#5fe5ff;
+
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    font-size:12px;
+    font-weight:900;
+
+    margin-bottom:8px;
+}
+
+.sectionIntro h2{
+    margin:0 0 10px;
+
+    font-size:
+        clamp(31px,4vw,47px);
+
+    line-height:1.08;
+    letter-spacing:-1.8px;
+}
+
+.sectionIntro p{
+    color:var(--muted);
+    margin:0;
+}
+
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+
+.progressWrap{
+    position:sticky;
+    top:70px;
+    z-index:50;
+
+    margin-bottom:26px;
+
+    padding:14px 16px;
+
+    border-radius:18px;
+
+    background:
+        rgba(7,23,29,.88);
+
+    backdrop-filter:blur(15px);
+
+    border:1px solid var(--line);
+}
+
+.progressHead{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:12px;
+
+    margin-bottom:9px;
+
+    font-size:11px;
+    color:#a7bbc1;
+}
+
+.progressHead b{
+    color:#fff;
+}
+
+.progressBar{
+    height:8px;
+
+    border-radius:999px;
+
+    background:
+        rgba(255,255,255,.065);
+
+    overflow:hidden;
+}
+
+.progressFill{
+    width:0;
+    height:100%;
+
+    border-radius:inherit;
+
+    background:
+        linear-gradient(
+            90deg,
+            #4fe0a1,
+            #4bdfff,
+            #ffd45c,
+            #ff6a34
+        );
+
+    transition:.35s;
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.quizCard{
+    display:none;
+
+    border-radius:27px;
+
+    padding:28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.055),
+            rgba(255,255,255,.025)
+        );
+
+    border:1px solid var(--line);
+
+    box-shadow:
+        0 18px 55px
+        rgba(0,0,0,.20);
+
+    animation:fadeUp .4s ease;
+}
+
+.quizCard.active{
+    display:block;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(14px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.questionTop{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+
+    margin-bottom:20px;
+}
+
+.levelTag{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+
+    padding:7px 11px;
+
+    border-radius:999px;
+
+    font-size:10px;
+    font-weight:900;
+
+    letter-spacing:.8px;
+
+    color:#63e8ff;
+
+    background:
+        rgba(65,225,255,.08);
+
+    border:
+        1px solid rgba(65,225,255,.18);
+}
+
+.questionNo{
+    color:#859ca4;
+    font-size:11px;
+}
+
+.questionText{
+    margin:0 0 22px;
+
+    font-size:
+        clamp(22px,3vw,31px);
+
+    line-height:1.28;
+
+    letter-spacing:-.5px;
+}
+
+
+/* =========================================================
+   OPTIONS
+   ========================================================= */
+
+.options{
+    display:grid;
+    gap:11px;
+}
+
+.option{
+    width:100%;
+
+    display:grid;
+    grid-template-columns:44px 1fr;
+
+    gap:13px;
+    align-items:center;
+
+    padding:14px;
+
+    border-radius:17px;
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    background:
+        rgba(255,255,255,.035);
+
+    color:#eaf3f5;
+
+    cursor:pointer;
+
+    text-align:left;
+
+    transition:.2s;
+}
+
+.option:hover{
+    transform:translateY(-2px);
+
+    border-color:
+        rgba(80,220,255,.22);
+
+    background:
+        rgba(255,255,255,.055);
+}
+
+.optionLetter{
+    width:38px;
+    height:38px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:12px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    font-weight:900;
+    color:#b8c8cc;
+}
+
+.option.correct{
+    border-color:
+        rgba(79,224,161,.5);
+
+    background:
+        rgba(79,224,161,.10);
+}
+
+.option.correct .optionLetter{
+    background:
+        rgba(79,224,161,.20);
+
+    color:#72f0b5;
+}
+
+.option.wrong{
+    border-color:
+        rgba(255,79,72,.5);
+
+    background:
+        rgba(255,79,72,.09);
+}
+
+.option.wrong .optionLetter{
+    background:
+        rgba(255,79,72,.18);
+
+    color:#ff746f;
+}
+
+.option.disabled{
+    pointer-events:none;
+}
+
+
+/* =========================================================
+   FEEDBACK
+   ========================================================= */
+
+.feedback{
+    display:none;
+
+    margin-top:18px;
+
+    padding:16px;
+
+    border-radius:17px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:1px solid var(--line);
+
+    font-size:13px;
+    color:#adc0c6;
+}
+
+.feedback.show{
+    display:block;
+}
+
+.feedback strong{
+    color:#fff;
+}
+
+.feedback.correct{
+    border-color:
+        rgba(79,224,161,.23);
+
+    background:
+        rgba(79,224,161,.055);
+}
+
+.feedback.wrong{
+    border-color:
+        rgba(255,88,70,.22);
+
+    background:
+        rgba(255,88,70,.05);
+}
+
+
+/* =========================================================
+   SCENARIO
+   ========================================================= */
+
+.scenarioBox{
+    display:grid;
+    grid-template-columns:.9fr 1.1fr;
+    gap:18px;
+
+    padding:18px;
+
+    margin-bottom:20px;
+
+    border-radius:20px;
+
+    background:
+        rgba(255,139,50,.05);
+
+    border:
+        1px solid rgba(255,139,50,.14);
+}
+
+.scenarioVisual{
+    min-height:200px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:17px;
+
+    font-size:70px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #213628,
+            #141f18
+        );
+}
+
+.scenarioText{
+    color:#b8c8cd;
+    font-size:14px;
+}
+
+.scenarioText b{
+    display:block;
+    color:#fff;
+
+    margin-bottom:8px;
+
+    font-size:17px;
+}
+
+
+/* =========================================================
+   SORTING / DECISION
+   ========================================================= */
+
+.actionGrid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+
+    gap:12px;
+}
+
+.actionCard{
+    position:relative;
+
+    min-height:125px;
+
+    padding:16px;
+
+    border-radius:18px;
+
+    border:1px solid var(--line);
+
+    background:
+        rgba(255,255,255,.035);
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.actionCard:hover{
+    transform:translateY(-2px);
+}
+
+.actionCard.selected{
+    border-color:
+        rgba(65,225,255,.40);
+
+    background:
+        rgba(65,225,255,.08);
+}
+
+.actionCard b{
+    display:block;
+    margin-bottom:6px;
+}
+
+.actionCard p{
+    margin:0;
+
+    color:#a8bdc4;
+
+    font-size:12px;
+}
+
+
+/* =========================================================
+   CONFIDENCE
+   ========================================================= */
+
+.confidenceWrap{
+    margin-top:18px;
+
+    padding:15px;
+
+    border-radius:17px;
+
+    background:
+        rgba(255,255,255,.03);
+
+    border:1px solid var(--line);
+}
+
+.confidenceWrap label{
+    display:block;
+    margin-bottom:10px;
+
+    color:#aebfc5;
+    font-size:12px;
+}
+
+.confidenceScale{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:7px;
+}
+
+.confidenceBtn{
+    border:1px solid var(--line);
+
+    background:
+        rgba(255,255,255,.035);
+
+    color:#9eb1b8;
+
+    border-radius:11px;
+
+    padding:9px 5px;
+
+    cursor:pointer;
+
+    font-size:11px;
+}
+
+.confidenceBtn.active{
+    color:#fff;
+
+    background:
+        rgba(128,109,255,.16);
+
+    border-color:
+        rgba(128,109,255,.4);
+}
+
+
+/* =========================================================
+   NAV BUTTONS
+   ========================================================= */
+
+.quizNav{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+
+    margin-top:22px;
+}
+
+.navBtn{
+    border:0;
+    border-radius:14px;
+
+    padding:12px 18px;
+
+    cursor:pointer;
+
+    font-weight:900;
+}
+
+.prevBtn{
+    color:#d7e2e5;
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid var(--line);
+}
+
+.nextBtn{
+    color:#140c04;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffd55f,
+            #ff7b30
+        );
+}
+
+.nextBtn:disabled{
+    opacity:.35;
+    cursor:not-allowed;
+}
+
+
+/* =========================================================
+   REFLECTION
+   ========================================================= */
+
+.reflectionCard{
+    display:none;
+
+    padding:28px;
+
+    border-radius:28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(29,85,83,.16),
+            rgba(255,255,255,.03)
+        );
+
+    border:1px solid var(--line);
+}
+
+.reflectionCard.active{
+    display:block;
+}
+
+.reflectionGrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.refBox{
+    padding:18px;
+
+    border-radius:19px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:1px solid var(--line);
+}
+
+.refBox h3{
+    margin:0 0 8px;
+    font-size:17px;
+}
+
+.refBox p{
+    margin:0 0 12px;
+
+    color:#9fb5bc;
+    font-size:12px;
+}
+
+textarea{
+    width:100%;
+    min-height:125px;
+
+    resize:vertical;
+
+    border:1px solid var(--line);
+
+    border-radius:15px;
+
+    outline:none;
+
+    padding:13px;
+
+    color:#fff;
+
+    background:
+        rgba(0,0,0,.18);
+
+    line-height:1.6;
+}
+
+textarea:focus{
+    border-color:
+        rgba(65,225,255,.30);
+}
+
+.charCount{
+    margin-top:6px;
+
+    text-align:right;
+
+    color:#748f99;
+    font-size:10px;
+}
+
+.commitments{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+
+    gap:8px;
+}
+
+.commitment{
+    border:1px solid var(--line);
+
+    background:
+        rgba(255,255,255,.035);
+
+    color:#b2c3c8;
+
+    border-radius:13px;
+
+    padding:11px;
+
+    cursor:pointer;
+
+    text-align:left;
+
+    font-size:12px;
+}
+
+.commitment.selected{
+    background:
+        rgba(79,224,161,.10);
+
+    border-color:
+        rgba(79,224,161,.34);
+
+    color:#dcfff0;
+}
+
+
+/* =========================================================
+   RESULT
+   ========================================================= */
+
+.resultCard{
+    display:none;
+
+    padding:32px;
+
+    border-radius:30px;
+
+    text-align:center;
+
+    background:
+        radial-gradient(
+            circle at 50% 10%,
+            rgba(255,126,44,.16),
+            transparent 32%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.055),
+            rgba(255,255,255,.025)
+        );
+
+    border:1px solid var(--line);
+
+    box-shadow:var(--shadow);
+}
+
+.resultCard.active{
+    display:block;
+}
+
+.resultIcon{
+    font-size:65px;
+}
+
+.resultScore{
+    margin-top:8px;
+
+    font-size:70px;
+    font-weight:950;
+
+    letter-spacing:-4px;
+
+    color:#ffd05c;
+}
+
+.resultLabel{
+    font-size:16px;
+    font-weight:900;
+}
+
+.resultSub{
+    max-width:680px;
+
+    margin:10px auto 22px;
+
+    color:#a9bdc4;
+    font-size:13px;
+}
+
+.resultGrid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+
+    gap:12px;
+
+    max-width:800px;
+    margin:0 auto 20px;
+}
+
+.resultMetric{
+    padding:16px;
+
+    border-radius:17px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:1px solid var(--line);
+}
+
+.resultMetric span{
+    display:block;
+
+    color:#8ea6ae;
+    font-size:10px;
+
+    margin-bottom:6px;
+}
+
+.resultMetric b{
+    font-size:22px;
+}
+
+.finalMessage{
+    margin-top:20px;
+
+    padding:17px;
+
+    border-radius:18px;
+
+    background:
+        rgba(65,225,255,.055);
+
+    border:
+        1px solid rgba(65,225,255,.15);
+
+    color:#c5dadd;
+
+    font-size:13px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:900px){
+
+    .hero,
+    .scenarioBox,
+    .reflectionGrid{
+        grid-template-columns:1fr;
+    }
+
+    .resultGrid{
+        grid-template-columns:1fr;
+    }
+
+    .actionGrid,
+    .commitments{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:650px){
+
+    .topbar{
+        padding:10px 4%;
+    }
+
+    .brandText span{
+        display:none;
+    }
+
+    .hero{
+        padding:50px 5% 30px;
+    }
+
+    main{
+        padding:15px 5% 70px;
+    }
+
+    .quizCard,
+    .reflectionCard,
+    .resultCard{
+        padding:20px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<!-- ======================================================
+     TOPBAR
+     ====================================================== -->
+
+<div class="topbar">
+
+    <div class="brand">
+
+        <div class="brandIcon">
+            🔥
+        </div>
+
+        <div class="brandText">
+
+            <b>
+                CLIMASCORE • WILDFIRE CHALLENGE
+            </b>
+
+            <span>
+                Tương tác – tư duy – phản tư sau mô hình 3D
+            </span>
+
+        </div>
+
+    </div>
+
+    <button
+        class="backBtn"
+        onclick="history.back()">
+
+        ← Quay lại
+
+    </button>
+
+</div>
+
+
+<!-- ======================================================
+     HERO
+     ====================================================== -->
+
+<section class="hero">
+
+    <div>
+
+        <div class="heroTag">
+            🧠 POST-LEARNING CHALLENGE
+        </div>
+
+        <h1>
+            SAU KHI
+            <span>NGỌN LỬA</span>
+            ĐI QUA
+        </h1>
+
+        <p>
+            Em đã tìm hiểu lý thuyết và quan sát mô hình 3D.
+            Bây giờ, hãy chứng minh rằng em không chỉ “nhớ”
+            kiến thức mà còn có thể
+            <strong>giải thích – đánh giá – ra quyết định –
+            và suy ngẫm về trách nhiệm của con người</strong>.
+        </p>
+
+    </div>
+
+    <div class="heroVisual">
+
+        <div class="smokeCloud"></div>
+        <div class="fireGlow"></div>
+
+        <div class="bigFire">
+            🔥
+        </div>
+
+        <div class="heroMini">
+            Mỗi câu hỏi đều có phần giải thích.
+            Hãy đọc phản hồi sau khi chọn đáp án,
+            vì đó mới là phần giúp em hiểu sâu.
+        </div>
+
+    </div>
+
+</section>
+
+
+<main>
+
+<!-- ======================================================
+     INTRO
+     ====================================================== -->
+
+<div class="sectionIntro">
+
+    <div class="sectionTag">
+        01 / Wildfire Thinking Challenge
+    </div>
+
+    <h2>
+        Không chỉ kiểm tra kiến thức —
+        mà kiểm tra cách em suy nghĩ
+    </h2>
+
+    <p>
+        Bộ câu hỏi gồm 10 nhiệm vụ.
+        Các câu đầu kiểm tra kiến thức nền,
+        sau đó chuyển sang phân tích mô hình,
+        tình huống thực tế và lựa chọn hành động phù hợp.
+    </p>
+
+</div>
+
+
+<!-- ======================================================
+     PROGRESS
+     ====================================================== -->
+
+<div class="progressWrap">
+
+    <div class="progressHead">
+
+        <span>
+            TIẾN TRÌNH
+        </span>
+
+        <b id="progressText">
+            1 / 10
+        </b>
+
+    </div>
+
+    <div class="progressBar">
+
+        <div
+            class="progressFill"
+            id="progressFill">
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     QUESTION 1
+     ====================================================== -->
+
+<div class="quizCard active" data-q="1">
+
+    <div class="questionTop">
+
+        <div class="levelTag">
+            🌱 NHẬN BIẾT
+        </div>
+
+        <div class="questionNo">
+            CÂU 01
+        </div>
+
+    </div>
+
+    <h2 class="questionText">
+        Ba yếu tố nào tạo nên “tam giác lửa”?
+    </h2>
+
+    <div
+        class="options"
+        data-correct="1">
+
+        <button class="option">
+
+            <div class="optionLetter">
+                A
+            </div>
+
+            <div>
+                Gió – mưa – địa hình
+            </div>
+
+        </button>
+
+        <button class="option">
+
+            <div class="optionLetter">
+                B
+            </div>
+
+            <div>
+                Nhiệt – nhiên liệu – oxy
+            </div>
+
+        </button>
+
+        <button class="option">
+
+            <div class="optionLetter">
+                C
+            </div>
+
+            <div>
+                Rừng – con người – nhiệt độ
+            </div>
+
+        </button>
+
+        <button class="option">
+
+            <div class="optionLetter">
+                D
+            </div>
+
+            <div>
+                Độ ẩm – đất – khói
+            </div>
+
+        </button>
+
+    </div>
+
+    <div class="feedback">
+        <strong>Giải thích:</strong>
+        Một đám cháy cần đồng thời có
+        nguồn nhiệt, vật liệu cháy và oxy.
+        Thiếu một trong ba yếu tố,
+        quá trình cháy sẽ suy yếu hoặc bị dập tắt.
+    </div>
+
+    <div class="quizNav">
+
+        <button
+            class="navBtn prevBtn"
+            disabled>
+
+            ← Trước
+
+        </button>
+
+        <button
+            class="navBtn nextBtn"
+            disabled>
+
+            Tiếp theo →
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     QUESTION 2
+     ====================================================== -->
+
+<div class="quizCard" data-q="2">
+
+    <div class="questionTop">
+
+        <div class="levelTag">
+            🔍 HIỂU CƠ CHẾ
+        </div>
+
+        <div class="questionNo">
+            CÂU 02
+        </div>
+
+    </div>
+
+    <h2 class="questionText">
+        Vì sao gió mạnh thường làm cháy rừng lan nhanh hơn?
+    </h2>
+
+    <div
+        class="options"
+        data-correct="2">
+
+        <button class="option">
+            <div class="optionLetter">A</div>
+            <div>
+                Vì gió làm giảm lượng oxy quanh đám cháy
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">B</div>
+            <div>
+                Vì gió làm đất nóng lên ngay lập tức
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">C</div>
+            <div>
+                Vì gió cung cấp oxy, nghiêng ngọn lửa và
+                đưa tàn lửa tới khu vực chưa cháy
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">D</div>
+            <div>
+                Vì gió làm tất cả cây trong rừng khô ngay lập tức
+            </div>
+        </button>
+
+    </div>
+
+    <div class="feedback">
+        <strong>Giải thích:</strong>
+        Gió vừa cung cấp oxy cho quá trình cháy,
+        vừa đẩy ngọn lửa và tàn lửa về phía trước,
+        tạo ra các điểm cháy mới.
+    </div>
+
+    <div class="quizNav">
+
+        <button class="navBtn prevBtn">
+            ← Trước
+        </button>
+
+        <button
+            class="navBtn nextBtn"
+            disabled>
+
+            Tiếp theo →
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     QUESTION 3
+     ====================================================== -->
+
+<div class="quizCard" data-q="3">
+
+    <div class="questionTop">
+
+        <div class="levelTag">
+            🌡 PHÂN TÍCH
+        </div>
+
+        <div class="questionNo">
+            CÂU 03
+        </div>
+
+    </div>
+
+    <h2 class="questionText">
+        Trong mô hình 3D, em tăng nhiệt độ nhưng giữ
+        độ ẩm cao và nhiên liệu còn ướt.
+        Điều nào hợp lí nhất?
+    </h2>
+
+    <div
+        class="options"
+        data-correct="2">
+
+        <button class="option">
+            <div class="optionLetter">A</div>
+            <div>
+                Cháy chắc chắn trở thành cực đoan
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">B</div>
+            <div>
+                Nhiệt độ không có bất kì ảnh hưởng nào
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">C</div>
+            <div>
+                Nguy cơ có thể tăng,
+                nhưng nhiên liệu ẩm vẫn hạn chế khả năng bắt lửa
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">D</div>
+            <div>
+                Cháy sẽ dừng ngay cả khi có nguồn lửa lớn
+            </div>
+        </button>
+
+    </div>
+
+    <div class="feedback">
+        <strong>Giải thích:</strong>
+        Cháy rừng là kết quả của nhiều yếu tố.
+        Nhiệt độ cao làm tăng nguy cơ,
+        nhưng độ ẩm nhiên liệu vẫn là yếu tố quan trọng
+        quyết định khả năng bắt lửa và lan cháy.
+    </div>
+
+    <div class="quizNav">
+
+        <button class="navBtn prevBtn">
+            ← Trước
+        </button>
+
+        <button
+            class="navBtn nextBtn"
+            disabled>
+
+            Tiếp theo →
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     QUESTION 4
+     ====================================================== -->
+
+<div class="quizCard" data-q="4">
+
+    <div class="questionTop">
+
+        <div class="levelTag">
+            🌫 SUY LUẬN
+        </div>
+
+        <div class="questionNo">
+            CÂU 04
+        </div>
+
+    </div>
+
+    <h2 class="questionText">
+        Vì sao một thành phố cách xa khu cháy rừng
+        vẫn có thể bị ảnh hưởng?
+    </h2>
+
+    <div
+        class="options"
+        data-correct="3">
+
+        <button class="option">
+            <div class="optionLetter">A</div>
+            <div>
+                Vì lửa luôn lan được hàng trăm kilômét
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">B</div>
+            <div>
+                Vì nhiệt từ đám cháy làm nóng toàn bộ thành phố
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">C</div>
+            <div>
+                Vì đất cháy lan qua lòng đất đến thành phố
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">D</div>
+            <div>
+                Vì khói và PM2.5 có thể được gió vận chuyển đi xa
+            </div>
+        </button>
+
+    </div>
+
+    <div class="feedback">
+        <strong>Giải thích:</strong>
+        Khói cháy rừng chứa hạt mịn PM2.5
+        có thể lan rất xa theo hướng gió,
+        làm suy giảm chất lượng không khí
+        ở nơi cách xa đám cháy.
+    </div>
+
+    <div class="quizNav">
+
+        <button class="navBtn prevBtn">
+            ← Trước
+        </button>
+
+        <button
+            class="navBtn nextBtn"
+            disabled>
+
+            Tiếp theo →
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     QUESTION 5
+     ====================================================== -->
+
+<div class="quizCard" data-q="5">
+
+    <div class="questionTop">
+
+        <div class="levelTag">
+            🧭 TÌNH HUỐNG
+        </div>
+
+        <div class="questionNo">
+            CÂU 05
+        </div>
+
+    </div>
+
+    <div class="scenarioBox">
+
+        <div class="scenarioVisual">
+            🔥🌲💨🏠
+        </div>
+
+        <div class="scenarioText">
+
+            <b>
+                Tình huống mô phỏng
+            </b>
+
+            Một đám cháy đang lan theo hướng gió
+            về phía khu dân cư.
+            Gió mạnh, nhiên liệu rất khô,
+            tàn lửa liên tục bay vượt qua mặt lửa chính.
+
+        </div>
+
+    </div>
+
+    <h2 class="questionText">
+        Nguy cơ quan trọng nhất cần chú ý ngay lúc này là gì?
+    </h2>
+
+    <div
+        class="options"
+        data-correct="1">
+
+        <button class="option">
+            <div class="optionLetter">A</div>
+            <div>
+                Khả năng xuất hiện các điểm cháy mới
+                phía trước mặt lửa do tàn lửa
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">B</div>
+            <div>
+                Cây xanh sẽ tự hấp thụ toàn bộ khói
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">C</div>
+            <div>
+                Gió mạnh sẽ tự dập tắt ngọn lửa
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">D</div>
+            <div>
+                Nhiệt độ khu dân cư sẽ giảm nhanh
+            </div>
+        </button>
+
+    </div>
+
+    <div class="feedback">
+        <strong>Giải thích:</strong>
+        Tàn lửa có thể bị gió đưa đi xa,
+        tạo các điểm cháy mới phía trước.
+        Đây là một trong những lí do cháy có thể
+        vượt qua đường hoặc khoảng trống.
+    </div>
+
+    <div class="quizNav">
+
+        <button class="navBtn prevBtn">
+            ← Trước
+        </button>
+
+        <button
+            class="navBtn nextBtn"
+            disabled>
+
+            Tiếp theo →
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     QUESTION 6
+     ====================================================== -->
+
+<div class="quizCard" data-q="6">
+
+    <div class="questionTop">
+
+        <div class="levelTag">
+            🌧 HỆ QUẢ SAU CHÁY
+        </div>
+
+        <div class="questionNo">
+            CÂU 06
+        </div>
+
+    </div>
+
+    <h2 class="questionText">
+        Sau một vụ cháy lớn, mưa rất to xuất hiện.
+        Vì sao nguy cơ xói mòn và nước đục có thể tăng?
+    </h2>
+
+    <div
+        class="options"
+        data-correct="0">
+
+        <button class="option">
+            <div class="optionLetter">A</div>
+            <div>
+                Lớp phủ thực vật giảm,
+                đất trơ dễ bị nước cuốn theo dòng chảy mặt
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">B</div>
+            <div>
+                Vì mưa làm tất cả đất biến thành tro
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">C</div>
+            <div>
+                Vì sau cháy nước không còn chảy xuống dốc
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">D</div>
+            <div>
+                Vì cây chết làm tăng độ che phủ mặt đất
+            </div>
+        </button>
+
+    </div>
+
+    <div class="feedback">
+        <strong>Giải thích:</strong>
+        Khi tán cây và lớp thực vật mặt đất bị mất,
+        khả năng giữ đất và làm chậm dòng chảy giảm.
+        Tro, bùn và đất có thể bị cuốn xuống suối.
+    </div>
+
+    <div class="quizNav">
+
+        <button class="navBtn prevBtn">
+            ← Trước
+        </button>
+
+        <button
+            class="navBtn nextBtn"
+            disabled>
+
+            Tiếp theo →
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     QUESTION 7
+     ====================================================== -->
+
+<div class="quizCard" data-q="7">
+
+    <div class="questionTop">
+
+        <div class="levelTag">
+            ⚖ ĐÁNH GIÁ
+        </div>
+
+        <div class="questionNo">
+            CÂU 07
+        </div>
+
+    </div>
+
+    <h2 class="questionText">
+        Phát biểu nào thể hiện cách hiểu đúng nhất
+        về mối quan hệ giữa cháy rừng và biến đổi khí hậu?
+    </h2>
+
+    <div
+        class="options"
+        data-correct="2">
+
+        <button class="option">
+            <div class="optionLetter">A</div>
+            <div>
+                Biến đổi khí hậu trực tiếp châm lửa
+                cho mọi vụ cháy rừng
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">B</div>
+            <div>
+                Cháy rừng hoàn toàn không liên quan đến khí hậu
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">C</div>
+            <div>
+                Khí hậu nóng và khô hơn có thể tạo điều kiện
+                thuận lợi để cháy dễ phát triển và cực đoan hơn
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">D</div>
+            <div>
+                Chỉ có nhiệt độ quyết định mức độ cháy
+            </div>
+        </button>
+
+    </div>
+
+    <div class="feedback">
+        <strong>Giải thích:</strong>
+        Biến đổi khí hậu thường tác động lên
+        điều kiện nền như nhiệt độ, hạn và độ khô nhiên liệu.
+        Nguồn gây cháy vẫn có thể đến từ con người hoặc tự nhiên.
+    </div>
+
+    <div class="quizNav">
+
+        <button class="navBtn prevBtn">
+            ← Trước
+        </button>
+
+        <button
+            class="navBtn nextBtn"
+            disabled>
+
+            Tiếp theo →
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     QUESTION 8
+     ====================================================== -->
+
+<div class="quizCard" data-q="8">
+
+    <div class="questionTop">
+
+        <div class="levelTag">
+            🧠 RA QUYẾT ĐỊNH
+        </div>
+
+        <div class="questionNo">
+            CÂU 08
+        </div>
+
+    </div>
+
+    <h2 class="questionText">
+        Nếu được lựa chọn 2 hành động giúp giảm nguy cơ cháy rừng,
+        em sẽ ưu tiên phương án nào?
+    </h2>
+
+    <div class="actionGrid">
+
+        <div
+            class="actionCard"
+            data-good="1">
+
+            <b>
+                🌿 Quản lý vật liệu cháy
+            </b>
+
+            <p>
+                Giảm cành khô, lá khô
+                tại khu vực có nguy cơ cao
+                bằng biện pháp phù hợp.
+            </p>
+
+        </div>
+
+        <div
+            class="actionCard"
+            data-good="1">
+
+            <b>
+                🔥 Kiểm soát nguồn lửa
+            </b>
+
+            <p>
+                Hạn chế đốt thực bì,
+                lửa trại và các nguồn phát tia lửa
+                trong thời kì nguy hiểm.
+            </p>
+
+        </div>
+
+        <div
+            class="actionCard"
+            data-good="0">
+
+            <b>
+                🌲 Trồng cây thật dày ở mọi nơi
+            </b>
+
+            <p>
+                Không xét loại rừng,
+                cấu trúc nhiên liệu
+                hay điều kiện sinh thái.
+            </p>
+
+        </div>
+
+        <div
+            class="actionCard"
+            data-good="0">
+
+            <b>
+                🚫 Chỉ chờ đến khi cháy mới hành động
+            </b>
+
+            <p>
+                Không cần theo dõi,
+                cảnh báo hay chuẩn bị từ trước.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="feedback">
+        <strong>Giải thích:</strong>
+        Phòng cháy hiệu quả phải diễn ra trước khi cháy:
+        quản lý nhiên liệu và kiểm soát nguồn gây cháy
+        là hai biện pháp quan trọng.
+    </div>
+
+    <div class="quizNav">
+
+        <button class="navBtn prevBtn">
+            ← Trước
+        </button>
+
+        <button
+            class="navBtn nextBtn"
+            disabled>
+
+            Tiếp theo →
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     QUESTION 9
+     ====================================================== -->
+
+<div class="quizCard" data-q="9">
+
+    <div class="questionTop">
+
+        <div class="levelTag">
+            🧩 TƯ DUY HỆ THỐNG
+        </div>
+
+        <div class="questionNo">
+            CÂU 09
+        </div>
+
+    </div>
+
+    <h2 class="questionText">
+        Chuỗi tác động nào hợp lí nhất?
+    </h2>
+
+    <div
+        class="options"
+        data-correct="3">
+
+        <button class="option">
+            <div class="optionLetter">A</div>
+            <div>
+                Cháy → cây xanh hơn → đất ổn định → nước sạch hơn
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">B</div>
+            <div>
+                Cháy → độ che phủ tăng → xói mòn giảm
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">C</div>
+            <div>
+                Cháy → khói giảm → sức khỏe cải thiện ngay
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">D</div>
+            <div>
+                Cháy → mất thảm thực vật → đất trơ →
+                dòng chảy mạnh hơn → xói mòn và nước đục
+            </div>
+        </button>
+
+    </div>
+
+    <div class="feedback">
+        <strong>Giải thích:</strong>
+        Đây là ví dụ về tác động dây chuyền:
+        hệ quả của cháy không dừng ở ngọn lửa
+        mà tiếp tục ảnh hưởng đến đất và nước.
+    </div>
+
+    <div class="quizNav">
+
+        <button class="navBtn prevBtn">
+            ← Trước
+        </button>
+
+        <button
+            class="navBtn nextBtn"
+            disabled>
+
+            Tiếp theo →
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     QUESTION 10
+     ====================================================== -->
+
+<div class="quizCard" data-q="10">
+
+    <div class="questionTop">
+
+        <div class="levelTag">
+            🎯 VẬN DỤNG
+        </div>
+
+        <div class="questionNo">
+            CÂU 10
+        </div>
+
+    </div>
+
+    <div class="scenarioBox">
+
+        <div class="scenarioVisual">
+            🏫🌲🔥
+        </div>
+
+        <div class="scenarioText">
+
+            <b>
+                Tình huống tại trường học
+            </b>
+
+            Một trường nằm gần khu rừng.
+            Dự báo cho thấy nhiều ngày khô nóng,
+            độ ẩm thấp và nguy cơ cháy tăng cao.
+
+        </div>
+
+    </div>
+
+    <h2 class="questionText">
+        Phương án chuẩn bị phù hợp nhất là gì?
+    </h2>
+
+    <div
+        class="options"
+        data-correct="1">
+
+        <button class="option">
+            <div class="optionLetter">A</div>
+            <div>
+                Tiếp tục sử dụng lửa ngoài trời bình thường
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">B</div>
+            <div>
+                Theo dõi cảnh báo,
+                kiểm soát nguồn lửa,
+                chuẩn bị phương án sơ tán và hướng dẫn học sinh
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">C</div>
+            <div>
+                Chờ nhìn thấy lửa rồi mới chuẩn bị
+            </div>
+        </button>
+
+        <button class="option">
+            <div class="optionLetter">D</div>
+            <div>
+                Chỉ cần đóng cửa lớp học
+            </div>
+        </button>
+
+    </div>
+
+    <div class="feedback">
+        <strong>Giải thích:</strong>
+        Quản trị rủi ro hiệu quả cần chuẩn bị từ trước:
+        theo dõi cảnh báo, kiểm soát nguồn gây cháy,
+        có kế hoạch sơ tán và hướng dẫn rõ ràng.
+    </div>
+
+    <div class="confidenceWrap">
+
+        <label>
+            Em tự tin mức nào với câu trả lời này?
+        </label>
+
+        <div class="confidenceScale">
+
+            <button class="confidenceBtn">
+                1<br>Rất ít
+            </button>
+
+            <button class="confidenceBtn">
+                2
+            </button>
+
+            <button class="confidenceBtn">
+                3
+            </button>
+
+            <button class="confidenceBtn">
+                4
+            </button>
+
+            <button class="confidenceBtn">
+                5<br>Rất chắc
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="quizNav">
+
+        <button class="navBtn prevBtn">
+            ← Trước
+        </button>
+
+        <button
+            class="navBtn nextBtn"
+            disabled>
+
+            Viết cảm nghĩ →
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     REFLECTION
+     ====================================================== -->
+
+<div class="reflectionCard" id="reflectionCard">
+
+    <div class="sectionTag">
+        02 / Reflection
+    </div>
+
+    <h2 class="questionText">
+        Sau khi nhìn thấy một khu rừng
+        từ xanh → cháy → đất trơ,
+        em nghĩ gì?
+    </h2>
+
+    <div class="reflectionGrid">
+
+        <div class="refBox">
+
+            <h3>
+                💭 Cảm nghĩ của em
+            </h3>
+
+            <p>
+                Viết từ 3–5 câu.
+                Hãy nói điều khiến em ấn tượng nhất
+                hoặc thay đổi suy nghĩ sau khi xem mô hình.
+            </p>
+
+            <textarea
+                id="reflectionText"
+                maxlength="600"
+                placeholder="Ví dụ: Trước đây em nghĩ cháy rừng chỉ gây mất cây, nhưng sau khi xem mô hình em nhận ra...">
+            </textarea>
+
+            <div class="charCount">
+
+                <span id="charCount">
+                    0
+                </span>
+                /600 ký tự
+
+            </div>
+
+        </div>
+
+
+        <div class="refBox">
+
+            <h3>
+                🌱 Cam kết hành động
+            </h3>
+
+            <p>
+                Chọn tối đa 3 việc em có thể thực hiện
+                hoặc lan tỏa đến người khác.
+            </p>
+
+            <div class="commitments">
+
+                <button class="commitment">
+                    Không sử dụng lửa bất cẩn gần rừng
+                </button>
+
+                <button class="commitment">
+                    Nhắc người thân kiểm soát đốt thực bì
+                </button>
+
+                <button class="commitment">
+                    Tìm hiểu cảnh báo cháy rừng địa phương
+                </button>
+
+                <button class="commitment">
+                    Không vứt tàn thuốc vào khu vực dễ cháy
+                </button>
+
+                <button class="commitment">
+                    Tham gia hoạt động bảo vệ rừng
+                </button>
+
+                <button class="commitment">
+                    Chia sẻ kiến thức đúng về cháy rừng
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="quizNav">
+
+        <button
+            class="navBtn prevBtn"
+            id="reflectionBack">
+
+            ← Quay lại câu 10
+
+        </button>
+
+        <button
+            class="navBtn nextBtn"
+            id="finishBtn">
+
+            Hoàn thành thử thách
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ======================================================
+     RESULT
+     ====================================================== -->
+
+<div
+    class="resultCard"
+    id="resultCard">
+
+    <div class="resultIcon">
+        🏆
+    </div>
+
+    <div class="resultScore">
+
+        <span id="finalScore">
+            0
+        </span>
+        %
+
+    </div>
+
+    <div
+        class="resultLabel"
+        id="resultLabel">
+
+        WILDFIRE THINKER
+
+    </div>
+
+    <div class="resultSub" id="resultSub">
+        Em đã hoàn thành toàn bộ thử thách.
+    </div>
+
+    <div class="resultGrid">
+
+        <div class="resultMetric">
+
+            <span>
+                CÂU ĐÚNG
+            </span>
+
+            <b id="correctCount">
+                0/10
+            </b>
+
+        </div>
+
+        <div class="resultMetric">
+
+            <span>
+                TƯ DUY TÌNH HUỐNG
+            </span>
+
+            <b id="scenarioResult">
+                TỐT
+            </b>
+
+        </div>
+
+        <div class="resultMetric">
+
+            <span>
+                CAM KẾT HÀNH ĐỘNG
+            </span>
+
+            <b id="commitResult">
+                0
+            </b>
+
+        </div>
+
+    </div>
+
+    <div class="finalMessage" id="finalMessage">
+        Cháy rừng không chỉ là một hiện tượng tự nhiên.
+        Mỗi lựa chọn của con người trước, trong và sau cháy
+        đều có thể làm rủi ro tăng lên hoặc giảm xuống.
+    </div>
+
+    <div
+        style="
+        display:flex;
+        justify-content:center;
+        gap:10px;
+        margin-top:20px;
+        flex-wrap:wrap">
+
+        <button
+            class="navBtn prevBtn"
+            onclick="location.reload()">
+
+            Làm lại thử thách
+
+        </button>
+
+        <button
+            class="navBtn nextBtn"
+            onclick="window.scrollTo({
+                top:0,
+                behavior:'smooth'
+            })">
+
+            ↑ Về đầu trang
+
+        </button>
+
+    </div>
+
+</div>
+
+</main>
+
+
+<script>
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+const totalQuestions = 10;
+
+let currentQuestion = 1;
+
+let score = 0;
+
+const answered = {};
+
+let selectedActions = [];
+
+let confidence = 0;
+
+
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+
+const progressFill =
+    document.getElementById("progressFill");
+
+const progressText =
+    document.getElementById("progressText");
+
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+
+function updateProgress(){
+
+    const progress =
+        ((currentQuestion - 1) / totalQuestions) * 100;
+
+    progressFill.style.width =
+        progress + "%";
+
+    progressText.textContent =
+        currentQuestion + " / " + totalQuestions;
+}
+
+
+/* =========================================================
+   SHOW QUESTION
+   ========================================================= */
+
+function showQuestion(num){
+
+    document
+    .querySelectorAll(".quizCard")
+    .forEach(card => {
+
+        card.classList.remove("active");
+
+    });
+
+
+    const card =
+        document.querySelector(
+            `.quizCard[data-q="${num}"]`
+        );
+
+
+    if(card){
+
+        card.classList.add("active");
+
+        card.scrollIntoView({
+            behavior:"smooth",
+            block:"center"
+        });
+
+    }
+
+
+    currentQuestion = num;
+
+    updateProgress();
+}
+
+
+/* =========================================================
+   MULTIPLE CHOICE
+   ========================================================= */
+
+document
+.querySelectorAll(".options")
+.forEach(group => {
+
+    const options =
+        [...group.querySelectorAll(".option")];
+
+    const correctIndex =
+        Number(group.dataset.correct);
+
+    const card =
+        group.closest(".quizCard");
+
+    const q =
+        Number(card.dataset.q);
+
+    const feedback =
+        card.querySelector(".feedback");
+
+    const nextBtn =
+        card.querySelector(".nextBtn");
+
+
+    options.forEach((option,index) => {
+
+        option.addEventListener("click", () => {
+
+            if(answered[q])
+                return;
+
+
+            answered[q] = true;
+
+
+            options.forEach(o => {
+
+                o.classList.add("disabled");
+
+            });
+
+
+            if(index === correctIndex){
+
+                option.classList.add("correct");
+
+                feedback.classList.add(
+                    "show",
+                    "correct"
+                );
+
+                feedback.insertAdjacentHTML(
+                    "afterbegin",
+                    "<strong>✓ Chính xác.</strong><br>"
+                );
+
+                score++;
+
+            }
+            else{
+
+                option.classList.add("wrong");
+
+                options[correctIndex]
+                    .classList.add("correct");
+
+                feedback.classList.add(
+                    "show",
+                    "wrong"
+                );
+
+                feedback.insertAdjacentHTML(
+                    "afterbegin",
+                    "<strong>✗ Chưa chính xác.</strong><br>"
+                );
+
+            }
+
+
+            nextBtn.disabled = false;
+
+        });
+
+    });
+
+});
+
+
+/* =========================================================
+   QUESTION 8 — CHOOSE TWO
+   ========================================================= */
+
+const q8 =
+    document.querySelector(
+        '.quizCard[data-q="8"]'
+    );
+
+const actionCards =
+    [...q8.querySelectorAll(".actionCard")];
+
+const q8Next =
+    q8.querySelector(".nextBtn");
+
+const q8Feedback =
+    q8.querySelector(".feedback");
+
+
+actionCards.forEach(card => {
+
+    card.addEventListener("click", () => {
+
+        if(answered[8])
+            return;
+
+
+        card.classList.toggle("selected");
+
+
+        selectedActions =
+            actionCards
+            .filter(c =>
+                c.classList.contains("selected")
+            );
+
+
+        if(selectedActions.length > 2){
+
+            card.classList.remove("selected");
+
+            selectedActions =
+                actionCards
+                .filter(c =>
+                    c.classList.contains("selected")
+                );
+
+        }
+
+
+        if(selectedActions.length === 2){
+
+            const goodCount =
+                selectedActions
+                .filter(c =>
+                    c.dataset.good === "1"
+                )
+                .length;
+
+
+            answered[8] = true;
+
+
+            actionCards.forEach(c => {
+
+                c.style.pointerEvents = "none";
+
+            });
+
+
+            if(goodCount === 2){
+
+                score++;
+
+                q8Feedback.classList.add(
+                    "show",
+                    "correct"
+                );
+
+                q8Feedback.insertAdjacentHTML(
+                    "afterbegin",
+                    "<strong>✓ Lựa chọn hợp lí.</strong><br>"
+                );
+
+            }
+            else{
+
+                q8Feedback.classList.add(
+                    "show",
+                    "wrong"
+                );
+
+                q8Feedback.insertAdjacentHTML(
+                    "afterbegin",
+                    "<strong>✗ Cần cân nhắc lại.</strong><br>"
+                );
+
+            }
+
+
+            q8Next.disabled = false;
+
+        }
+
+    });
+
+});
+
+
+/* =========================================================
+   CONFIDENCE
+   ========================================================= */
+
+document
+.querySelectorAll(".confidenceBtn")
+.forEach((btn,index) => {
+
+    btn.addEventListener("click", () => {
+
+        document
+        .querySelectorAll(".confidenceBtn")
+        .forEach(b =>
+            b.classList.remove("active")
+        );
+
+
+        btn.classList.add("active");
+
+        confidence = index + 1;
+
+    });
+
+});
+
+
+/* =========================================================
+   NEXT / PREV
+   ========================================================= */
+
+document
+.querySelectorAll(".quizCard")
+.forEach(card => {
+
+    const q =
+        Number(card.dataset.q);
+
+    const prev =
+        card.querySelector(".prevBtn");
+
+    const next =
+        card.querySelector(".nextBtn");
+
+
+    if(prev){
+
+        prev.addEventListener("click", () => {
+
+            if(q > 1){
+
+                showQuestion(q - 1);
+
+            }
+
+        });
+
+    }
+
+
+    if(next){
+
+        next.addEventListener("click", () => {
+
+            if(q < 10){
+
+                showQuestion(q + 1);
+
+            }
+            else{
+
+                card.classList.remove("active");
+
+                document
+                .getElementById("reflectionCard")
+                .classList.add("active");
+
+                progressFill.style.width = "100%";
+
+                progressText.textContent =
+                    "10 / 10 • Reflection";
+
+                document
+                .getElementById("reflectionCard")
+                .scrollIntoView({
+                    behavior:"smooth",
+                    block:"center"
+                });
+
+            }
+
+        });
+
+    }
+
+});
+
+
+/* =========================================================
+   REFLECTION
+   ========================================================= */
+
+const reflectionText =
+    document.getElementById("reflectionText");
+
+const charCount =
+    document.getElementById("charCount");
+
+
+reflectionText.addEventListener("input", () => {
+
+    charCount.textContent =
+        reflectionText.value.length;
+
+});
+
+
+document
+.querySelectorAll(".commitment")
+.forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+        const selected =
+            document
+            .querySelectorAll(
+                ".commitment.selected"
+            );
+
+
+        if(
+            !btn.classList.contains("selected")
+            &&
+            selected.length >= 3
+        ){
+            return;
+        }
+
+
+        btn.classList.toggle("selected");
+
+    });
+
+});
+
+
+document
+.getElementById("reflectionBack")
+.addEventListener("click", () => {
+
+    document
+    .getElementById("reflectionCard")
+    .classList.remove("active");
+
+    showQuestion(10);
+
+});
+
+
+/* =========================================================
+   FINISH
+   ========================================================= */
+
+document
+.getElementById("finishBtn")
+.addEventListener("click", () => {
+
+    const reflection =
+        reflectionText.value.trim();
+
+    const commitments =
+        document
+        .querySelectorAll(
+            ".commitment.selected"
+        ).length;
+
+
+    if(reflection.length < 40){
+
+        alert(
+            "Hãy viết cảm nghĩ ít nhất khoảng 40 ký tự để hoàn thành."
+        );
+
+        return;
+    }
+
+
+    if(commitments === 0){
+
+        alert(
+            "Hãy chọn ít nhất 1 cam kết hành động."
+        );
+
+        return;
+    }
+
+
+    showResult(commitments);
+
+});
+
+
+/* =========================================================
+   RESULT
+   ========================================================= */
+
+function showResult(commitments){
+
+    document
+    .getElementById("reflectionCard")
+    .classList.remove("active");
+
+
+    const resultCard =
+        document.getElementById("resultCard");
+
+
+    resultCard.classList.add("active");
+
+
+    const percent =
+        Math.round(
+            score / totalQuestions * 100
+        );
+
+
+    document
+    .getElementById("finalScore")
+    .textContent =
+        percent;
+
+
+    document
+    .getElementById("correctCount")
+    .textContent =
+        score + "/10";
+
+
+    document
+    .getElementById("commitResult")
+    .textContent =
+        commitments;
+
+
+    let label;
+    let sub;
+    let scenario;
+
+
+    if(percent >= 90){
+
+        label =
+            "WILDFIRE SYSTEM THINKER";
+
+        sub =
+            "Em không chỉ nhớ kiến thức mà đã thể hiện khả năng phân tích cơ chế, hệ quả và lựa chọn giải pháp.";
+
+        scenario =
+            "RẤT TỐT";
+
+    }
+    else if(percent >= 70){
+
+        label =
+            "WILDFIRE ANALYST";
+
+        sub =
+            "Em đã hiểu khá tốt cơ chế cháy rừng và tác động dây chuyền. Hãy xem lại những câu còn sai để hoàn thiện tư duy.";
+
+        scenario =
+            "TỐT";
+
+    }
+    else if(percent >= 50){
+
+        label =
+            "WILDFIRE EXPLORER";
+
+        sub =
+            "Em đã nắm được những ý chính, nhưng cần củng cố thêm mối liên hệ giữa điều kiện cháy và hệ quả sau cháy.";
+
+        scenario =
+            "ĐẠT";
+
+    }
+    else{
+
+        label =
+            "KEEP EXPLORING";
+
+        sub =
+            "Hãy quay lại phần lý thuyết và mô hình 3D, đặc biệt chú ý gió, nhiên liệu, khói và tác động sau cháy.";
+
+        scenario =
+            "CẦN ÔN";
+
+    }
+
+
+    document
+    .getElementById("resultLabel")
+    .textContent =
+        label;
+
+
+    document
+    .getElementById("resultSub")
+    .textContent =
+        sub;
+
+
+    document
+    .getElementById("scenarioResult")
+    .textContent =
+        scenario;
+
+
+    let reflectionBonus = "";
+
+
+    if(reflectionText.value.trim().length > 180){
+
+        reflectionBonus =
+            " Phần cảm nghĩ của em có chiều sâu và thể hiện sự phản tư rõ ràng.";
+
+    }
+
+
+    document
+    .getElementById("finalMessage")
+    .textContent =
+        "Điều quan trọng nhất sau bài học không phải chỉ là biết cháy rừng nguy hiểm, mà là hiểu cách rủi ro hình thành và biết lựa chọn hành động phù hợp."
+        + reflectionBonus;
+
+
+    resultCard.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+    });
+
+}
+
+
+/* =========================================================
+   INITIAL
+   ========================================================= */
+
+updateProgress();
+
+</script>
+
+</body>
+</html>

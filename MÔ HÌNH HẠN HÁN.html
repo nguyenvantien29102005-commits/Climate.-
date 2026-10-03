@@ -1,0 +1,6668 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CLIMASCORE 3D | Hạn hán – Hệ quả thiên tai</title>
+
+<style>
+
+/* =========================================================
+   CLIMASCORE 3D - DROUGHT IMPACT LAB
+   ========================================================= */
+
+:root{
+    --bg:#02151c;
+    --bg2:#062832;
+
+    --panel:rgba(5,34,44,.82);
+    --panel2:rgba(8,49,61,.92);
+
+    --cyan:#69eeff;
+    --cyan2:#1fd8eb;
+    --mint:#2de1bd;
+
+    --green:#4ae0a0;
+    --yellow:#ffd568;
+    --orange:#ff9c52;
+    --red:#ff665c;
+
+    --white:#f4fcff;
+    --text:#d2eaf0;
+    --muted:#88b2bd;
+
+    --line:rgba(105,238,255,.16);
+    --line2:rgba(105,238,255,.28);
+
+    --shadow:0 25px 80px rgba(0,0,0,.38);
+
+    --radius:22px;
+}
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+*{
+    box-sizing:border-box;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    margin:0;
+    overflow:hidden;
+}
+
+body{
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color:var(--white);
+
+    background:#02151c;
+}
+
+button,
+input{
+    font:inherit;
+}
+
+/* =========================================================
+   APP
+   ========================================================= */
+
+#app{
+    width:100vw;
+    height:100vh;
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(45,225,189,.09),
+            transparent 30%
+        ),
+        linear-gradient(
+            180deg,
+            #052630,
+            #02151c
+        );
+}
+
+#three-container{
+    position:absolute;
+    inset:0;
+}
+
+canvas{
+    display:block;
+}
+
+/* =========================================================
+   TOP BAR
+   ========================================================= */
+
+.topbar{
+    position:absolute;
+
+    z-index:50;
+
+    top:16px;
+    left:18px;
+    right:18px;
+
+    min-height:68px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    gap:16px;
+
+    padding:10px 14px;
+
+    border:
+        1px solid var(--line);
+
+    border-radius:22px;
+
+    background:
+        rgba(2,22,30,.76);
+
+    backdrop-filter:
+        blur(18px);
+
+    box-shadow:
+        var(--shadow);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+
+    gap:13px;
+}
+
+.logo{
+    width:46px;
+    height:46px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:14px;
+
+    color:#032027;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--mint),
+            var(--cyan2)
+        );
+
+    font-size:22px;
+    font-weight:1000;
+
+    box-shadow:
+        0 10px 28px
+        rgba(31,216,235,.22);
+}
+
+.brand-text{
+    display:flex;
+    flex-direction:column;
+}
+
+.brand-text strong{
+    font-size:16px;
+
+    letter-spacing:.3px;
+}
+
+.brand-text span{
+    margin-top:4px;
+
+    color:var(--muted);
+
+    font-size:10px;
+
+    letter-spacing:1px;
+}
+
+.top-actions{
+    display:flex;
+
+    gap:8px;
+}
+
+.button{
+    border:
+        1px solid var(--line);
+
+    border-radius:13px;
+
+    padding:10px 13px;
+
+    color:#def8fc;
+
+    background:#082c36;
+
+    font-size:12px;
+
+    font-weight:900;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.button:hover{
+    transform:
+        translateY(-2px);
+
+    border-color:
+        rgba(105,238,255,.38);
+}
+
+.button.active{
+    color:#dffff7;
+
+    border-color:
+        rgba(45,225,189,.45);
+
+    background:
+        rgba(45,225,189,.13);
+}
+
+/* =========================================================
+   PANELS
+   ========================================================= */
+
+.panel{
+    position:absolute;
+
+    z-index:40;
+
+    top:100px;
+    bottom:18px;
+
+    width:350px;
+
+    overflow-y:auto;
+
+    border:
+        1px solid var(--line);
+
+    border-radius:24px;
+
+    background:
+        rgba(4,31,40,.78);
+
+    backdrop-filter:
+        blur(20px);
+
+    box-shadow:
+        var(--shadow);
+
+    scrollbar-width:thin;
+    scrollbar-color:
+        #176176 transparent;
+}
+
+.left-panel{
+    left:18px;
+}
+
+.right-panel{
+    right:18px;
+}
+
+.panel-content{
+    padding:18px;
+}
+
+/* =========================================================
+   TYPOGRAPHY
+   ========================================================= */
+
+.eyebrow{
+    margin-bottom:7px;
+
+    color:var(--mint);
+
+    font-size:10px;
+
+    font-weight:950;
+
+    letter-spacing:1.5px;
+
+    text-transform:uppercase;
+}
+
+.panel h2{
+    margin:0;
+
+    font-size:23px;
+
+    letter-spacing:-.7px;
+}
+
+.panel-description{
+    margin:
+        8px 0 0;
+
+    color:var(--muted);
+
+    font-size:12px;
+
+    line-height:1.55;
+}
+
+/* =========================================================
+   CONTROLS
+   ========================================================= */
+
+.control{
+    margin-top:14px;
+
+    padding:14px;
+
+    border:
+        1px solid
+        rgba(105,238,255,.10);
+
+    border-radius:16px;
+
+    background:
+        rgba(255,255,255,.025);
+}
+
+.control-header{
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    gap:10px;
+
+    margin-bottom:10px;
+
+    font-size:12px;
+
+    font-weight:850;
+}
+
+.control-value{
+    color:var(--cyan);
+
+    font-size:14px;
+
+    font-weight:1000;
+}
+
+input[type="range"]{
+    width:100%;
+
+    cursor:pointer;
+
+    accent-color:
+        var(--cyan2);
+}
+
+.range-labels{
+    margin-top:7px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    color:#6f9aa6;
+
+    font-size:9px;
+}
+
+/* =========================================================
+   SCENARIOS
+   ========================================================= */
+
+.scenario-title{
+    margin-top:18px;
+}
+
+.scenario-grid{
+    margin-top:10px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:8px;
+}
+
+.scenario{
+    min-height:57px;
+
+    padding:10px;
+
+    border:
+        1px solid var(--line);
+
+    border-radius:13px;
+
+    color:#edfaff;
+
+    background:#082e39;
+
+    text-align:left;
+
+    font-size:11px;
+
+    font-weight:850;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.scenario:hover{
+    transform:
+        translateY(-2px);
+
+    border-color:
+        rgba(105,238,255,.36);
+}
+
+.scenario span{
+    display:block;
+
+    margin-top:4px;
+
+    color:#86adb7;
+
+    font-size:9px;
+
+    font-weight:500;
+}
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+.risk-box{
+    margin-top:14px;
+
+    padding:15px;
+
+    border-radius:17px;
+
+    border:
+        1px solid
+        rgba(255,213,104,.18);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,213,104,.07),
+            rgba(255,102,92,.035)
+        );
+}
+
+.risk-header{
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    gap:10px;
+}
+
+.risk-header strong{
+    font-size:12px;
+}
+
+.risk-badge{
+    padding:5px 9px;
+
+    border-radius:999px;
+
+    color:var(--green);
+
+    background:
+        rgba(74,224,160,.12);
+
+    border:
+        1px solid
+        rgba(74,224,160,.26);
+
+    font-size:10px;
+
+    font-weight:1000;
+}
+
+.progress{
+    margin-top:11px;
+
+    height:9px;
+
+    border-radius:999px;
+
+    overflow:hidden;
+
+    background:
+        rgba(255,255,255,.06);
+}
+
+.progress span{
+    display:block;
+
+    width:20%;
+    height:100%;
+
+    border-radius:999px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--green),
+            var(--yellow),
+            var(--orange),
+            var(--red)
+        );
+
+    transition:.35s;
+}
+
+.risk-description{
+    margin:
+        10px 0 0;
+
+    color:#aeced6;
+
+    font-size:11px;
+
+    line-height:1.5;
+}
+
+/* =========================================================
+   METRICS
+   ========================================================= */
+
+.metrics{
+    margin-top:12px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap:9px;
+}
+
+.metric{
+    padding:12px;
+
+    border:
+        1px solid
+        rgba(105,238,255,.09);
+
+    border-radius:14px;
+
+    background:
+        rgba(255,255,255,.025);
+}
+
+.metric-value{
+    color:var(--cyan);
+
+    font-size:22px;
+
+    font-weight:1000;
+
+    line-height:1;
+}
+
+.metric-label{
+    margin-top:6px;
+
+    color:var(--muted);
+
+    font-size:9px;
+
+    line-height:1.3;
+}
+
+/* =========================================================
+   IMPACT CARDS
+   ========================================================= */
+
+.impact-list{
+    display:grid;
+
+    gap:9px;
+
+    margin-top:13px;
+}
+
+.impact{
+    padding:11px;
+
+    border:
+        1px solid
+        rgba(105,238,255,.09);
+
+    border-radius:14px;
+
+    background:
+        rgba(255,255,255,.022);
+}
+
+.impact-title{
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+    font-size:11px;
+
+    font-weight:900;
+}
+
+.impact-status{
+    color:var(--cyan);
+}
+
+.impact-text{
+    margin-top:6px;
+
+    color:#86abb5;
+
+    font-size:10px;
+
+    line-height:1.45;
+}
+
+/* =========================================================
+   BOTTOM HUD
+   ========================================================= */
+
+.bottom-hud{
+    position:absolute;
+
+    z-index:20;
+
+    left:386px;
+    right:386px;
+    bottom:18px;
+
+    display:flex;
+
+    justify-content:center;
+
+    pointer-events:none;
+}
+
+.hud-card{
+    width:min(750px,100%);
+
+    padding:11px 14px;
+
+    border:
+        1px solid var(--line);
+
+    border-radius:17px;
+
+    background:
+        rgba(2,22,30,.72);
+
+    backdrop-filter:
+        blur(14px);
+
+    box-shadow:
+        var(--shadow);
+}
+
+.hud-top{
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:15px;
+}
+
+.hud-title{
+    font-size:11px;
+
+    font-weight:950;
+}
+
+.hud-help{
+    color:var(--muted);
+
+    font-size:9px;
+}
+
+.legend{
+    margin-top:8px;
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:12px;
+}
+
+.legend-item{
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    color:#bcdce3;
+
+    font-size:9px;
+}
+
+.legend-dot{
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+}
+
+.green{background:var(--green)}
+.yellow{background:var(--yellow)}
+.orange{background:var(--orange)}
+.red{background:var(--red)}
+.blue{background:var(--cyan2)}
+
+/* =========================================================
+   INFO TAGS IN 3D SPACE
+   ========================================================= */
+
+.world-label{
+    position:absolute;
+
+    z-index:15;
+
+    display:none;
+
+    min-width:130px;
+
+    padding:9px 11px;
+
+    border:
+        1px solid
+        rgba(105,238,255,.20);
+
+    border-radius:12px;
+
+    color:#e7faff;
+
+    background:
+        rgba(2,24,31,.84);
+
+    backdrop-filter:
+        blur(12px);
+
+    box-shadow:
+        0 12px 35px
+        rgba(0,0,0,.30);
+
+    pointer-events:none;
+}
+
+.world-label strong{
+    display:block;
+
+    font-size:10px;
+}
+
+.world-label span{
+    display:block;
+
+    margin-top:3px;
+
+    color:#8eb7c1;
+
+    font-size:8px;
+}
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+.toast{
+    position:absolute;
+
+    z-index:100;
+
+    left:50%;
+    top:92px;
+
+    transform:
+        translateX(-50%)
+        translateY(-10px);
+
+    opacity:0;
+
+    padding:9px 14px;
+
+    border:
+        1px solid var(--line);
+
+    border-radius:13px;
+
+    color:#e8fbff;
+
+    background:
+        rgba(3,27,36,.94);
+
+    font-size:11px;
+
+    font-weight:850;
+
+    pointer-events:none;
+
+    transition:.25s;
+}
+
+.toast.show{
+    opacity:1;
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+}
+
+/* =========================================================
+   INFO NOTE
+   ========================================================= */
+
+.note{
+    margin-top:13px;
+
+    padding:11px;
+
+    border-radius:13px;
+
+    border:
+        1px solid
+        rgba(31,216,235,.13);
+
+    background:
+        rgba(31,216,235,.05);
+
+    color:#a9d4dc;
+
+    font-size:10px;
+
+    line-height:1.5;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:1180px){
+
+    .panel{
+        width:310px;
+    }
+
+    .bottom-hud{
+        left:338px;
+        right:338px;
+    }
+
+}
+
+@media(max-width:980px){
+
+    .right-panel{
+        display:none;
+    }
+
+    .left-panel{
+        width:320px;
+    }
+
+    .bottom-hud{
+        left:350px;
+        right:18px;
+    }
+
+}
+
+@media(max-width:720px){
+
+    .topbar{
+        top:10px;
+        left:10px;
+        right:10px;
+    }
+
+    .brand-text span{
+        display:none;
+    }
+
+    .top-actions .desktop{
+        display:none;
+    }
+
+    .left-panel{
+        top:auto;
+
+        left:10px;
+        right:10px;
+        bottom:10px;
+
+        width:auto;
+
+        max-height:43vh;
+    }
+
+    .right-panel,
+    .bottom-hud{
+        display:none;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+    <div id="three-container"></div>
+
+
+    <!-- ====================================================
+         TOP BAR
+         ==================================================== -->
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="logo">
+                C
+            </div>
+
+            <div class="brand-text">
+
+                <strong>
+                    CLIMASCORE 3D · HẠN HÁN
+                </strong>
+
+                <span>
+                    MÔ HÌNH TÁC ĐỘNG – HỆ QUẢ THIÊN TAI
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="top-actions">
+
+            <button
+                id="soundButton"
+                class="button"
+            >
+                🔊 Âm thanh
+            </button>
+
+            <button
+                id="autoButton"
+                class="button desktop"
+            >
+                ▶ Diễn biến
+            </button>
+
+            <button
+                id="labelsButton"
+                class="button active desktop"
+            >
+                ◉ Nhãn
+            </button>
+
+            <button
+                id="resetButton"
+                class="button"
+            >
+                ↻ Đặt lại
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- ====================================================
+         LEFT CONTROL PANEL
+         ==================================================== -->
+
+    <aside class="panel left-panel">
+
+        <div class="panel-content">
+
+            <div class="eyebrow">
+                Bảng điều khiển
+            </div>
+
+            <h2>
+                Điều kiện hạn hán
+            </h2>
+
+            <p class="panel-description">
+                Điều chỉnh từng yếu tố để quan sát
+                trực tiếp sự thay đổi của hồ nước,
+                đất, cây trồng, rừng và khu dân cư.
+            </p>
+
+
+            <!-- RAIN -->
+
+            <div class="control">
+
+                <div class="control-header">
+
+                    <span>
+                        🌧️ Lượng mưa
+                    </span>
+
+                    <span
+                        id="rainValue"
+                        class="control-value"
+                    >
+                        72%
+                    </span>
+
+                </div>
+
+                <input
+                    id="rain"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="72"
+                >
+
+                <div class="range-labels">
+                    <span>Không mưa</span>
+                    <span>Dồi dào</span>
+                </div>
+
+            </div>
+
+
+            <!-- TEMPERATURE -->
+
+            <div class="control">
+
+                <div class="control-header">
+
+                    <span>
+                        🌡️ Nhiệt độ
+                    </span>
+
+                    <span
+                        id="temperatureValue"
+                        class="control-value"
+                    >
+                        31°C
+                    </span>
+
+                </div>
+
+                <input
+                    id="temperature"
+                    type="range"
+                    min="24"
+                    max="46"
+                    value="31"
+                >
+
+                <div class="range-labels">
+                    <span>24°C</span>
+                    <span>46°C</span>
+                </div>
+
+            </div>
+
+
+            <!-- SOIL -->
+
+            <div class="control">
+
+                <div class="control-header">
+
+                    <span>
+                        💧 Độ ẩm đất
+                    </span>
+
+                    <span
+                        id="soilValue"
+                        class="control-value"
+                    >
+                        68%
+                    </span>
+
+                </div>
+
+                <input
+                    id="soil"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="68"
+                >
+
+                <div class="range-labels">
+                    <span>Khô kiệt</span>
+                    <span>Ẩm</span>
+                </div>
+
+            </div>
+
+
+            <!-- VEGETATION -->
+
+            <div class="control">
+
+                <div class="control-header">
+
+                    <span>
+                        🌳 Thảm thực vật
+                    </span>
+
+                    <span
+                        id="vegetationValue"
+                        class="control-value"
+                    >
+                        82%
+                    </span>
+
+                </div>
+
+                <input
+                    id="vegetation"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="82"
+                >
+
+                <div class="range-labels">
+                    <span>Suy kiệt</span>
+                    <span>Dày</span>
+                </div>
+
+            </div>
+
+
+            <!-- WATER USE -->
+
+            <div class="control">
+
+                <div class="control-header">
+
+                    <span>
+                        🚰 Khai thác nước
+                    </span>
+
+                    <span
+                        id="waterUseValue"
+                        class="control-value"
+                    >
+                        35%
+                    </span>
+
+                </div>
+
+                <input
+                    id="waterUse"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="35"
+                >
+
+                <div class="range-labels">
+                    <span>Thấp</span>
+                    <span>Quá mức</span>
+                </div>
+
+            </div>
+
+
+            <!-- WIND -->
+
+            <div class="control">
+
+                <div class="control-header">
+
+                    <span>
+                        🌬️ Gió khô
+                    </span>
+
+                    <span
+                        id="windValue"
+                        class="control-value"
+                    >
+                        25%
+                    </span>
+
+                </div>
+
+                <input
+                    id="wind"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="25"
+                >
+
+                <div class="range-labels">
+                    <span>Yếu</span>
+                    <span>Mạnh</span>
+                </div>
+
+            </div>
+
+
+            <!-- SCENARIOS -->
+
+            <div class="eyebrow scenario-title">
+                Kịch bản nhanh
+            </div>
+
+
+            <div class="scenario-grid">
+
+                <button
+                    class="scenario"
+                    data-scenario="normal"
+                >
+                    🌿 Bình thường
+
+                    <span>
+                        Nguồn nước ổn định
+                    </span>
+                </button>
+
+
+                <button
+                    class="scenario"
+                    data-scenario="mild"
+                >
+                    ☀️ Hạn nhẹ
+
+                    <span>
+                        Đất bắt đầu thiếu ẩm
+                    </span>
+                </button>
+
+
+                <button
+                    class="scenario"
+                    data-scenario="severe"
+                >
+                    🔥 Hạn nặng
+
+                    <span>
+                        Hồ cạn – cây suy yếu
+                    </span>
+                </button>
+
+
+                <button
+                    class="scenario"
+                    data-scenario="extreme"
+                >
+                    ⚠️ Cực đoan
+
+                    <span>
+                        Suy kiệt hệ thống
+                    </span>
+                </button>
+
+            </div>
+
+
+            <div class="note">
+
+                <strong>
+                    Mẹo quan sát:
+                </strong>
+
+                chọn “Hạn cực đoan”, sau đó tăng lượng mưa
+                từng bước để quan sát tốc độ phục hồi
+                của hồ nước, cây trồng và thảm thực vật.
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ====================================================
+         RIGHT DASHBOARD
+         ==================================================== -->
+
+    <aside class="panel right-panel">
+
+        <div class="panel-content">
+
+            <div class="eyebrow">
+                Phân tích hệ quả
+            </div>
+
+            <h2>
+                Dashboard tác động
+            </h2>
+
+            <p class="panel-description">
+                Các giá trị là mô phỏng giáo dục,
+                dùng để thể hiện quan hệ giữa
+                điều kiện khô hạn và hệ quả.
+            </p>
+
+
+            <div class="risk-box">
+
+                <div class="risk-header">
+
+                    <strong>
+                        Rủi ro hạn tổng hợp
+                    </strong>
+
+                    <span
+                        id="riskBadge"
+                        class="risk-badge"
+                    >
+                        THẤP
+                    </span>
+
+                </div>
+
+
+                <div class="progress">
+
+                    <span
+                        id="riskBar"
+                    ></span>
+
+                </div>
+
+
+                <p
+                    id="riskDescription"
+                    class="risk-description"
+                >
+                    Nguồn nước và hệ sinh thái
+                    còn tương đối ổn định.
+                </p>
+
+            </div>
+
+
+            <div class="metrics">
+
+                <div class="metric">
+
+                    <div
+                        id="lakeMetric"
+                        class="metric-value"
+                    >
+                        83%
+                    </div>
+
+                    <div class="metric-label">
+                        Mực nước hồ
+                    </div>
+
+                </div>
+
+
+                <div class="metric">
+
+                    <div
+                        id="cropMetric"
+                        class="metric-value"
+                    >
+                        91%
+                    </div>
+
+                    <div class="metric-label">
+                        Sức khỏe cây trồng
+                    </div>
+
+                </div>
+
+
+                <div class="metric">
+
+                    <div
+                        id="groundwaterMetric"
+                        class="metric-value"
+                    >
+                        79%
+                    </div>
+
+                    <div class="metric-label">
+                        Nước ngầm
+                    </div>
+
+                </div>
+
+
+                <div class="metric">
+
+                    <div
+                        id="fireMetric"
+                        class="metric-value"
+                    >
+                        13%
+                    </div>
+
+                    <div class="metric-label">
+                        Nguy cơ cháy rừng
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="impact-list">
+
+
+                <div class="impact">
+
+                    <div class="impact-title">
+
+                        <span>
+                            🌾 Nông nghiệp
+                        </span>
+
+                        <span
+                            id="agricultureStatus"
+                            class="impact-status"
+                        >
+                            Ổn định
+                        </span>
+
+                    </div>
+
+                    <div
+                        id="agricultureText"
+                        class="impact-text"
+                    >
+                        Đất còn đủ ẩm để duy trì
+                        phần lớn cây trồng.
+                    </div>
+
+                </div>
+
+
+                <div class="impact">
+
+                    <div class="impact-title">
+
+                        <span>
+                            🚰 Nước sinh hoạt
+                        </span>
+
+                        <span
+                            id="waterStatus"
+                            class="impact-status"
+                        >
+                            Ổn định
+                        </span>
+
+                    </div>
+
+                    <div
+                        id="waterText"
+                        class="impact-text"
+                    >
+                        Nguồn nước mặt và nước ngầm
+                        chưa chịu áp lực đáng kể.
+                    </div>
+
+                </div>
+
+
+                <div class="impact">
+
+                    <div class="impact-title">
+
+                        <span>
+                            ⚡ Thủy điện
+                        </span>
+
+                        <span
+                            id="powerStatus"
+                            class="impact-status"
+                        >
+                            Bình thường
+                        </span>
+
+                    </div>
+
+                    <div
+                        id="powerText"
+                        class="impact-text"
+                    >
+                        Hồ chứa còn đủ nước
+                        cho vận hành thông thường.
+                    </div>
+
+                </div>
+
+
+                <div class="impact">
+
+                    <div class="impact-title">
+
+                        <span>
+                            🔥 Cháy rừng
+                        </span>
+
+                        <span
+                            id="fireStatus"
+                            class="impact-status"
+                        >
+                            Thấp
+                        </span>
+
+                    </div>
+
+                    <div
+                        id="fireText"
+                        class="impact-text"
+                    >
+                        Nhiên liệu cháy chưa quá khô.
+                    </div>
+
+                </div>
+
+
+                <div class="impact">
+
+                    <div class="impact-title">
+
+                        <span>
+                            🌿 Hệ sinh thái
+                        </span>
+
+                        <span
+                            id="ecosystemStatus"
+                            class="impact-status"
+                        >
+                            Ổn định
+                        </span>
+
+                    </div>
+
+                    <div
+                        id="ecosystemText"
+                        class="impact-text"
+                    >
+                        Sinh cảnh vẫn duy trì
+                        nguồn nước và thảm phủ.
+                    </div>
+
+                </div>
+
+
+                <div class="impact">
+
+                    <div class="impact-title">
+
+                        <span>
+                            🏘️ Dân cư
+                        </span>
+
+                        <span
+                            id="communityStatus"
+                            class="impact-status"
+                        >
+                            An toàn
+                        </span>
+
+                    </div>
+
+                    <div
+                        id="communityText"
+                        class="impact-text"
+                    >
+                        Hệ thống cấp nước
+                        chưa chịu sức ép lớn.
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ====================================================
+         BOTTOM HUD
+         ==================================================== -->
+
+    <div class="bottom-hud">
+
+        <div class="hud-card">
+
+            <div class="hud-top">
+
+                <div class="hud-title">
+                    MÔ HÌNH HẠN HÁN 3D
+                </div>
+
+                <div class="hud-help">
+                    Kéo chuột: xoay · Cuộn: phóng to · Chuột phải: di chuyển
+                </div>
+
+            </div>
+
+
+            <div class="legend">
+
+                <div class="legend-item">
+                    <span class="legend-dot blue"></span>
+                    Hồ chứa
+                </div>
+
+                <div class="legend-item">
+                    <span class="legend-dot green"></span>
+                    Bình thường
+                </div>
+
+                <div class="legend-item">
+                    <span class="legend-dot yellow"></span>
+                    Stress nước
+                </div>
+
+                <div class="legend-item">
+                    <span class="legend-dot orange"></span>
+                    Hạn nặng
+                </div>
+
+                <div class="legend-item">
+                    <span class="legend-dot red"></span>
+                    Cháy / suy kiệt
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- WORLD LABELS -->
+
+    <div
+        id="lakeLabel"
+        class="world-label"
+    >
+        <strong>HỒ CHỨA</strong>
+        <span id="lakeLabelText">Mực nước 83%</span>
+    </div>
+
+
+    <div
+        id="fieldLabel"
+        class="world-label"
+    >
+        <strong>KHU NÔNG NGHIỆP</strong>
+        <span id="fieldLabelText">Cây trồng khỏe</span>
+    </div>
+
+
+    <div
+        id="forestLabel"
+        class="world-label"
+    >
+        <strong>RỪNG</strong>
+        <span id="forestLabelText">Nguy cơ cháy thấp</span>
+    </div>
+
+
+    <div
+        id="villageLabel"
+        class="world-label"
+    >
+        <strong>KHU DÂN CƯ</strong>
+        <span id="villageLabelText">Nguồn nước ổn định</span>
+    </div>
+
+
+    <div
+        id="toast"
+        class="toast"
+    ></div>
+
+</div>
+
+
+<!-- ========================================================
+     THREE.JS IMPORT
+     ======================================================== -->
+
+<script type="importmap">
+
+{
+    "imports":{
+        "three":
+        "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+
+        "three/addons/":
+        "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+    }
+}
+
+</script>
+
+
+<script type="module">
+
+/* =========================================================
+   IMPORT
+   ========================================================= */
+
+import * as THREE from "three";
+
+import {
+    OrbitControls
+}
+from "three/addons/controls/OrbitControls.js";
+
+import {
+    EffectComposer
+}
+from "three/addons/postprocessing/EffectComposer.js";
+
+import {
+    RenderPass
+}
+from "three/addons/postprocessing/RenderPass.js";
+
+import {
+    UnrealBloomPass
+}
+from "three/addons/postprocessing/UnrealBloomPass.js";
+
+
+/* =========================================================
+   DOM
+   ========================================================= */
+
+const container =
+document.getElementById(
+    "three-container"
+);
+
+const toast =
+document.getElementById(
+    "toast"
+);
+
+
+/* =========================================================
+   UTILITY
+   ========================================================= */
+
+function clamp(
+    value,
+    min=0,
+    max=100
+){
+
+    return Math.max(
+        min,
+        Math.min(
+            max,
+            value
+        )
+    );
+
+}
+
+
+function showToast(
+    message
+){
+
+    toast.textContent =
+        message;
+
+    toast.classList.add(
+        "show"
+    );
+
+    clearTimeout(
+        showToast.timer
+    );
+
+    showToast.timer =
+        setTimeout(
+            ()=>{
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            1800
+        );
+
+}
+
+
+/* =========================================================
+   SCENE
+   ========================================================= */
+
+const scene =
+new THREE.Scene();
+
+
+scene.background =
+new THREE.Color(
+    0x071b22
+);
+
+
+scene.fog =
+new THREE.FogExp2(
+    0x0b2025,
+    0.014
+);
+
+
+/* =========================================================
+   CAMERA
+   ========================================================= */
+
+const camera =
+new THREE.PerspectiveCamera(
+    48,
+    innerWidth / innerHeight,
+    .1,
+    500
+);
+
+
+camera.position.set(
+    27,
+    20,
+    31
+);
+
+
+/* =========================================================
+   RENDERER
+   ========================================================= */
+
+const renderer =
+new THREE.WebGLRenderer({
+
+    antialias:true,
+
+    powerPreference:
+        "high-performance"
+
+});
+
+
+renderer.setSize(
+    innerWidth,
+    innerHeight
+);
+
+
+renderer.setPixelRatio(
+
+    Math.min(
+        window.devicePixelRatio,
+        2
+    )
+
+);
+
+
+renderer.shadowMap.enabled =
+    true;
+
+
+renderer.shadowMap.type =
+    THREE.PCFSoftShadowMap;
+
+
+renderer.outputColorSpace =
+    THREE.SRGBColorSpace;
+
+
+renderer.toneMapping =
+    THREE.ACESFilmicToneMapping;
+
+
+renderer.toneMappingExposure =
+    1.12;
+
+
+container.appendChild(
+    renderer.domElement
+);
+
+
+/* =========================================================
+   ORBIT CONTROL
+   ========================================================= */
+
+const controls =
+new OrbitControls(
+    camera,
+    renderer.domElement
+);
+
+
+controls.enableDamping =
+    true;
+
+
+controls.dampingFactor =
+    .045;
+
+
+controls.target.set(
+    0,
+    1,
+    0
+);
+
+
+controls.minDistance =
+    16;
+
+
+controls.maxDistance =
+    60;
+
+
+controls.maxPolarAngle =
+    Math.PI * .47;
+
+
+/* =========================================================
+   POST PROCESSING
+   ========================================================= */
+
+const composer =
+new EffectComposer(
+    renderer
+);
+
+
+const renderPass =
+new RenderPass(
+    scene,
+    camera
+);
+
+
+composer.addPass(
+    renderPass
+);
+
+
+const bloom =
+new UnrealBloomPass(
+
+    new THREE.Vector2(
+        innerWidth,
+        innerHeight
+    ),
+
+    .22,
+
+    .65,
+
+    .88
+
+);
+
+
+composer.addPass(
+    bloom
+);
+
+
+/* =========================================================
+   LIGHTS
+   ========================================================= */
+
+const hemisphereLight =
+new THREE.HemisphereLight(
+
+    0xbfeeff,
+
+    0x5a371f,
+
+    1.75
+
+);
+
+
+scene.add(
+    hemisphereLight
+);
+
+
+const sunlight =
+new THREE.DirectionalLight(
+
+    0xffdd9c,
+
+    4.2
+
+);
+
+
+sunlight.position.set(
+    -18,
+    28,
+    10
+);
+
+
+sunlight.castShadow =
+    true;
+
+
+sunlight.shadow.mapSize.set(
+    2048,
+    2048
+);
+
+
+sunlight.shadow.camera.left =
+    -36;
+
+sunlight.shadow.camera.right =
+    36;
+
+sunlight.shadow.camera.top =
+    36;
+
+sunlight.shadow.camera.bottom =
+    -36;
+
+
+sunlight.shadow.bias =
+    -.0002;
+
+
+scene.add(
+    sunlight
+);
+
+
+const fillLight =
+new THREE.DirectionalLight(
+
+    0x4cd9ff,
+
+    .85
+
+);
+
+
+fillLight.position.set(
+    18,
+    12,
+    -16
+);
+
+
+scene.add(
+    fillLight
+);
+
+
+/* =========================================================
+   SKY SUN
+   ========================================================= */
+
+const sunDisc =
+new THREE.Mesh(
+
+    new THREE.SphereGeometry(
+        2.2,
+        32,
+        32
+    ),
+
+    new THREE.MeshBasicMaterial({
+        color:0xffdf79
+    })
+
+);
+
+
+sunDisc.position.set(
+    -30,
+    28,
+    -42
+);
+
+
+scene.add(
+    sunDisc
+);
+
+
+/* =========================================================
+   TERRAIN
+   ========================================================= */
+
+const terrainGeometry =
+new THREE.PlaneGeometry(
+
+    56,
+    56,
+
+    150,
+    150
+
+);
+
+
+terrainGeometry.rotateX(
+    -Math.PI / 2
+);
+
+
+const terrainPositions =
+terrainGeometry.attributes.position;
+
+
+for(
+    let i=0;
+    i<terrainPositions.count;
+    i++
+){
+
+    const x =
+    terrainPositions.getX(i);
+
+    const z =
+    terrainPositions.getZ(i);
+
+
+    const base =
+
+        Math.sin(
+            x * .15
+        ) * 1.05
+
+        +
+
+        Math.cos(
+            z * .17
+        ) * .85
+
+        +
+
+        Math.sin(
+            (x + z) * .08
+        ) * .75;
+
+
+    const hill =
+
+        Math.exp(
+
+            -(
+
+                (x - 16) *
+                (x - 16)
+
+                +
+
+                (z + 13) *
+                (z + 13)
+
+            )
+
+            /
+
+            95
+
+        )
+
+        *
+
+        7.8;
+
+
+    const valley =
+
+        -Math.exp(
+
+            -(
+
+                (x + 3) *
+                (x + 3)
+
+                +
+
+                (z - 1) *
+                (z - 1)
+
+            )
+
+            /
+
+            72
+
+        )
+
+        *
+
+        3.7;
+
+
+    terrainPositions.setY(
+
+        i,
+
+        base +
+        hill +
+        valley
+
+    );
+
+}
+
+
+terrainGeometry.computeVertexNormals();
+
+
+const terrainMaterial =
+new THREE.MeshStandardMaterial({
+
+    color:0x627444,
+
+    roughness:.98,
+
+    metalness:0
+
+});
+
+
+const terrain =
+new THREE.Mesh(
+
+    terrainGeometry,
+
+    terrainMaterial
+
+);
+
+
+terrain.receiveShadow =
+    true;
+
+
+scene.add(
+    terrain
+);
+
+
+/* =========================================================
+   RESERVOIR
+   ========================================================= */
+
+const lakeMaterial =
+new THREE.MeshPhysicalMaterial({
+
+    color:0x229ec7,
+
+    roughness:.18,
+
+    metalness:.02,
+
+    transmission:.13,
+
+    transparent:true,
+
+    opacity:.92,
+
+    clearcoat:.8,
+
+    clearcoatRoughness:.13
+
+});
+
+
+const lake =
+new THREE.Mesh(
+
+    new THREE.CylinderGeometry(
+
+        9.1,
+
+        8.5,
+
+        .55,
+
+        96
+
+    ),
+
+    lakeMaterial
+
+);
+
+
+lake.scale.z =
+    .61;
+
+
+lake.position.set(
+
+    -4,
+
+    -1.25,
+
+    1
+
+);
+
+
+scene.add(
+    lake
+);
+
+
+/* SHORE */
+
+const shoreline =
+new THREE.Mesh(
+
+    new THREE.TorusGeometry(
+
+        8.95,
+
+        .38,
+
+        12,
+
+        100
+
+    ),
+
+    new THREE.MeshStandardMaterial({
+
+        color:0xb07c50,
+
+        roughness:1
+
+    })
+
+);
+
+
+shoreline.rotation.x =
+    Math.PI / 2;
+
+
+shoreline.scale.z =
+    .61;
+
+
+shoreline.position.set(
+
+    -4,
+
+    -.92,
+
+    1
+
+);
+
+
+scene.add(
+    shoreline
+);
+
+
+/* =========================================================
+   DAM
+   ========================================================= */
+
+const dam =
+new THREE.Mesh(
+
+    new THREE.BoxGeometry(
+        9.2,
+        3,
+        1.15
+    ),
+
+    new THREE.MeshStandardMaterial({
+
+        color:0x858f91,
+
+        roughness:.74
+
+    })
+
+);
+
+
+dam.position.set(
+
+    -4,
+    .15,
+    7.8
+
+);
+
+
+dam.rotation.y =
+    .1;
+
+
+dam.castShadow =
+dam.receiveShadow =
+    true;
+
+
+scene.add(
+    dam
+);
+
+
+/* =========================================================
+   WATER TOWER
+   ========================================================= */
+
+const waterTower =
+new THREE.Group();
+
+
+const towerTank =
+new THREE.Mesh(
+
+    new THREE.CylinderGeometry(
+
+        1.15,
+        1.2,
+        2.6,
+        28
+
+    ),
+
+    new THREE.MeshStandardMaterial({
+
+        color:0xbac6c9,
+
+        roughness:.7
+
+    })
+
+);
+
+
+towerTank.position.y =
+    4.2;
+
+
+towerTank.castShadow =
+    true;
+
+
+waterTower.add(
+    towerTank
+);
+
+
+const towerLegMaterial =
+new THREE.MeshStandardMaterial({
+
+    color:0x687477,
+
+    roughness:.8
+
+});
+
+
+for(
+    let i=0;
+    i<4;
+    i++
+){
+
+    const leg =
+    new THREE.Mesh(
+
+        new THREE.CylinderGeometry(
+
+            .09,
+            .12,
+            4,
+            8
+
+        ),
+
+        towerLegMaterial
+
+    );
+
+
+    const sx =
+    i < 2 ? -1 : 1;
+
+
+    const sz =
+    i % 2 ? -1 : 1;
+
+
+    leg.position.set(
+
+        sx * .72,
+
+        2,
+
+        sz * .72
+
+    );
+
+
+    leg.rotation.z =
+    sx * -.08;
+
+
+    waterTower.add(
+        leg
+    );
+
+}
+
+
+waterTower.position.set(
+
+    13,
+
+    0,
+
+    -5
+
+);
+
+
+scene.add(
+    waterTower
+);
+
+
+/* =========================================================
+   TREE GENERATOR
+   ========================================================= */
+
+function createTree(
+    scale=1
+){
+
+    const group =
+    new THREE.Group();
+
+
+    const trunk =
+    new THREE.Mesh(
+
+        new THREE.CylinderGeometry(
+
+            .11,
+            .17,
+            1.9,
+            8
+
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+            color:0x704728,
+
+            roughness:1
+
+        })
+
+    );
+
+
+    trunk.position.y =
+        .95;
+
+
+    trunk.castShadow =
+        true;
+
+
+    group.add(
+        trunk
+    );
+
+
+    const crownMaterial =
+    new THREE.MeshStandardMaterial({
+
+        color:0x2b934f,
+
+        roughness:.86
+
+    });
+
+
+    const crown =
+    new THREE.Mesh(
+
+        new THREE.IcosahedronGeometry(
+
+            1,
+            1
+
+        ),
+
+        crownMaterial
+
+    );
+
+
+    crown.position.y =
+        2.15;
+
+
+    crown.scale.set(
+
+        1.1,
+        1.2,
+        1.1
+
+    );
+
+
+    crown.castShadow =
+        true;
+
+
+    group.add(
+        crown
+    );
+
+
+    group.userData.crown =
+        crown;
+
+
+    group.scale.setScalar(
+        scale
+    );
+
+
+    return group;
+
+}
+
+
+/* =========================================================
+   FOREST
+   ========================================================= */
+
+const forest =
+new THREE.Group();
+
+
+scene.add(
+    forest
+);
+
+
+for(
+    let i=0;
+    i<130;
+    i++
+){
+
+    const tree =
+    createTree(
+
+        .62 +
+        Math.random() * .65
+
+    );
+
+
+    let x;
+    let z;
+
+
+    if(
+        i < 75
+    ){
+
+        x =
+        -24 +
+        Math.random() * 13;
+
+
+        z =
+        -21 +
+        Math.random() * 40;
+
+    }
+    else{
+
+        x =
+        8 +
+        Math.random() * 16;
+
+
+        z =
+        -20 +
+        Math.random() * 38;
+
+    }
+
+
+    const y =
+
+        Math.sin(
+            x * .15
+        ) * 1.05
+
+        +
+
+        Math.cos(
+            z * .17
+        ) * .85
+
+        +
+
+        Math.sin(
+            (x + z) * .08
+        ) * .75
+
+        +
+
+        Math.exp(
+
+            -(
+
+                (x - 16) *
+                (x - 16)
+
+                +
+
+                (z + 13) *
+                (z + 13)
+
+            )
+
+            /
+
+            95
+
+        )
+
+        *
+
+        7.8
+
+        -
+
+        Math.exp(
+
+            -(
+
+                (x + 3) *
+                (x + 3)
+
+                +
+
+                (z - 1) *
+                (z - 1)
+
+            )
+
+            /
+
+            72
+
+        )
+
+        *
+
+        3.7;
+
+
+    tree.position.set(
+        x,
+        y,
+        z
+    );
+
+
+    tree.rotation.y =
+        Math.random() *
+        Math.PI *
+        2;
+
+
+    forest.add(
+        tree
+    );
+
+}
+
+
+/* =========================================================
+   AGRICULTURAL FIELD
+   ========================================================= */
+
+const farm =
+new THREE.Group();
+
+
+scene.add(
+    farm
+);
+
+
+const farmBase =
+new THREE.Mesh(
+
+    new THREE.BoxGeometry(
+
+        12,
+        .16,
+        9
+
+    ),
+
+    new THREE.MeshStandardMaterial({
+
+        color:0x705035,
+
+        roughness:1
+
+    })
+
+);
+
+
+farmBase.position.set(
+
+    8,
+    .15,
+    8
+
+);
+
+
+farmBase.receiveShadow =
+    true;
+
+
+farm.add(
+    farmBase
+);
+
+
+const crops =
+[];
+
+
+for(
+    let row=0;
+    row<8;
+    row++
+){
+
+    for(
+        let col=0;
+        col<12;
+        col++
+    ){
+
+        const cropMaterial =
+        new THREE.MeshStandardMaterial({
+
+            color:0x4fa342,
+
+            roughness:.86
+
+        });
+
+
+        const crop =
+        new THREE.Mesh(
+
+            new THREE.ConeGeometry(
+
+                .13,
+                .8,
+                6
+
+            ),
+
+            cropMaterial
+
+        );
+
+
+        crop.position.set(
+
+            2.7 +
+            col * .92,
+
+            .63,
+
+            4.5 +
+            row * .92
+
+        );
+
+
+        crop.rotation.z =
+        (
+            Math.random() -
+            .5
+        ) * .1;
+
+
+        crop.castShadow =
+            true;
+
+
+        farm.add(
+            crop
+        );
+
+
+        crops.push(
+            crop
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   VILLAGE
+   ========================================================= */
+
+const village =
+new THREE.Group();
+
+
+scene.add(
+    village
+);
+
+
+function createHouse(
+    x,
+    z,
+    scale=.9
+){
+
+    const group =
+    new THREE.Group();
+
+
+    const wall =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            1.8 * scale,
+
+            1.3 * scale,
+
+            1.6 * scale
+
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+            color:0xd5c4ac,
+
+            roughness:.85
+
+        })
+
+    );
+
+
+    wall.position.y =
+        .7 * scale;
+
+
+    wall.castShadow =
+    wall.receiveShadow =
+        true;
+
+
+    group.add(
+        wall
+    );
+
+
+    const roof =
+    new THREE.Mesh(
+
+        new THREE.ConeGeometry(
+
+            1.42 * scale,
+
+            .75 * scale,
+
+            4
+
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+            color:0x814838,
+
+            roughness:.92
+
+        })
+
+    );
+
+
+    roof.rotation.y =
+        Math.PI / 4;
+
+
+    roof.position.y =
+        1.7 * scale;
+
+
+    roof.castShadow =
+        true;
+
+
+    group.add(
+        roof
+    );
+
+
+    const door =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            .38 * scale,
+
+            .7 * scale,
+
+            .05
+
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+            color:0x49342b
+
+        })
+
+    );
+
+
+    door.position.set(
+
+        0,
+
+        .4 * scale,
+
+        .82 * scale
+
+    );
+
+
+    group.add(
+        door
+    );
+
+
+    group.position.set(
+        x,
+        0,
+        z
+    );
+
+
+    return group;
+
+}
+
+
+[
+    [11,-12,.85],
+    [14,-11,.8],
+    [17,-10,.92],
+    [20,-8,.85],
+    [11,-8,.78],
+    [14,-6,.84],
+    [18,-5,.88],
+    [21,-3,.82],
+    [12,-3,.72]
+]
+.forEach(
+
+    h => village.add(
+        createHouse(...h)
+    )
+
+);
+
+
+/* =========================================================
+   DEAD TREES
+   ========================================================= */
+
+const deadForest =
+new THREE.Group();
+
+
+scene.add(
+    deadForest
+);
+
+
+function createDeadTree(
+    x,
+    z
+){
+
+    const group =
+    new THREE.Group();
+
+
+    const material =
+    new THREE.MeshStandardMaterial({
+
+        color:0x5a3824,
+
+        roughness:1
+
+    });
+
+
+    const trunk =
+    new THREE.Mesh(
+
+        new THREE.CylinderGeometry(
+
+            .10,
+            .16,
+            2.6,
+            7
+
+        ),
+
+        material
+
+    );
+
+
+    trunk.position.y =
+        1.3;
+
+
+    group.add(
+        trunk
+    );
+
+
+    for(
+        let i=0;
+        i<4;
+        i++
+    ){
+
+        const branch =
+        new THREE.Mesh(
+
+            new THREE.CylinderGeometry(
+
+                .04,
+                .065,
+                1.05,
+                6
+
+            ),
+
+            material
+
+        );
+
+
+        branch.position.set(
+
+            0,
+
+            1.7 +
+            i * .12,
+
+            0
+
+        );
+
+
+        branch.rotation.z =
+        (
+            i % 2
+            ?
+            1
+            :
+            -1
+        )
+
+        *
+
+        (
+            .62 +
+            Math.random() * .22
+        );
+
+
+        branch.rotation.y =
+            i * .8;
+
+
+        group.add(
+            branch
+        );
+
+    }
+
+
+    group.position.set(
+        x,
+        0,
+        z
+    );
+
+
+    return group;
+
+}
+
+
+for(
+    let i=0;
+    i<22;
+    i++
+){
+
+    deadForest.add(
+
+        createDeadTree(
+
+            -6 +
+            Math.random() * 15,
+
+            -16 +
+            Math.random() * 8
+
+        )
+
+    );
+
+}
+
+
+deadForest.visible =
+    false;
+
+
+/* =========================================================
+   SOIL CRACKS
+   ========================================================= */
+
+const crackGroup =
+new THREE.Group();
+
+
+scene.add(
+    crackGroup
+);
+
+
+const crackMaterial =
+new THREE.MeshBasicMaterial({
+
+    color:0x26140d,
+
+    transparent:true,
+
+    opacity:.04
+
+});
+
+
+for(
+    let i=0;
+    i<100;
+    i++
+){
+
+    const length =
+        .65 +
+        Math.random() * 2.4;
+
+
+    const crack =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+
+            length,
+            .022,
+            .045
+
+        ),
+
+        crackMaterial
+
+    );
+
+
+    crack.position.set(
+
+        -11 +
+        Math.random() * 25,
+
+        .11,
+
+        -16 +
+        Math.random() * 15
+
+    );
+
+
+    crack.rotation.y =
+        Math.random() *
+        Math.PI;
+
+
+    crackGroup.add(
+        crack
+    );
+
+
+    if(
+        Math.random() >
+        .42
+    ){
+
+        const branch =
+        new THREE.Mesh(
+
+            new THREE.BoxGeometry(
+
+                length * .5,
+                .021,
+                .038
+
+            ),
+
+            crackMaterial
+
+        );
+
+
+        branch.position.copy(
+            crack.position
+        );
+
+
+        branch.rotation.y =
+
+            crack.rotation.y
+
+            +
+
+            (
+                Math.random() >
+                .5
+                ?
+                .8
+                :
+                -.8
+            );
+
+
+        crackGroup.add(
+            branch
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DUST
+   ========================================================= */
+
+const dustCount =
+    550;
+
+
+const dustGeometry =
+new THREE.BufferGeometry();
+
+
+const dustPositions =
+new Float32Array(
+    dustCount * 3
+);
+
+
+for(
+    let i=0;
+    i<dustCount;
+    i++
+){
+
+    dustPositions[
+        i * 3
+    ] =
+        -28 +
+        Math.random() * 56;
+
+
+    dustPositions[
+        i * 3 + 1
+    ] =
+        .4 +
+        Math.random() * 11;
+
+
+    dustPositions[
+        i * 3 + 2
+    ] =
+        -28 +
+        Math.random() * 56;
+
+}
+
+
+dustGeometry.setAttribute(
+
+    "position",
+
+    new THREE.BufferAttribute(
+
+        dustPositions,
+        3
+
+    )
+
+);
+
+
+const dustMaterial =
+new THREE.PointsMaterial({
+
+    color:0xd6a16c,
+
+    size:.07,
+
+    transparent:true,
+
+    opacity:0,
+
+    depthWrite:false
+
+});
+
+
+const dust =
+new THREE.Points(
+
+    dustGeometry,
+
+    dustMaterial
+
+);
+
+
+scene.add(
+    dust
+);
+
+
+/* =========================================================
+   FIRE
+   ========================================================= */
+
+const fire =
+new THREE.Group();
+
+
+scene.add(
+    fire
+);
+
+
+const flameGeometry =
+new THREE.SphereGeometry(
+
+    .12,
+    8,
+    8
+
+);
+
+
+for(
+    let i=0;
+    i<100;
+    i++
+){
+
+    const material =
+    new THREE.MeshBasicMaterial({
+
+        color:
+        Math.random() >
+        .5
+        ?
+        0xff7a2f
+        :
+        0xffd14a,
+
+        transparent:true,
+
+        opacity:.7
+
+    });
+
+
+    const flame =
+    new THREE.Mesh(
+
+        flameGeometry,
+
+        material
+
+    );
+
+
+    flame.position.set(
+
+        -20 +
+        Math.random() * 8,
+
+        .25 +
+        Math.random() * 2,
+
+        -14 +
+        Math.random() * 9
+
+    );
+
+
+    flame.scale.set(
+
+        .5 +
+        Math.random(),
+
+        1 +
+        Math.random() * 2,
+
+        .5 +
+        Math.random()
+
+    );
+
+
+    flame.userData.speed =
+        .5 +
+        Math.random() * 1;
+
+
+    fire.add(
+        flame
+    );
+
+}
+
+
+fire.visible =
+    false;
+
+
+/* =========================================================
+   SMOKE
+   ========================================================= */
+
+const smokeGroup =
+new THREE.Group();
+
+
+scene.add(
+    smokeGroup
+);
+
+
+const smokeGeometry =
+new THREE.SphereGeometry(
+
+    .35,
+    10,
+    10
+
+);
+
+
+for(
+    let i=0;
+    i<35;
+    i++
+){
+
+    const smokeMaterial =
+    new THREE.MeshBasicMaterial({
+
+        color:0x393a39,
+
+        transparent:true,
+
+        opacity:.15
+
+    });
+
+
+    const smoke =
+    new THREE.Mesh(
+
+        smokeGeometry,
+
+        smokeMaterial
+
+    );
+
+
+    smoke.position.set(
+
+        -18 +
+        Math.random() * 6,
+
+        1 +
+        Math.random() * 5,
+
+        -12 +
+        Math.random() * 7
+
+    );
+
+
+    smoke.scale.setScalar(
+
+        .5 +
+        Math.random() * 1.5
+
+    );
+
+
+    smoke.userData.speed =
+        .25 +
+        Math.random() * .5;
+
+
+    smokeGroup.add(
+        smoke
+    );
+
+}
+
+
+smokeGroup.visible =
+    false;
+
+
+/* =========================================================
+   UI INPUTS
+   ========================================================= */
+
+const inputs = {
+
+    rain:
+        document.getElementById(
+            "rain"
+        ),
+
+    temperature:
+        document.getElementById(
+            "temperature"
+        ),
+
+    soil:
+        document.getElementById(
+            "soil"
+        ),
+
+    vegetation:
+        document.getElementById(
+            "vegetation"
+        ),
+
+    waterUse:
+        document.getElementById(
+            "waterUse"
+        ),
+
+    wind:
+        document.getElementById(
+            "wind"
+        )
+
+};
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+const state = {
+
+    rain:72,
+
+    temperature:31,
+
+    soil:68,
+
+    vegetation:82,
+
+    waterUse:35,
+
+    wind:25,
+
+    risk:0,
+
+    lake:0,
+
+    crop:0,
+
+    groundwater:0,
+
+    fire:0
+
+};
+
+
+/* =========================================================
+   LABELS
+   ========================================================= */
+
+const labels = {
+
+    lake:{
+        element:
+        document.getElementById(
+            "lakeLabel"
+        ),
+
+        object:
+        new THREE.Vector3(
+            -4,
+            2,
+            1
+        )
+    },
+
+    field:{
+        element:
+        document.getElementById(
+            "fieldLabel"
+        ),
+
+        object:
+        new THREE.Vector3(
+            8,
+            2,
+            8
+        )
+    },
+
+    forest:{
+        element:
+        document.getElementById(
+            "forestLabel"
+        ),
+
+        object:
+        new THREE.Vector3(
+            -16,
+            5,
+            -9
+        )
+    },
+
+    village:{
+        element:
+        document.getElementById(
+            "villageLabel"
+        ),
+
+        object:
+        new THREE.Vector3(
+            16,
+            4,
+            -8
+        )
+    }
+
+};
+
+
+let showLabels =
+    true;
+
+
+/* =========================================================
+   RISK FUNCTIONS
+   ========================================================= */
+
+function classifyRisk(
+    value
+){
+
+    if(
+        value < 25
+    ){
+
+        return [
+            "THẤP",
+            "#4ae0a0"
+        ];
+
+    }
+
+
+    if(
+        value < 45
+    ){
+
+        return [
+            "TRUNG BÌNH",
+            "#d8df65"
+        ];
+
+    }
+
+
+    if(
+        value < 65
+    ){
+
+        return [
+            "CAO",
+            "#ffd568"
+        ];
+
+    }
+
+
+    if(
+        value < 82
+    ){
+
+        return [
+            "RẤT CAO",
+            "#ff9c52"
+        ];
+
+    }
+
+
+    return [
+        "CỰC ĐOAN",
+        "#ff665c"
+    ];
+
+}
+
+
+function classifyImpact(
+    value
+){
+
+    if(value < 25)
+        return "Thấp";
+
+    if(value < 45)
+        return "Trung bình";
+
+    if(value < 65)
+        return "Cao";
+
+    if(value < 82)
+        return "Rất cao";
+
+    return "Cực đoan";
+
+}
+
+
+/* =========================================================
+   UPDATE MODEL
+   ========================================================= */
+
+function updateSimulation(){
+
+    state.rain =
+        +inputs.rain.value;
+
+
+    state.temperature =
+        +inputs.temperature.value;
+
+
+    state.soil =
+        +inputs.soil.value;
+
+
+    state.vegetation =
+        +inputs.vegetation.value;
+
+
+    state.waterUse =
+        +inputs.waterUse.value;
+
+
+    state.wind =
+        +inputs.wind.value;
+
+
+    /* --------------------------------------------
+       UI VALUES
+       -------------------------------------------- */
+
+    document.getElementById(
+        "rainValue"
+    ).textContent =
+        state.rain + "%";
+
+
+    document.getElementById(
+        "temperatureValue"
+    ).textContent =
+        state.temperature + "°C";
+
+
+    document.getElementById(
+        "soilValue"
+    ).textContent =
+        state.soil + "%";
+
+
+    document.getElementById(
+        "vegetationValue"
+    ).textContent =
+        state.vegetation + "%";
+
+
+    document.getElementById(
+        "waterUseValue"
+    ).textContent =
+        state.waterUse + "%";
+
+
+    document.getElementById(
+        "windValue"
+    ).textContent =
+        state.wind + "%";
+
+
+    /* --------------------------------------------
+       NORMALIZED FACTORS
+       -------------------------------------------- */
+
+    const rainDeficit =
+        100 -
+        state.rain;
+
+
+    const heat =
+        clamp(
+
+            (
+                state.temperature -
+                24
+            )
+
+            /
+
+            22
+
+            *
+
+            100
+
+        );
+
+
+    const soilDeficit =
+        100 -
+        state.soil;
+
+
+    const vegetationLoss =
+        100 -
+        state.vegetation;
+
+
+    /* --------------------------------------------
+       EDUCATIONAL DROUGHT RISK MODEL
+       -------------------------------------------- */
+
+    state.risk =
+        clamp(
+
+            rainDeficit * .29
+
+            +
+
+            heat * .22
+
+            +
+
+            soilDeficit * .22
+
+            +
+
+            vegetationLoss * .09
+
+            +
+
+            state.waterUse * .11
+
+            +
+
+            state.wind * .07
+
+        );
+
+
+    /* --------------------------------------------
+       RESERVOIR
+       -------------------------------------------- */
+
+    state.lake =
+        clamp(
+
+            96
+
+            -
+
+            rainDeficit * .58
+
+            -
+
+            heat * .14
+
+            -
+
+            state.waterUse * .23
+
+        );
+
+
+    /* --------------------------------------------
+       GROUNDWATER
+       -------------------------------------------- */
+
+    state.groundwater =
+        clamp(
+
+            93
+
+            -
+
+            rainDeficit * .38
+
+            -
+
+            state.waterUse * .40
+
+            -
+
+            heat * .12
+
+        );
+
+
+    /* --------------------------------------------
+       CROPS
+       -------------------------------------------- */
+
+    state.crop =
+        clamp(
+
+            100
+
+            -
+
+            soilDeficit * .53
+
+            -
+
+            heat * .21
+
+            -
+
+            rainDeficit * .16
+
+            -
+
+            vegetationLoss * .05
+
+        );
+
+
+    /* --------------------------------------------
+       FIRE RISK
+       -------------------------------------------- */
+
+    state.fire =
+        clamp(
+
+            heat * .31
+
+            +
+
+            soilDeficit * .25
+
+            +
+
+            vegetationLoss * .18
+
+            +
+
+            rainDeficit * .15
+
+            +
+
+            state.wind * .21
+
+        );
+
+
+    /* =====================================================
+       3D - LAKE
+       ===================================================== */
+
+    const lakeScale =
+
+        THREE.MathUtils.lerp(
+
+            .10,
+
+            1,
+
+            state.lake / 100
+
+        );
+
+
+    lake.scale.y =
+        lakeScale;
+
+
+    lake.position.y =
+
+        -1.35
+
+        +
+
+        lakeScale * .13;
+
+
+    lakeMaterial.opacity =
+
+        .38
+
+        +
+
+        state.lake / 100 * .56;
+
+
+    lakeMaterial.color.setHSL(
+
+        .54,
+
+        .67,
+
+        THREE.MathUtils.lerp(
+
+            .24,
+
+            .47,
+
+            state.lake / 100
+
+        )
+
+    );
+
+
+    /* =====================================================
+       3D - TERRAIN
+       ===================================================== */
+
+    const dryness =
+        state.risk / 100;
+
+
+    const wetSoil =
+    new THREE.Color(
+        0x5c7543
+    );
+
+
+    const drySoil =
+    new THREE.Color(
+        0xaa673c
+    );
+
+
+    terrainMaterial.color
+    .copy(
+        wetSoil
+    )
+    .lerp(
+        drySoil,
+        dryness
+    );
+
+
+    /* =====================================================
+       3D - CRACKS
+       ===================================================== */
+
+    crackMaterial.opacity =
+
+        Math.max(
+            .02,
+            dryness * .88
+        );
+
+
+    crackGroup.scale.setScalar(
+
+        .88
+
+        +
+
+        dryness * .35
+
+    );
+
+
+    /* =====================================================
+       3D - FOREST
+       ===================================================== */
+
+    const treeStress =
+        clamp(
+
+            (
+                state.risk -
+                12
+            )
+
+            /
+
+            88
+
+        );
+
+
+    forest.children.forEach(
+
+        (
+            tree,
+            index
+        )=>{
+
+            const crown =
+                tree.userData.crown;
+
+
+            const healthy =
+            new THREE.Color(
+                0x2e9852
+            );
+
+
+            const stressed =
+            new THREE.Color(
+                0x879044
+            );
+
+
+            const dead =
+            new THREE.Color(
+                0x98613a
+            );
+
+
+            if(
+                treeStress <
+                .52
+            ){
+
+                crown.material.color
+                .copy(
+                    healthy
+                )
+                .lerp(
+
+                    stressed,
+
+                    treeStress /
+                    .52
+
+                );
+
+            }
+            else{
+
+                crown.material.color
+                .copy(
+                    stressed
+                )
+                .lerp(
+
+                    dead,
+
+                    (
+                        treeStress -
+                        .52
+                    )
+
+                    /
+
+                    .48
+
+                );
+
+            }
+
+
+            crown.scale.y =
+
+                1.15
+
+                -
+
+                treeStress * .36;
+
+
+            const surviveChance =
+
+                state.vegetation /
+                100;
+
+
+            if(
+                index % 7 === 0
+            ){
+
+                tree.visible =
+                    surviveChance >
+                    .15
+
+                    ||
+
+                    Math.random() >
+                    .5;
+
+            }
+
+        }
+
+    );
+
+
+    deadForest.visible =
+        state.risk > 55;
+
+
+    /* =====================================================
+       3D - CROPS
+       ===================================================== */
+
+    const cropStress =
+        1 -
+        state.crop / 100;
+
+
+    crops.forEach(
+
+        (
+            crop,
+            index
+        )=>{
+
+            crop.material.color
+            .copy(
+
+                new THREE.Color(
+                    0x4da342
+                )
+
+            )
+            .lerp(
+
+                new THREE.Color(
+                    0xc28c3e
+                ),
+
+                cropStress
+
+            );
+
+
+            crop.scale.y =
+
+                .25
+
+                +
+
+                state.crop /
+                100 *
+                .9;
+
+
+            crop.rotation.z =
+
+                (
+                    index % 2
+                    ?
+                    1
+                    :
+                    -1
+                )
+
+                *
+
+                cropStress *
+                .25;
+
+        }
+
+    );
+
+
+    /* =====================================================
+       FIRE
+       ===================================================== */
+
+    fire.visible =
+        state.fire > 66;
+
+
+    smokeGroup.visible =
+        state.fire > 61;
+
+
+    /* =====================================================
+       DUST
+       ===================================================== */
+
+    dustMaterial.opacity =
+
+        Math.max(
+
+            0,
+
+            (
+                state.risk -
+                25
+            )
+
+            /
+
+            100
+
+            *
+
+            .68
+
+        );
+
+
+    /* =====================================================
+       ATMOSPHERE
+       ===================================================== */
+
+    scene.fog.density =
+
+        .011
+
+        +
+
+        state.risk /
+        100 *
+        .019;
+
+
+    const normalSky =
+    new THREE.Color(
+        0x071b22
+    );
+
+
+    const droughtSky =
+    new THREE.Color(
+        0x7b5940
+    );
+
+
+    scene.background
+    .copy(
+        normalSky
+    )
+    .lerp(
+
+        droughtSky,
+
+        Math.max(
+
+            0,
+
+            (
+                state.risk -
+                35
+            )
+
+            /
+
+            90
+
+        )
+
+    );
+
+
+    sunlight.intensity =
+
+        3.5
+
+        +
+
+        heat /
+        100 *
+        5;
+
+
+    sunDisc.scale.setScalar(
+
+        .92
+
+        +
+
+        heat /
+        100 *
+        .62
+
+    );
+
+
+    /* =====================================================
+       BLOOM
+       ===================================================== */
+
+    bloom.strength =
+
+        .20
+
+        +
+
+        Math.max(
+
+            0,
+
+            (
+                state.fire -
+                55
+            )
+
+            /
+
+            100
+
+        )
+
+        *
+
+        .85;
+
+
+    /* =====================================================
+       SOUND
+       ===================================================== */
+
+    updateAudio();
+
+
+    /* =====================================================
+       UI
+       ===================================================== */
+
+    updateDashboard();
+
+}
+
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+function updateDashboard(){
+
+    document.getElementById(
+        "lakeMetric"
+    ).textContent =
+
+        Math.round(
+            state.lake
+        )
+
+        + "%";
+
+
+    document.getElementById(
+        "cropMetric"
+    ).textContent =
+
+        Math.round(
+            state.crop
+        )
+
+        + "%";
+
+
+    document.getElementById(
+        "groundwaterMetric"
+    ).textContent =
+
+        Math.round(
+            state.groundwater
+        )
+
+        + "%";
+
+
+    document.getElementById(
+        "fireMetric"
+    ).textContent =
+
+        Math.round(
+            state.fire
+        )
+
+        + "%";
+
+
+    const [
+        riskText,
+        riskColor
+    ] =
+    classifyRisk(
+        state.risk
+    );
+
+
+    const riskBadge =
+    document.getElementById(
+        "riskBadge"
+    );
+
+
+    riskBadge.textContent =
+        riskText;
+
+
+    riskBadge.style.color =
+        riskColor;
+
+
+    riskBadge.style.borderColor =
+        riskColor + "66";
+
+
+    riskBadge.style.background =
+        riskColor + "18";
+
+
+    document.getElementById(
+        "riskBar"
+    ).style.width =
+
+        state.risk +
+        "%";
+
+
+    const description =
+    document.getElementById(
+        "riskDescription"
+    );
+
+
+    if(
+        state.risk <
+        25
+    ){
+
+        description.textContent =
+            "Nguồn nước và hệ sinh thái còn tương đối ổn định.";
+
+    }
+    else if(
+        state.risk <
+        45
+    ){
+
+        description.textContent =
+            "Đất bắt đầu mất ẩm, cây trồng xuất hiện stress nước.";
+
+    }
+    else if(
+        state.risk <
+        65
+    ){
+
+        description.textContent =
+            "Nguồn nước giảm rõ rệt, nông nghiệp bắt đầu chịu tác động.";
+
+    }
+    else if(
+        state.risk <
+        82
+    ){
+
+        description.textContent =
+            "Hạn nghiêm trọng: hồ cạn, cây suy yếu và nguy cơ cháy tăng mạnh.";
+
+    }
+    else{
+
+        description.textContent =
+            "Hệ thống suy kiệt: thiếu nước nghiêm trọng, cháy rừng và tổn thất sinh thái cao.";
+
+    }
+
+
+    /* AGRICULTURE */
+
+    const agricultureRisk =
+        100 -
+        state.crop;
+
+
+    document.getElementById(
+        "agricultureStatus"
+    ).textContent =
+
+        classifyImpact(
+            agricultureRisk
+        );
+
+
+    if(
+        agricultureRisk <
+        25
+    ){
+
+        document.getElementById(
+            "agricultureText"
+        ).textContent =
+            "Đất còn đủ ẩm để duy trì phần lớn cây trồng.";
+
+    }
+    else if(
+        agricultureRisk <
+        50
+    ){
+
+        document.getElementById(
+            "agricultureText"
+        ).textContent =
+            "Cây bắt đầu stress nước, nhu cầu tưới tăng.";
+
+    }
+    else if(
+        agricultureRisk <
+        75
+    ){
+
+        document.getElementById(
+            "agricultureText"
+        ).textContent =
+            "Năng suất giảm rõ rệt, nhiều diện tích cần cứu hạn.";
+
+    }
+    else{
+
+        document.getElementById(
+            "agricultureText"
+        ).textContent =
+            "Nguy cơ mất mùa cao và cây trồng suy kiệt trên diện rộng.";
+
+    }
+
+
+    /* DOMESTIC WATER */
+
+    const waterRisk =
+        100
+
+        -
+
+        (
+            state.lake * .55
+
+            +
+
+            state.groundwater * .45
+        );
+
+
+    document.getElementById(
+        "waterStatus"
+    ).textContent =
+
+        classifyImpact(
+            waterRisk
+        );
+
+
+    if(
+        waterRisk <
+        25
+    ){
+
+        document.getElementById(
+            "waterText"
+        ).textContent =
+            "Nguồn nước mặt và nước ngầm chưa chịu áp lực đáng kể.";
+
+    }
+    else if(
+        waterRisk <
+        50
+    ){
+
+        document.getElementById(
+            "waterText"
+        ).textContent =
+            "Cần bắt đầu điều tiết và ưu tiên nguồn nước thiết yếu.";
+
+    }
+    else if(
+        waterRisk <
+        75
+    ){
+
+        document.getElementById(
+            "waterText"
+        ).textContent =
+            "Thiếu nước cục bộ có thể xuất hiện tại khu dân cư.";
+
+    }
+    else{
+
+        document.getElementById(
+            "waterText"
+        ).textContent =
+            "Nguy cơ giếng cạn và gián đoạn cấp nước ở mức rất cao.";
+
+    }
+
+
+    /* POWER */
+
+    const powerRisk =
+        100 -
+        state.lake;
+
+
+    document.getElementById(
+        "powerStatus"
+    ).textContent =
+
+        classifyImpact(
+            powerRisk
+        );
+
+
+    document.getElementById(
+        "powerText"
+    ).textContent =
+
+        powerRisk <
+        30
+
+        ?
+
+        "Hồ chứa còn đủ nước cho vận hành thông thường."
+
+        :
+
+        powerRisk <
+        60
+
+        ?
+
+        "Sản lượng thủy điện bắt đầu chịu ảnh hưởng do mực nước giảm."
+
+        :
+
+        "Mực nước thấp có thể làm sản lượng thủy điện suy giảm mạnh.";
+
+
+    /* FIRE */
+
+    document.getElementById(
+        "fireStatus"
+    ).textContent =
+
+        classifyImpact(
+            state.fire
+        );
+
+
+    document.getElementById(
+        "fireText"
+    ).textContent =
+
+        state.fire <
+        25
+
+        ?
+
+        "Nhiên liệu cháy chưa quá khô."
+
+        :
+
+        state.fire <
+        50
+
+        ?
+
+        "Thảm thực vật khô dần, cần tăng giám sát cháy."
+
+        :
+
+        state.fire <
+        75
+
+        ?
+
+        "Nguy cơ cháy cao, lửa có thể lan nhanh khi có nguồn phát."
+
+        :
+
+        "Điều kiện cực kỳ dễ cháy, cháy rừng có thể phát triển dữ dội.";
+
+
+    /* ECOSYSTEM */
+
+    const ecoRisk =
+        clamp(
+
+            state.risk * .7
+
+            +
+
+            (
+                100 -
+                state.vegetation
+            )
+
+            *
+
+            .3
+
+        );
+
+
+    document.getElementById(
+        "ecosystemStatus"
+    ).textContent =
+
+        classifyImpact(
+            ecoRisk
+        );
+
+
+    document.getElementById(
+        "ecosystemText"
+    ).textContent =
+
+        ecoRisk <
+        30
+
+        ?
+
+        "Sinh cảnh vẫn duy trì nguồn nước và thảm phủ."
+
+        :
+
+        ecoRisk <
+        60
+
+        ?
+
+        "Nguồn thức ăn, nước uống và nơi cư trú bắt đầu suy giảm."
+
+        :
+
+        "Hệ sinh thái chịu stress mạnh, khả năng phục hồi giảm.";
+
+
+    /* COMMUNITY */
+
+    const communityRisk =
+
+        clamp(
+
+            waterRisk * .65
+
+            +
+
+            agricultureRisk * .25
+
+            +
+
+            state.fire * .1
+
+        );
+
+
+    document.getElementById(
+        "communityStatus"
+    ).textContent =
+
+        classifyImpact(
+            communityRisk
+        );
+
+
+    document.getElementById(
+        "communityText"
+    ).textContent =
+
+        communityRisk <
+        30
+
+        ?
+
+        "Hệ thống cấp nước chưa chịu sức ép lớn."
+
+        :
+
+        communityRisk <
+        60
+
+        ?
+
+        "Chi phí nước và sản xuất tăng, cần điều tiết nguồn cung."
+
+        :
+
+        "Thiếu nước và suy giảm sinh kế có thể ảnh hưởng nghiêm trọng tới cộng đồng.";
+
+
+    /* WORLD LABEL TEXT */
+
+    document.getElementById(
+        "lakeLabelText"
+    ).textContent =
+
+        "Mực nước "
+
+        +
+
+        Math.round(
+            state.lake
+        )
+
+        +
+
+        "%";
+
+
+    document.getElementById(
+        "fieldLabelText"
+    ).textContent =
+
+        state.crop >
+        70
+
+        ?
+
+        "Cây trồng khỏe"
+
+        :
+
+        state.crop >
+        40
+
+        ?
+
+        "Stress nước"
+
+        :
+
+        "Suy kiệt";
+
+
+    document.getElementById(
+        "forestLabelText"
+    ).textContent =
+
+        "Nguy cơ cháy "
+
+        +
+
+        Math.round(
+            state.fire
+        )
+
+        +
+
+        "%";
+
+
+    document.getElementById(
+        "villageLabelText"
+    ).textContent =
+
+        waterRisk <
+        35
+
+        ?
+
+        "Nguồn nước ổn định"
+
+        :
+
+        waterRisk <
+        65
+
+        ?
+
+        "Bắt đầu thiếu nước"
+
+        :
+
+        "Áp lực cấp nước cao";
+
+}
+
+
+/* =========================================================
+   INPUT EVENTS
+   ========================================================= */
+
+Object.values(
+    inputs
+)
+.forEach(
+
+    input => {
+
+        input.addEventListener(
+
+            "input",
+
+            ()=>{
+
+                autoMode =
+                    false;
+
+
+                autoButton.textContent =
+                    "▶ Diễn biến";
+
+
+                autoButton.classList.remove(
+                    "active"
+                );
+
+
+                updateSimulation();
+
+            }
+
+        );
+
+    }
+
+);
+
+
+/* =========================================================
+   SCENARIOS
+   ========================================================= */
+
+const scenarios = {
+
+    normal:{
+
+        rain:82,
+
+        temperature:29,
+
+        soil:78,
+
+        vegetation:90,
+
+        waterUse:28,
+
+        wind:18
+
+    },
+
+    mild:{
+
+        rain:52,
+
+        temperature:35,
+
+        soil:46,
+
+        vegetation:66,
+
+        waterUse:47,
+
+        wind:35
+
+    },
+
+    severe:{
+
+        rain:24,
+
+        temperature:40,
+
+        soil:23,
+
+        vegetation:39,
+
+        waterUse:68,
+
+        wind:62
+
+    },
+
+    extreme:{
+
+        rain:5,
+
+        temperature:45,
+
+        soil:7,
+
+        vegetation:16,
+
+        waterUse:90,
+
+        wind:88
+
+    }
+
+};
+
+
+document
+.querySelectorAll(
+    ".scenario"
+)
+.forEach(
+
+    button => {
+
+        button.addEventListener(
+
+            "click",
+
+            ()=>{
+
+                autoMode =
+                    false;
+
+
+                autoButton.classList.remove(
+                    "active"
+                );
+
+
+                autoButton.textContent =
+                    "▶ Diễn biến";
+
+
+                const data =
+
+                    scenarios[
+                        button.dataset.scenario
+                    ];
+
+
+                Object.entries(
+                    data
+                )
+                .forEach(
+
+                    (
+                        [
+                            key,
+                            value
+                        ]
+                    )=>{
+
+                        inputs[
+                            key
+                        ].value =
+                            value;
+
+                    }
+
+                );
+
+
+                updateSimulation();
+
+
+                showToast(
+
+                    "Kịch bản: "
+
+                    +
+
+                    button.textContent
+                    .trim()
+                    .split("\n")[0]
+
+                );
+
+            }
+
+        );
+
+    }
+
+);
+
+
+/* =========================================================
+   AUDIO
+   ========================================================= */
+
+let audioContext =
+    null;
+
+
+let masterGain =
+    null;
+
+
+let windGain =
+    null;
+
+
+let soundEnabled =
+    false;
+
+
+function noiseBuffer(
+    seconds
+){
+
+    const buffer =
+
+        audioContext.createBuffer(
+
+            1,
+
+            audioContext.sampleRate *
+            seconds,
+
+            audioContext.sampleRate
+
+        );
+
+
+    const data =
+        buffer.getChannelData(
+            0
+        );
+
+
+    for(
+        let i=0;
+        i<data.length;
+        i++
+    ){
+
+        data[i] =
+            Math.random() * 2 - 1;
+
+    }
+
+
+    return buffer;
+
+}
+
+
+function initialiseAudio(){
+
+    if(
+        audioContext
+    ){
+
+        return;
+
+    }
+
+
+    audioContext =
+
+    new (
+
+        window.AudioContext
+
+        ||
+
+        window.webkitAudioContext
+
+    )();
+
+
+    masterGain =
+    audioContext.createGain();
+
+
+    masterGain.gain.value =
+        .28;
+
+
+    masterGain.connect(
+        audioContext.destination
+    );
+
+
+    const source =
+    audioContext.createBufferSource();
+
+
+    source.buffer =
+        noiseBuffer(
+            3
+        );
+
+
+    source.loop =
+        true;
+
+
+    const filter =
+    audioContext.createBiquadFilter();
+
+
+    filter.type =
+        "bandpass";
+
+
+    filter.frequency.value =
+        390;
+
+
+    filter.Q.value =
+        .8;
+
+
+    windGain =
+    audioContext.createGain();
+
+
+    windGain.gain.value =
+        0;
+
+
+    source
+    .connect(
+        filter
+    )
+    .connect(
+        windGain
+    )
+    .connect(
+        masterGain
+    );
+
+
+    source.start();
+
+
+    setInterval(
+
+        ()=>{
+
+            if(
+                !soundEnabled
+            ){
+
+                return;
+
+            }
+
+
+            if(
+                state.risk >
+                55
+
+                &&
+
+                Math.random() >
+                .4
+            ){
+
+                playCrack();
+
+            }
+
+        },
+
+        1150
+
+    );
+
+
+    setInterval(
+
+        ()=>{
+
+            if(
+                !soundEnabled
+            ){
+
+                return;
+
+            }
+
+
+            if(
+                state.risk <
+                35
+
+                &&
+
+                Math.random() >
+                .45
+            ){
+
+                playBird();
+
+            }
+
+        },
+
+        900
+
+    );
+
+}
+
+
+function playCrack(){
+
+    if(
+        !audioContext
+    ){
+
+        return;
+
+    }
+
+
+    const source =
+    audioContext.createBufferSource();
+
+
+    source.buffer =
+        noiseBuffer(
+            .13
+        );
+
+
+    const filter =
+    audioContext.createBiquadFilter();
+
+
+    filter.type =
+        "highpass";
+
+
+    filter.frequency.value =
+        900;
+
+
+    const gain =
+    audioContext.createGain();
+
+
+    gain.gain.setValueAtTime(
+
+        .065,
+
+        audioContext.currentTime
+
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+
+        .0001,
+
+        audioContext.currentTime +
+        .13
+
+    );
+
+
+    source
+    .connect(
+        filter
+    )
+    .connect(
+        gain
+    )
+    .connect(
+        masterGain
+    );
+
+
+    source.start();
+
+}
+
+
+function playBird(){
+
+    const oscillator =
+    audioContext.createOscillator();
+
+
+    const gain =
+    audioContext.createGain();
+
+
+    oscillator.type =
+        "sine";
+
+
+    oscillator.frequency.setValueAtTime(
+
+        1750 +
+        Math.random() * 400,
+
+        audioContext.currentTime
+
+    );
+
+
+    oscillator.frequency.exponentialRampToValueAtTime(
+
+        2600 +
+        Math.random() * 700,
+
+        audioContext.currentTime +
+        .1
+
+    );
+
+
+    gain.gain.setValueAtTime(
+
+        .0001,
+
+        audioContext.currentTime
+
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+
+        .025,
+
+        audioContext.currentTime +
+        .015
+
+    );
+
+
+    gain.gain.exponentialRampToValueAtTime(
+
+        .0001,
+
+        audioContext.currentTime +
+        .13
+
+    );
+
+
+    oscillator
+    .connect(
+        gain
+    )
+    .connect(
+        masterGain
+    );
+
+
+    oscillator.start();
+
+
+    oscillator.stop(
+
+        audioContext.currentTime +
+        .14
+
+    );
+
+}
+
+
+function updateAudio(){
+
+    if(
+        !audioContext
+
+        ||
+
+        !windGain
+    ){
+
+        return;
+
+    }
+
+
+    const windVolume =
+
+        .012
+
+        +
+
+        (
+            state.wind /
+            100
+        )
+
+        *
+
+        .12
+
+        +
+
+        (
+            state.risk /
+            100
+        )
+
+        *
+
+        .06;
+
+
+    windGain.gain.setTargetAtTime(
+
+        soundEnabled
+        ?
+        windVolume
+        :
+        0,
+
+        audioContext.currentTime,
+
+        .15
+
+    );
+
+}
+
+
+/* SOUND BUTTON */
+
+const soundButton =
+document.getElementById(
+    "soundButton"
+);
+
+
+soundButton.addEventListener(
+
+    "click",
+
+    async()=>{
+
+        initialiseAudio();
+
+
+        if(
+            audioContext.state ===
+            "suspended"
+        ){
+
+            await audioContext.resume();
+
+        }
+
+
+        soundEnabled =
+            !soundEnabled;
+
+
+        soundButton.classList.toggle(
+
+            "active",
+
+            soundEnabled
+
+        );
+
+
+        soundButton.textContent =
+
+            soundEnabled
+
+            ?
+
+            "🔊 Âm thanh ON"
+
+            :
+
+            "🔇 Âm thanh OFF";
+
+
+        updateAudio();
+
+
+        showToast(
+
+            soundEnabled
+
+            ?
+
+            "Đã bật âm thanh môi trường"
+
+            :
+
+            "Đã tắt âm thanh"
+
+        );
+
+    }
+
+);
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+document
+.getElementById(
+    "resetButton"
+)
+.addEventListener(
+
+    "click",
+
+    ()=>{
+
+        autoMode =
+            false;
+
+
+        autoButton.classList.remove(
+            "active"
+        );
+
+
+        autoButton.textContent =
+            "▶ Diễn biến";
+
+
+        const data =
+            scenarios.normal;
+
+
+        Object.entries(
+            data
+        )
+        .forEach(
+
+            (
+                [
+                    key,
+                    value
+                ]
+            )=>{
+
+                inputs[
+                    key
+                ].value =
+                    value;
+
+            }
+
+        );
+
+
+        updateSimulation();
+
+
+        controls.reset();
+
+
+        camera.position.set(
+            27,
+            20,
+            31
+        );
+
+
+        controls.target.set(
+            0,
+            1,
+            0
+        );
+
+
+        showToast(
+            "Đã đặt lại mô hình"
+        );
+
+    }
+
+);
+
+
+/* =========================================================
+   LABEL BUTTON
+   ========================================================= */
+
+const labelsButton =
+document.getElementById(
+    "labelsButton"
+);
+
+
+labelsButton.addEventListener(
+
+    "click",
+
+    ()=>{
+
+        showLabels =
+            !showLabels;
+
+
+        labelsButton.classList.toggle(
+
+            "active",
+
+            showLabels
+
+        );
+
+
+        showToast(
+
+            showLabels
+
+            ?
+
+            "Đã bật nhãn thông tin"
+
+            :
+
+            "Đã ẩn nhãn thông tin"
+
+        );
+
+    }
+
+);
+
+
+/* =========================================================
+   AUTO DROUGHT EVOLUTION
+   ========================================================= */
+
+let autoMode =
+    false;
+
+
+let autoTime =
+    0;
+
+
+const autoButton =
+document.getElementById(
+    "autoButton"
+);
+
+
+autoButton.addEventListener(
+
+    "click",
+
+    ()=>{
+
+        autoMode =
+            !autoMode;
+
+
+        autoButton.classList.toggle(
+
+            "active",
+
+            autoMode
+
+        );
+
+
+        autoButton.textContent =
+
+            autoMode
+
+            ?
+
+            "⏸ Dừng diễn biến"
+
+            :
+
+            "▶ Diễn biến";
+
+
+        showToast(
+
+            autoMode
+
+            ?
+
+            "Bắt đầu mô phỏng hạn phát triển"
+
+            :
+
+            "Đã tạm dừng diễn biến"
+
+        );
+
+    }
+
+);
+
+
+/* =========================================================
+   WORLD LABEL POSITION
+   ========================================================= */
+
+function updateWorldLabels(){
+
+    Object.values(
+        labels
+    )
+    .forEach(
+
+        item => {
+
+            if(
+                !showLabels
+            ){
+
+                item.element.style.display =
+                    "none";
+
+                return;
+
+            }
+
+
+            const vector =
+                item.object.clone();
+
+
+            vector.project(
+                camera
+            );
+
+
+            const x =
+
+                (
+                    vector.x *
+                    .5 +
+                    .5
+                )
+
+                *
+
+                innerWidth;
+
+
+            const y =
+
+                (
+                    -vector.y *
+                    .5 +
+                    .5
+                )
+
+                *
+
+                innerHeight;
+
+
+            const visible =
+
+                vector.z <
+                1;
+
+
+            item.element.style.display =
+
+                visible
+
+                ?
+
+                "block"
+
+                :
+
+                "none";
+
+
+            item.element.style.left =
+
+                x +
+                "px";
+
+
+            item.element.style.top =
+
+                y +
+                "px";
+
+
+            item.element.style.transform =
+
+                "translate(-50%,-100%)";
+
+        }
+
+    );
+
+}
+
+
+/* =========================================================
+   ANIMATION
+   ========================================================= */
+
+const clock =
+new THREE.Clock();
+
+
+let elapsed =
+    0;
+
+
+function animate(){
+
+    requestAnimationFrame(
+        animate
+    );
+
+
+    const dt =
+
+        Math.min(
+
+            clock.getDelta(),
+
+            .033
+
+        );
+
+
+    elapsed +=
+        dt;
+
+
+    controls.update();
+
+
+    /* =====================================================
+       DUST MOVEMENT
+       ===================================================== */
+
+    const positions =
+        dust.geometry
+        .attributes
+        .position;
+
+
+    const dustSpeed =
+
+        .35
+
+        +
+
+        state.wind /
+        100 *
+        3.2;
+
+
+    for(
+        let i=0;
+        i<dustCount;
+        i++
+    ){
+
+        let x =
+            positions.getX(i);
+
+
+        x +=
+
+            dt *
+            dustSpeed;
+
+
+        if(
+            x >
+            28
+        ){
+
+            x =
+                -28;
+
+        }
+
+
+        positions.setX(
+            i,
+            x
+        );
+
+
+        positions.setY(
+
+            i,
+
+            positions.getY(i)
+
+            +
+
+            Math.sin(
+
+                elapsed *
+                1.3
+
+                +
+
+                i *
+                .13
+
+            )
+
+            *
+
+            dt *
+            .025
+
+        );
+
+    }
+
+
+    positions.needsUpdate =
+        true;
+
+
+    /* =====================================================
+       WATER MOVEMENT
+       ===================================================== */
+
+    lake.rotation.y +=
+        dt * .02;
+
+
+    lakeMaterial.roughness =
+
+        .15
+
+        +
+
+        Math.sin(
+            elapsed * .7
+        )
+
+        *
+
+        .025;
+
+
+    /* =====================================================
+       FIRE ANIMATION
+       ===================================================== */
+
+    if(
+        fire.visible
+    ){
+
+        fire.children.forEach(
+
+            (
+                flame,
+                index
+            )=>{
+
+                flame.position.y +=
+
+                    dt *
+                    flame.userData.speed;
+
+
+                flame.material.opacity =
+
+                    .38
+
+                    +
+
+                    Math.sin(
+
+                        elapsed * 7
+
+                        +
+
+                        index
+
+                    )
+
+                    *
+
+                    .25;
+
+
+                flame.scale.y =
+
+                    1.1
+
+                    +
+
+                    Math.sin(
+
+                        elapsed * 8
+
+                        +
+
+                        index * .7
+
+                    )
+
+                    *
+
+                    .6;
+
+
+                if(
+                    flame.position.y >
+                    3.5
+                ){
+
+                    flame.position.y =
+                        .25;
+
+                }
+
+            }
+
+        );
+
+    }
+
+
+    /* =====================================================
+       SMOKE ANIMATION
+       ===================================================== */
+
+    if(
+        smokeGroup.visible
+    ){
+
+        smokeGroup.children.forEach(
+
+            (
+                smoke,
+                index
+            )=>{
+
+                smoke.position.y +=
+
+                    dt *
+                    smoke.userData.speed;
+
+
+                smoke.position.x +=
+
+                    dt *
+                    state.wind /
+                    100 *
+                    .7;
+
+
+                smoke.material.opacity =
+
+                    .05
+
+                    +
+
+                    state.fire /
+                    100 *
+                    .18;
+
+
+                if(
+                    smoke.position.y >
+                    8
+                ){
+
+                    smoke.position.y =
+                        1;
+
+                    smoke.position.x =
+                        -18 +
+                        Math.random() * 6;
+
+                }
+
+            }
+
+        );
+
+    }
+
+
+    /* =====================================================
+       AUTO EVOLUTION
+       ===================================================== */
+
+    if(
+        autoMode
+    ){
+
+        autoTime +=
+            dt;
+
+
+        const progress =
+
+            (
+                Math.sin(
+
+                    autoTime *
+                    .12
+
+                    -
+
+                    Math.PI /
+                    2
+
+                )
+
+                +
+
+                1
+
+            )
+
+            /
+
+            2;
+
+
+        inputs.rain.value =
+
+            82
+
+            -
+
+            progress *
+            74;
+
+
+        inputs.temperature.value =
+
+            29
+
+            +
+
+            progress *
+            15;
+
+
+        inputs.soil.value =
+
+            78
+
+            -
+
+            progress *
+            69;
+
+
+        inputs.vegetation.value =
+
+            90
+
+            -
+
+            progress *
+            70;
+
+
+        inputs.waterUse.value =
+
+            28
+
+            +
+
+            progress *
+            58;
+
+
+        inputs.wind.value =
+
+            18
+
+            +
+
+            progress *
+            68;
+
+
+        updateSimulation();
+
+    }
+
+
+    updateWorldLabels();
+
+
+    composer.render();
+
+}
+
+
+updateSimulation();
+
+animate();
+
+
+/* =========================================================
+   RESIZE
+   ========================================================= */
+
+window.addEventListener(
+
+    "resize",
+
+    ()=>{
+
+        camera.aspect =
+
+            innerWidth /
+            innerHeight;
+
+
+        camera.updateProjectionMatrix();
+
+
+        renderer.setSize(
+
+            innerWidth,
+            innerHeight
+
+        );
+
+
+        composer.setSize(
+
+            innerWidth,
+            innerHeight
+
+        );
+
+    }
+
+);
+
+</script>
+
+</body>
+</html>

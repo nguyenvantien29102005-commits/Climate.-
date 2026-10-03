@@ -1,0 +1,5017 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ô Nhiễm Nước 3D | Hệ quả của thiên tai</title>
+
+<style>
+/* =========================================================
+   01. RESET
+========================================================= */
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+    background:#03111d;
+    color:#fff;
+}
+
+button,
+input{
+    font:inherit;
+}
+
+button{
+    border:0;
+    cursor:pointer;
+}
+
+/* =========================================================
+   02. APP
+========================================================= */
+#app{
+    position:relative;
+    width:100%;
+    height:100%;
+    background:
+        radial-gradient(circle at 50% 40%,rgba(8,122,181,.22),transparent 42%),
+        linear-gradient(180deg,#04131f,#020a10);
+}
+
+#three-container{
+    position:absolute;
+    inset:0;
+}
+
+canvas{
+    display:block;
+}
+
+/* =========================================================
+   03. VIGNETTE
+========================================================= */
+.vignette{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background:
+        radial-gradient(
+            ellipse at center,
+            transparent 45%,
+            rgba(0,0,0,.23) 78%,
+            rgba(0,0,0,.55) 100%
+        );
+    z-index:2;
+}
+
+/* =========================================================
+   04. HEADER
+========================================================= */
+.header{
+    position:absolute;
+    top:20px;
+    left:24px;
+    right:24px;
+    z-index:20;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+
+    pointer-events:none;
+}
+
+.title-box{
+    max-width:680px;
+}
+
+.eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+    padding:7px 12px;
+    margin-bottom:9px;
+
+    border:1px solid rgba(67,220,255,.25);
+    border-radius:999px;
+
+    background:rgba(2,25,39,.64);
+    backdrop-filter:blur(12px);
+
+    color:#76e6ff;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:1.8px;
+}
+
+.eyebrow-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:#29e8ff;
+    box-shadow:0 0 13px #29e8ff;
+}
+
+h1{
+    font-size:clamp(25px,3.2vw,46px);
+    font-weight:900;
+    line-height:1;
+    letter-spacing:-1.8px;
+
+    text-shadow:
+        0 5px 30px rgba(0,0,0,.6),
+        0 0 30px rgba(30,190,255,.12);
+}
+
+h1 span{
+    color:#4be7ff;
+}
+
+.subtitle{
+    margin-top:10px;
+
+    color:#c7dce5;
+    font-size:13px;
+    line-height:1.6;
+    max-width:610px;
+
+    text-shadow:0 3px 12px #000;
+}
+
+/* =========================================================
+   05. TOP BUTTONS
+========================================================= */
+.top-actions{
+    display:flex;
+    gap:8px;
+    pointer-events:auto;
+}
+
+.icon-btn{
+    height:42px;
+    min-width:42px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+
+    padding:0 13px;
+
+    border:1px solid rgba(155,230,255,.18);
+    border-radius:12px;
+
+    background:rgba(4,23,34,.70);
+    backdrop-filter:blur(14px);
+
+    color:#dff9ff;
+    font-size:12px;
+    font-weight:700;
+
+    box-shadow:0 12px 36px rgba(0,0,0,.24);
+
+    transition:.2s ease;
+}
+
+.icon-btn:hover{
+    transform:translateY(-2px);
+    border-color:rgba(74,224,255,.52);
+    background:rgba(5,36,52,.88);
+}
+
+.icon-btn.active{
+    color:#72edff;
+    border-color:#34dffa;
+    box-shadow:
+        0 0 0 1px rgba(52,223,250,.13),
+        0 0 24px rgba(25,201,235,.15);
+}
+
+/* =========================================================
+   06. LEFT PANEL
+========================================================= */
+.left-panel{
+    position:absolute;
+    z-index:15;
+
+    top:135px;
+    left:24px;
+
+    width:310px;
+    max-height:calc(100vh - 195px);
+
+    overflow:auto;
+
+    padding:15px;
+
+    border:1px solid rgba(159,223,245,.15);
+    border-radius:18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(7,29,42,.88),
+            rgba(3,17,27,.80)
+        );
+
+    backdrop-filter:blur(18px);
+
+    box-shadow:
+        0 24px 70px rgba(0,0,0,.30),
+        inset 0 1px rgba(255,255,255,.04);
+
+    scrollbar-width:none;
+}
+
+.left-panel::-webkit-scrollbar{
+    display:none;
+}
+
+/* =========================================================
+   07. PANEL COMMON
+========================================================= */
+.panel-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:13px;
+}
+
+.panel-title{
+    display:flex;
+    align-items:center;
+    gap:9px;
+
+    font-size:13px;
+    font-weight:850;
+    letter-spacing:.2px;
+}
+
+.panel-icon{
+    width:30px;
+    height:30px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:9px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(0,192,255,.18),
+            rgba(30,230,199,.08)
+        );
+
+    border:1px solid rgba(71,222,255,.18);
+
+    color:#55eaff;
+}
+
+.live{
+    display:flex;
+    align-items:center;
+    gap:6px;
+
+    font-size:9px;
+    color:#76efae;
+    font-weight:800;
+    letter-spacing:1px;
+}
+
+.live-dot{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:#5df49b;
+
+    box-shadow:0 0 9px #5df49b;
+
+    animation:pulse 1.2s infinite;
+}
+
+@keyframes pulse{
+    50%{
+        opacity:.35;
+        transform:scale(.72);
+    }
+}
+
+.divider{
+    height:1px;
+    margin:15px 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(145,218,242,.18),
+            transparent
+        );
+}
+
+/* =========================================================
+   08. SCENARIOS
+========================================================= */
+.scenario-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.scenario{
+    min-height:67px;
+    padding:10px;
+
+    text-align:left;
+
+    border:1px solid rgba(153,220,245,.12);
+    border-radius:12px;
+
+    background:rgba(8,32,45,.70);
+
+    color:#cfdee4;
+
+    transition:.2s;
+}
+
+.scenario:hover{
+    transform:translateY(-2px);
+    border-color:rgba(65,213,246,.35);
+}
+
+.scenario.active{
+    border-color:#38e0ff;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10,111,151,.32),
+            rgba(13,57,74,.86)
+        );
+
+    box-shadow:
+        inset 0 0 24px rgba(49,221,255,.06),
+        0 0 18px rgba(39,212,248,.07);
+}
+
+.scenario-icon{
+    display:block;
+    margin-bottom:5px;
+
+    font-size:18px;
+}
+
+.scenario-name{
+    display:block;
+    font-size:10px;
+    font-weight:800;
+    line-height:1.35;
+}
+
+/* =========================================================
+   09. SLIDERS
+========================================================= */
+.control-block{
+    margin-bottom:13px;
+}
+
+.control-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:7px;
+
+    font-size:10px;
+}
+
+.control-top span:first-child{
+    color:#bfd3dc;
+    font-weight:650;
+}
+
+.control-value{
+    color:#60e6ff;
+    font-weight:850;
+    font-variant-numeric:tabular-nums;
+}
+
+input[type="range"]{
+    width:100%;
+    height:5px;
+
+    appearance:none;
+
+    border-radius:999px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #138bb1,
+            #22d8e9
+        );
+
+    outline:none;
+}
+
+input[type="range"]::-webkit-slider-thumb{
+    appearance:none;
+
+    width:16px;
+    height:16px;
+
+    border-radius:50%;
+    border:3px solid #dffcff;
+
+    background:#20d7eb;
+
+    box-shadow:
+        0 0 0 3px rgba(32,215,235,.15),
+        0 0 13px rgba(25,216,239,.6);
+}
+
+/* =========================================================
+   10. VIEW MODES
+========================================================= */
+.view-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+}
+
+.view-btn{
+    padding:9px 8px;
+
+    border:1px solid rgba(145,214,239,.12);
+    border-radius:10px;
+
+    background:rgba(7,30,42,.72);
+
+    color:#adc5ce;
+
+    font-size:9px;
+    font-weight:800;
+}
+
+.view-btn.active{
+    color:#fff;
+    border-color:#3bdff9;
+    background:rgba(12,114,144,.32);
+}
+
+/* =========================================================
+   11. RIGHT PANEL
+========================================================= */
+.right-panel{
+    position:absolute;
+    z-index:15;
+
+    top:135px;
+    right:24px;
+
+    width:300px;
+
+    padding:15px;
+
+    border:1px solid rgba(159,223,245,.15);
+    border-radius:18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(7,29,42,.90),
+            rgba(3,17,27,.82)
+        );
+
+    backdrop-filter:blur(18px);
+
+    box-shadow:
+        0 24px 70px rgba(0,0,0,.30),
+        inset 0 1px rgba(255,255,255,.04);
+}
+
+/* =========================================================
+   12. MAIN STATUS
+========================================================= */
+.status-card{
+    position:relative;
+
+    padding:13px;
+
+    overflow:hidden;
+
+    border:1px solid rgba(83,220,248,.16);
+    border-radius:13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(11,61,78,.50),
+            rgba(8,30,42,.72)
+        );
+}
+
+.status-card::after{
+    content:"";
+    position:absolute;
+
+    width:110px;
+    height:110px;
+
+    top:-65px;
+    right:-40px;
+
+    background:rgba(42,228,255,.14);
+    filter:blur(32px);
+    border-radius:50%;
+}
+
+.status-label{
+    color:#8eaab4;
+    font-size:9px;
+    font-weight:700;
+    letter-spacing:1px;
+}
+
+.status-main{
+    margin-top:5px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+}
+
+.status-main strong{
+    font-size:21px;
+    letter-spacing:-.5px;
+}
+
+.status-score{
+    color:#59ecff;
+    font-size:27px;
+    font-weight:950;
+}
+
+.status-score small{
+    color:#718b94;
+    font-size:9px;
+    font-weight:600;
+}
+
+/* =========================================================
+   13. METRICS
+========================================================= */
+.metric-list{
+    margin-top:12px;
+
+    display:grid;
+    gap:8px;
+}
+
+.metric{
+    display:grid;
+    grid-template-columns:33px 1fr auto;
+    gap:8px;
+    align-items:center;
+
+    padding:8px;
+
+    border:1px solid rgba(147,215,238,.08);
+    border-radius:10px;
+
+    background:rgba(5,23,33,.46);
+}
+
+.metric-icon{
+    width:30px;
+    height:30px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:8px;
+
+    background:rgba(21,131,162,.13);
+
+    font-size:14px;
+}
+
+.metric-name{
+    color:#a9c0c9;
+    font-size:8px;
+    font-weight:700;
+}
+
+.metric-bar{
+    height:3px;
+    margin-top:5px;
+
+    overflow:hidden;
+
+    border-radius:99px;
+
+    background:#183541;
+}
+
+.metric-fill{
+    width:70%;
+    height:100%;
+
+    border-radius:99px;
+
+    background:#36dfeb;
+
+    transition:.4s;
+}
+
+.metric-value{
+    text-align:right;
+    font-size:10px;
+    font-weight:850;
+}
+
+.metric-value small{
+    display:block;
+
+    color:#708d98;
+    font-size:7px;
+    font-weight:600;
+    margin-top:2px;
+}
+
+/* =========================================================
+   14. IMPACT CARD
+========================================================= */
+.impact-card{
+    margin-top:12px;
+    padding:11px;
+
+    border-radius:12px;
+
+    background:rgba(7,29,40,.57);
+    border:1px solid rgba(153,220,244,.09);
+}
+
+.impact-title{
+    margin-bottom:8px;
+
+    color:#afc8d1;
+    font-size:9px;
+    font-weight:800;
+}
+
+.impact-row{
+    display:flex;
+    justify-content:space-between;
+
+    padding:5px 0;
+
+    border-bottom:1px dashed rgba(141,205,226,.09);
+
+    font-size:9px;
+}
+
+.impact-row:last-child{
+    border-bottom:0;
+}
+
+.impact-row span:first-child{
+    color:#8ba5af;
+}
+
+.impact-row strong{
+    color:#e5faff;
+}
+
+/* =========================================================
+   15. ALERT
+========================================================= */
+.alert{
+    position:absolute;
+    z-index:17;
+
+    left:50%;
+    bottom:25px;
+
+    transform:translateX(-50%);
+
+    width:min(630px,calc(100% - 700px));
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    padding:11px 15px;
+
+    border:1px solid rgba(255,180,52,.22);
+    border-radius:14px;
+
+    background:rgba(30,22,8,.76);
+    backdrop-filter:blur(16px);
+
+    box-shadow:0 15px 45px rgba(0,0,0,.3);
+
+    transition:.35s;
+}
+
+.alert.safe{
+    border-color:rgba(74,234,178,.21);
+    background:rgba(4,32,29,.76);
+}
+
+.alert-icon{
+    width:34px;
+    height:34px;
+
+    flex:0 0 34px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:10px;
+
+    background:rgba(255,178,36,.12);
+
+    font-size:17px;
+}
+
+.alert.safe .alert-icon{
+    background:rgba(73,239,181,.10);
+}
+
+.alert-text strong{
+    display:block;
+    margin-bottom:2px;
+
+    font-size:10px;
+}
+
+.alert-text span{
+    color:#b9c5c9;
+    font-size:9px;
+    line-height:1.4;
+}
+
+/* =========================================================
+   16. INFO LABELS
+========================================================= */
+.scene-label{
+    position:absolute;
+    z-index:10;
+
+    pointer-events:none;
+
+    transform:translate(-50%,-50%);
+
+    padding:5px 8px;
+
+    border:1px solid rgba(127,225,247,.19);
+    border-radius:7px;
+
+    background:rgba(3,19,28,.72);
+    backdrop-filter:blur(6px);
+
+    color:#dff8ff;
+    font-size:8px;
+    font-weight:800;
+
+    white-space:nowrap;
+
+    box-shadow:0 7px 18px rgba(0,0,0,.25);
+
+    transition:opacity .3s;
+}
+
+.scene-label::after{
+    content:"";
+
+    position:absolute;
+    top:100%;
+    left:50%;
+
+    width:1px;
+    height:16px;
+
+    background:
+        linear-gradient(
+            #6ce6ff,
+            transparent
+        );
+}
+
+/* =========================================================
+   17. HELP
+========================================================= */
+.help{
+    position:absolute;
+    z-index:14;
+
+    bottom:25px;
+    left:25px;
+
+    display:flex;
+    gap:5px;
+}
+
+.help-pill{
+    padding:6px 9px;
+
+    border:1px solid rgba(145,215,236,.10);
+    border-radius:8px;
+
+    background:rgba(4,18,27,.65);
+    backdrop-filter:blur(8px);
+
+    color:#819da8;
+    font-size:8px;
+}
+
+/* =========================================================
+   18. RESPONSIVE
+========================================================= */
+@media(max-width:1100px){
+
+    .left-panel{
+        width:270px;
+    }
+
+    .right-panel{
+        width:260px;
+    }
+
+    .alert{
+        width:380px;
+    }
+}
+
+@media(max-width:800px){
+
+    .subtitle,
+    .eyebrow{
+        display:none;
+    }
+
+    .header{
+        top:12px;
+        left:12px;
+        right:12px;
+    }
+
+    h1{
+        font-size:24px;
+    }
+
+    .left-panel{
+        left:10px;
+        bottom:10px;
+        top:auto;
+
+        width:235px;
+        max-height:57vh;
+    }
+
+    .right-panel{
+        right:10px;
+        top:85px;
+
+        width:220px;
+        max-height:53vh;
+        overflow:auto;
+    }
+
+    .alert,
+    .help{
+        display:none;
+    }
+
+    .top-actions .btn-label{
+        display:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+    <!-- ===================================================
+         THREE.JS
+    ==================================================== -->
+    <div id="three-container"></div>
+
+    <div class="vignette"></div>
+
+    <!-- ===================================================
+         HEADER
+    ==================================================== -->
+    <header class="header">
+
+        <div class="title-box">
+
+            <div class="eyebrow">
+                <span class="eyebrow-dot"></span>
+                MÔ PHỎNG MÔI TRƯỜNG 3D
+            </div>
+
+            <h1>
+                Ô NHIỄM <span>NƯỚC</span>
+            </h1>
+
+            <p class="subtitle">
+                Quan sát quá trình chất ô nhiễm xâm nhập, lan truyền theo dòng nước
+                và tác động đến chất lượng nước, sinh vật thủy sinh và đời sống con người.
+            </p>
+
+        </div>
+
+        <div class="top-actions">
+
+            <button class="icon-btn" id="soundBtn">
+                🔊
+                <span class="btn-label">Âm thanh</span>
+            </button>
+
+            <button class="icon-btn" id="resetCameraBtn">
+                ⟳
+                <span class="btn-label">Góc nhìn</span>
+            </button>
+
+            <button class="icon-btn" id="resetBtn">
+                ↺
+                <span class="btn-label">Đặt lại</span>
+            </button>
+
+        </div>
+
+    </header>
+
+    <!-- ===================================================
+         LEFT PANEL
+    ==================================================== -->
+    <aside class="left-panel">
+
+        <div class="panel-head">
+
+            <div class="panel-title">
+                <div class="panel-icon">⚙</div>
+                BẢNG ĐIỀU KHIỂN
+            </div>
+
+            <div class="live">
+                <span class="live-dot"></span>
+                LIVE
+            </div>
+
+        </div>
+
+        <div style="
+            color:#7898a4;
+            font-size:8px;
+            font-weight:800;
+            letter-spacing:1px;
+            margin-bottom:8px;
+        ">
+            KỊCH BẢN MÔ PHỎNG
+        </div>
+
+        <div class="scenario-grid">
+
+            <button class="scenario active" data-scenario="normal">
+                <span class="scenario-icon">💧</span>
+                <span class="scenario-name">
+                    Nước tương đối sạch
+                </span>
+            </button>
+
+            <button class="scenario" data-scenario="sewage">
+                <span class="scenario-icon">🏭</span>
+                <span class="scenario-name">
+                    Nước thải đô thị
+                </span>
+            </button>
+
+            <button class="scenario" data-scenario="chemical">
+                <span class="scenario-icon">☣</span>
+                <span class="scenario-name">
+                    Sự cố hóa chất
+                </span>
+            </button>
+
+            <button class="scenario" data-scenario="flood">
+                <span class="scenario-icon">🌊</span>
+                <span class="scenario-name">
+                    Ngập lụt cuốn chất bẩn
+                </span>
+            </button>
+
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Pollution -->
+        <div class="control-block">
+
+            <div class="control-top">
+                <span>Mức phát thải</span>
+                <span class="control-value" id="pollutionValue">
+                    10%
+                </span>
+            </div>
+
+            <input
+                id="pollutionSlider"
+                type="range"
+                min="0"
+                max="100"
+                value="10"
+            >
+
+        </div>
+
+        <!-- Flow -->
+        <div class="control-block">
+
+            <div class="control-top">
+                <span>Vận tốc dòng chảy</span>
+                <span class="control-value" id="flowValue">
+                    1.0×
+                </span>
+            </div>
+
+            <input
+                id="flowSlider"
+                type="range"
+                min="20"
+                max="200"
+                value="100"
+            >
+
+        </div>
+
+        <!-- Treatment -->
+        <div class="control-block">
+
+            <div class="control-top">
+                <span>Khả năng xử lí / tự làm sạch</span>
+                <span class="control-value" id="treatmentValue">
+                    70%
+                </span>
+            </div>
+
+            <input
+                id="treatmentSlider"
+                type="range"
+                min="0"
+                max="100"
+                value="70"
+            >
+
+        </div>
+
+        <div class="divider"></div>
+
+        <div style="
+            color:#7898a4;
+            font-size:8px;
+            font-weight:800;
+            letter-spacing:1px;
+            margin-bottom:8px;
+        ">
+            CHẾ ĐỘ QUAN SÁT
+        </div>
+
+        <div class="view-buttons">
+
+            <button class="view-btn active" data-view="impact">
+                Tác động
+            </button>
+
+            <button class="view-btn" data-view="clean">
+                Nước sạch
+            </button>
+
+            <button class="view-btn" data-view="polluted">
+                Ô nhiễm nặng
+            </button>
+
+            <button class="view-btn" data-view="top">
+                Nhìn từ trên
+            </button>
+
+        </div>
+
+    </aside>
+
+    <!-- ===================================================
+         RIGHT PANEL
+    ==================================================== -->
+    <aside class="right-panel">
+
+        <div class="panel-head">
+
+            <div class="panel-title">
+                <div class="panel-icon">◫</div>
+                CHẤT LƯỢNG NƯỚC
+            </div>
+
+        </div>
+
+        <div class="status-card">
+
+            <div class="status-label">
+                WATER QUALITY INDEX
+            </div>
+
+            <div class="status-main">
+
+                <strong id="waterStatus">
+                    TỐT
+                </strong>
+
+                <div class="status-score">
+                    <span id="wqiValue">89</span>
+                    <small>/100</small>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="metric-list">
+
+            <!-- DO -->
+            <div class="metric">
+
+                <div class="metric-icon">O₂</div>
+
+                <div>
+                    <div class="metric-name">
+                        OXY HÒA TAN — DO
+                    </div>
+
+                    <div class="metric-bar">
+                        <div
+                            class="metric-fill"
+                            id="doBar"
+                        ></div>
+                    </div>
+                </div>
+
+                <div class="metric-value">
+                    <span id="doValue">7.8</span>
+                    <small>mg/L</small>
+                </div>
+
+            </div>
+
+            <!-- pH -->
+            <div class="metric">
+
+                <div class="metric-icon">pH</div>
+
+                <div>
+                    <div class="metric-name">
+                        ĐỘ pH
+                    </div>
+
+                    <div class="metric-bar">
+                        <div
+                            class="metric-fill"
+                            id="phBar"
+                        ></div>
+                    </div>
+                </div>
+
+                <div class="metric-value">
+                    <span id="phValue">7.1</span>
+                    <small>pH</small>
+                </div>
+
+            </div>
+
+            <!-- Turbidity -->
+            <div class="metric">
+
+                <div class="metric-icon">◌</div>
+
+                <div>
+                    <div class="metric-name">
+                        ĐỘ ĐỤC
+                    </div>
+
+                    <div class="metric-bar">
+                        <div
+                            class="metric-fill"
+                            id="turbidityBar"
+                        ></div>
+                    </div>
+                </div>
+
+                <div class="metric-value">
+                    <span id="turbidityValue">8</span>
+                    <small>NTU</small>
+                </div>
+
+            </div>
+
+            <!-- Toxin -->
+            <div class="metric">
+
+                <div class="metric-icon">☣</div>
+
+                <div>
+                    <div class="metric-name">
+                        ĐỘC CHẤT
+                    </div>
+
+                    <div class="metric-bar">
+                        <div
+                            class="metric-fill"
+                            id="toxinBar"
+                        ></div>
+                    </div>
+                </div>
+
+                <div class="metric-value">
+                    <span id="toxinValue">7</span>
+                    <small>%</small>
+                </div>
+
+            </div>
+
+            <!-- Bacteria -->
+            <div class="metric">
+
+                <div class="metric-icon">◉</div>
+
+                <div>
+                    <div class="metric-name">
+                        NGUY CƠ VI SINH
+                    </div>
+
+                    <div class="metric-bar">
+                        <div
+                            class="metric-fill"
+                            id="bacteriaBar"
+                        ></div>
+                    </div>
+                </div>
+
+                <div class="metric-value">
+                    <span id="bacteriaValue">10</span>
+                    <small>%</small>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="impact-card">
+
+            <div class="impact-title">
+                TÁC ĐỘNG SINH THÁI
+            </div>
+
+            <div class="impact-row">
+                <span>Sức khỏe cá</span>
+                <strong id="fishHealth">
+                    94%
+                </strong>
+            </div>
+
+            <div class="impact-row">
+                <span>Thực vật thủy sinh</span>
+                <strong id="plantHealth">
+                    91%
+                </strong>
+            </div>
+
+            <div class="impact-row">
+                <span>Rủi ro sức khỏe người</span>
+                <strong id="humanRisk">
+                    Thấp
+                </strong>
+            </div>
+
+            <div class="impact-row">
+                <span>Phạm vi lan truyền</span>
+                <strong id="spreadValue">
+                    0.8 km
+                </strong>
+            </div>
+
+        </div>
+
+    </aside>
+
+    <!-- ===================================================
+         ALERT
+    ==================================================== -->
+    <div class="alert safe" id="alertBox">
+
+        <div class="alert-icon" id="alertIcon">
+            ✓
+        </div>
+
+        <div class="alert-text">
+
+            <strong id="alertTitle">
+                HỆ SINH THÁI ĐANG ỔN ĐỊNH
+            </strong>
+
+            <span id="alertMessage">
+                Chất lượng nước hiện ở mức tương đối tốt.
+                Hãy thử tăng nguồn thải để quan sát sự thay đổi.
+            </span>
+
+        </div>
+
+    </div>
+
+    <!-- ===================================================
+         LABELS
+    ==================================================== -->
+    <div class="scene-label" id="factoryLabel">
+        🏭 NGUỒN THẢI CÔNG NGHIỆP
+    </div>
+
+    <div class="scene-label" id="farmLabel">
+        🌱 KHU NÔNG NGHIỆP
+    </div>
+
+    <div class="scene-label" id="cityLabel">
+        🏠 KHU DÂN CƯ
+    </div>
+
+    <div class="scene-label" id="downstreamLabel">
+        ↓ HẠ LƯU
+    </div>
+
+    <!-- ===================================================
+         HELP
+    ==================================================== -->
+    <div class="help">
+
+        <div class="help-pill">
+            🖱 Kéo để xoay
+        </div>
+
+        <div class="help-pill">
+            ⚲ Cuộn để thu phóng
+        </div>
+
+        <div class="help-pill">
+            ◉ Bảng điều khiển để thay đổi môi trường
+        </div>
+
+    </div>
+
+</div>
+
+<!-- =======================================================
+     THREE.JS
+======================================================== -->
+<script type="importmap">
+{
+    "imports":{
+        "three":"https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+        "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+    }
+}
+</script>
+
+<script type="module">
+
+import * as THREE from "three";
+
+import {
+    OrbitControls
+}
+from "three/addons/controls/OrbitControls.js";
+
+/* =========================================================
+   01. DOM
+========================================================= */
+const container = document.getElementById("three-container");
+
+const pollutionSlider = document.getElementById("pollutionSlider");
+const flowSlider = document.getElementById("flowSlider");
+const treatmentSlider = document.getElementById("treatmentSlider");
+
+const pollutionValue = document.getElementById("pollutionValue");
+const flowValue = document.getElementById("flowValue");
+const treatmentValue = document.getElementById("treatmentValue");
+
+const soundBtn = document.getElementById("soundBtn");
+const resetCameraBtn = document.getElementById("resetCameraBtn");
+const resetBtn = document.getElementById("resetBtn");
+
+const wqiValue = document.getElementById("wqiValue");
+const waterStatus = document.getElementById("waterStatus");
+
+const doValue = document.getElementById("doValue");
+const phValue = document.getElementById("phValue");
+const turbidityValue = document.getElementById("turbidityValue");
+const toxinValue = document.getElementById("toxinValue");
+const bacteriaValue = document.getElementById("bacteriaValue");
+
+const doBar = document.getElementById("doBar");
+const phBar = document.getElementById("phBar");
+const turbidityBar = document.getElementById("turbidityBar");
+const toxinBar = document.getElementById("toxinBar");
+const bacteriaBar = document.getElementById("bacteriaBar");
+
+const fishHealth = document.getElementById("fishHealth");
+const plantHealth = document.getElementById("plantHealth");
+const humanRisk = document.getElementById("humanRisk");
+const spreadValue = document.getElementById("spreadValue");
+
+const alertBox = document.getElementById("alertBox");
+const alertIcon = document.getElementById("alertIcon");
+const alertTitle = document.getElementById("alertTitle");
+const alertMessage = document.getElementById("alertMessage");
+
+/* =========================================================
+   02. APPLICATION STATE
+========================================================= */
+const state = {
+
+    pollution:10,
+    flow:1,
+    treatment:70,
+
+    scenario:"normal",
+
+    time:0,
+
+    sound:false,
+
+    view:"impact"
+};
+
+/* =========================================================
+   03. THREE SCENE
+========================================================= */
+const scene = new THREE.Scene();
+
+scene.background = new THREE.Color(0x07131b);
+
+scene.fog = new THREE.FogExp2(
+    0x081821,
+    0.012
+);
+
+/* =========================================================
+   04. CAMERA
+========================================================= */
+const camera = new THREE.PerspectiveCamera(
+    48,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    500
+);
+
+camera.position.set(
+    38,
+    28,
+    45
+);
+
+/* =========================================================
+   05. RENDERER
+========================================================= */
+const renderer = new THREE.WebGLRenderer({
+    antialias:true,
+    powerPreference:"high-performance"
+});
+
+renderer.setPixelRatio(
+    Math.min(window.devicePixelRatio,2)
+);
+
+renderer.setSize(
+    window.innerWidth,
+    window.innerHeight
+);
+
+renderer.shadowMap.enabled = true;
+
+renderer.shadowMap.type =
+    THREE.PCFSoftShadowMap;
+
+renderer.outputColorSpace =
+    THREE.SRGBColorSpace;
+
+renderer.toneMapping =
+    THREE.ACESFilmicToneMapping;
+
+renderer.toneMappingExposure = 1.08;
+
+container.appendChild(renderer.domElement);
+
+/* =========================================================
+   06. CONTROLS
+========================================================= */
+const controls = new OrbitControls(
+    camera,
+    renderer.domElement
+);
+
+controls.enableDamping = true;
+
+controls.dampingFactor = .055;
+
+controls.minDistance = 24;
+controls.maxDistance = 90;
+
+controls.maxPolarAngle =
+    Math.PI * .47;
+
+controls.target.set(
+    0,
+    0,
+    0
+);
+
+/* =========================================================
+   07. LIGHTING
+========================================================= */
+const hemiLight = new THREE.HemisphereLight(
+    0xbdeaff,
+    0x193319,
+    2.2
+);
+
+scene.add(hemiLight);
+
+
+const sun = new THREE.DirectionalLight(
+    0xfff1d6,
+    4.2
+);
+
+sun.position.set(
+    -28,
+    45,
+    20
+);
+
+sun.castShadow = true;
+
+sun.shadow.mapSize.set(
+    2048,
+    2048
+);
+
+sun.shadow.camera.left = -65;
+sun.shadow.camera.right = 65;
+sun.shadow.camera.top = 65;
+sun.shadow.camera.bottom = -65;
+
+scene.add(sun);
+
+
+const fillLight = new THREE.DirectionalLight(
+    0x4adfff,
+    1.2
+);
+
+fillLight.position.set(
+    30,
+    20,
+    -20
+);
+
+scene.add(fillLight);
+
+/* =========================================================
+   08. WORLD GROUPS
+========================================================= */
+const world = new THREE.Group();
+
+scene.add(world);
+
+
+const terrainGroup = new THREE.Group();
+const waterGroup = new THREE.Group();
+const vegetationGroup = new THREE.Group();
+const buildingGroup = new THREE.Group();
+const fishGroup = new THREE.Group();
+const pollutionGroup = new THREE.Group();
+const debrisGroup = new THREE.Group();
+
+world.add(
+    terrainGroup,
+    waterGroup,
+    vegetationGroup,
+    buildingGroup,
+    fishGroup,
+    pollutionGroup,
+    debrisGroup
+);
+
+/* =========================================================
+   09. BASIC MATERIALS
+========================================================= */
+const landMaterial =
+    new THREE.MeshStandardMaterial({
+        color:0x416d37,
+        roughness:.95
+    });
+
+const soilMaterial =
+    new THREE.MeshStandardMaterial({
+        color:0x5d492d,
+        roughness:1
+    });
+
+const roadMaterial =
+    new THREE.MeshStandardMaterial({
+        color:0x4b5355,
+        roughness:.95
+    });
+
+const concreteMaterial =
+    new THREE.MeshStandardMaterial({
+        color:0x929aa0,
+        roughness:.8
+    });
+
+/* =========================================================
+   10. TERRAIN
+========================================================= */
+function createTerrain(){
+
+    const ground = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            90,
+            3,
+            58
+        ),
+        landMaterial
+    );
+
+    ground.position.y = -2.3;
+
+    ground.receiveShadow = true;
+
+    terrainGroup.add(ground);
+
+
+    /*
+        River banks.
+        The central gap creates one clear river corridor.
+    */
+
+    const leftBank = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            90,
+            1.7,
+            19
+        ),
+        soilMaterial
+    );
+
+    leftBank.position.set(
+        0,
+        -.6,
+        -19
+    );
+
+    leftBank.receiveShadow = true;
+
+    terrainGroup.add(leftBank);
+
+
+    const rightBank = leftBank.clone();
+
+    rightBank.position.z = 19;
+
+    terrainGroup.add(rightBank);
+
+
+    /*
+        Road on upper bank
+    */
+
+    const road = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            72,
+            .18,
+            5
+        ),
+        roadMaterial
+    );
+
+    road.position.set(
+        -3,
+        .36,
+        -17
+    );
+
+    road.receiveShadow = true;
+
+    terrainGroup.add(road);
+
+}
+
+createTerrain();
+
+/* =========================================================
+   11. WATER
+========================================================= */
+const waterMaterial =
+    new THREE.MeshPhysicalMaterial({
+
+        color:0x1687a7,
+
+        roughness:.17,
+
+        metalness:.03,
+
+        transparent:true,
+
+        opacity:.89,
+
+        transmission:.07,
+
+        clearcoat:.55,
+
+        clearcoatRoughness:.22
+    });
+
+
+const river = new THREE.Mesh(
+    new THREE.PlaneGeometry(
+        92,
+        19,
+        120,
+        24
+    ),
+    waterMaterial
+);
+
+river.rotation.x =
+    -Math.PI / 2;
+
+river.position.y = .18;
+
+river.receiveShadow = true;
+
+waterGroup.add(river);
+
+/* =========================================================
+   12. RIVER FOAM
+========================================================= */
+const foamMaterial =
+    new THREE.MeshBasicMaterial({
+
+        color:0xc7f8ff,
+
+        transparent:true,
+
+        opacity:.17,
+
+        depthWrite:false
+    });
+
+
+const foamLines = [];
+
+for(let i=0;i<22;i++){
+
+    const foam = new THREE.Mesh(
+        new THREE.PlaneGeometry(
+            2 + Math.random()*4,
+            .03 + Math.random()*.08
+        ),
+        foamMaterial.clone()
+    );
+
+    foam.rotation.x =
+        -Math.PI/2;
+
+    foam.position.set(
+        -45 + Math.random()*90,
+        .24,
+        -8 + Math.random()*16
+    );
+
+    foam.userData.speed =
+        .04 + Math.random()*.08;
+
+    waterGroup.add(foam);
+
+    foamLines.push(foam);
+}
+
+/* =========================================================
+   13. TREES
+========================================================= */
+function createTree(
+    x,
+    z,
+    scale=1
+){
+
+    const tree =
+        new THREE.Group();
+
+
+    const trunk =
+        new THREE.Mesh(
+            new THREE.CylinderGeometry(
+                .18*scale,
+                .25*scale,
+                1.8*scale,
+                8
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x503821,
+                roughness:1
+            })
+        );
+
+    trunk.position.y =
+        .9*scale;
+
+    trunk.castShadow = true;
+
+    tree.add(trunk);
+
+
+    const crownMat =
+        new THREE.MeshStandardMaterial({
+            color:
+                Math.random()>.5
+                    ? 0x377d38
+                    : 0x2f6c33,
+            roughness:.9
+        });
+
+
+    const crown1 =
+        new THREE.Mesh(
+            new THREE.IcosahedronGeometry(
+                1.15*scale,
+                1
+            ),
+            crownMat
+        );
+
+    crown1.position.y =
+        2.05*scale;
+
+    crown1.castShadow = true;
+
+    tree.add(crown1);
+
+
+    const crown2 =
+        new THREE.Mesh(
+            new THREE.IcosahedronGeometry(
+                .83*scale,
+                1
+            ),
+            crownMat
+        );
+
+    crown2.position.set(
+        .55*scale,
+        2.1*scale,
+        0
+    );
+
+    crown2.castShadow = true;
+
+    tree.add(crown2);
+
+
+    tree.position.set(
+        x,
+        .35,
+        z
+    );
+
+    vegetationGroup.add(tree);
+
+    return tree;
+}
+
+
+for(let i=0;i<42;i++){
+
+    const z =
+        Math.random()>.5
+            ? -21-Math.random()*5
+            : 21+Math.random()*5;
+
+    createTree(
+        -43 + Math.random()*86,
+        z,
+        .6 + Math.random()*.65
+    );
+}
+
+/* =========================================================
+   14. REEDS / RIVER VEGETATION
+========================================================= */
+const reeds = [];
+
+function createReed(
+    x,
+    z
+){
+
+    const group =
+        new THREE.Group();
+
+    const material =
+        new THREE.MeshStandardMaterial({
+            color:0x4f8d43,
+            roughness:.85
+        });
+
+    for(let i=0;i<7;i++){
+
+        const stem =
+            new THREE.Mesh(
+                new THREE.CylinderGeometry(
+                    .025,
+                    .04,
+                    .8+Math.random()*.7,
+                    5
+                ),
+                material
+            );
+
+        stem.position.set(
+            (Math.random()-.5)*.45,
+            .45+Math.random()*.25,
+            (Math.random()-.5)*.45
+        );
+
+        stem.rotation.z =
+            (Math.random()-.5)*.15;
+
+        group.add(stem);
+    }
+
+    group.position.set(
+        x,
+        .2,
+        z
+    );
+
+    vegetationGroup.add(group);
+
+    reeds.push(group);
+}
+
+
+for(let i=0;i<36;i++){
+
+    createReed(
+        -42 + Math.random()*84,
+        Math.random()>.5
+            ? 8.4
+            : -8.4
+    );
+}
+
+/* =========================================================
+   15. HOUSE
+========================================================= */
+function createHouse(
+    x,
+    z,
+    color=0xe4d4b4
+){
+
+    const house =
+        new THREE.Group();
+
+
+    const wall =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                3.1,
+                2.3,
+                2.8
+            ),
+            new THREE.MeshStandardMaterial({
+                color,
+                roughness:.75
+            })
+        );
+
+    wall.position.y =
+        1.5;
+
+    wall.castShadow = true;
+
+    wall.receiveShadow = true;
+
+    house.add(wall);
+
+
+    const roof =
+        new THREE.Mesh(
+            new THREE.ConeGeometry(
+                2.55,
+                1.4,
+                4
+            ),
+            new THREE.MeshStandardMaterial({
+                color:
+                    Math.random()>.5
+                        ? 0x9b493e
+                        : 0x5f6982,
+                roughness:.85
+            })
+        );
+
+    roof.rotation.y =
+        Math.PI/4;
+
+    roof.position.y =
+        3.2;
+
+    roof.scale.z =
+        .88;
+
+    roof.castShadow = true;
+
+    house.add(roof);
+
+
+    const door =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                .6,
+                1.25,
+                .08
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x473323
+            })
+        );
+
+    door.position.set(
+        0,
+        1.15,
+        1.44
+    );
+
+    house.add(door);
+
+
+    const windowMaterial =
+        new THREE.MeshStandardMaterial({
+            color:0x8ad9e9,
+            emissive:0x184c5b,
+            emissiveIntensity:.25
+        });
+
+
+    [-.9,.9].forEach(dx=>{
+
+        const windowMesh =
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    .58,
+                    .58,
+                    .06
+                ),
+                windowMaterial
+            );
+
+        windowMesh.position.set(
+            dx,
+            1.7,
+            1.45
+        );
+
+        house.add(windowMesh);
+    });
+
+
+    house.position.set(
+        x,
+        .35,
+        z
+    );
+
+    buildingGroup.add(house);
+}
+
+
+/*
+    Residential area
+*/
+
+for(let i=0;i<8;i++){
+
+    createHouse(
+        -32 + (i%4)*6,
+        -22 - Math.floor(i/4)*5,
+        [
+            0xe0c8aa,
+            0xd9c8a1,
+            0xc8d3cc
+        ][i%3]
+    );
+}
+
+/* =========================================================
+   16. FACTORY
+========================================================= */
+const factory =
+    new THREE.Group();
+
+
+const factoryBody =
+    new THREE.Mesh(
+        new THREE.BoxGeometry(
+            11,
+            4.8,
+            7
+        ),
+        new THREE.MeshStandardMaterial({
+            color:0x8b969c,
+            roughness:.73
+        })
+    );
+
+factoryBody.position.y =
+    2.75;
+
+factoryBody.castShadow = true;
+
+factoryBody.receiveShadow = true;
+
+factory.add(factoryBody);
+
+
+/*
+    Roof
+*/
+
+const factoryRoof =
+    new THREE.Mesh(
+        new THREE.BoxGeometry(
+            11.5,
+            .45,
+            7.5
+        ),
+        new THREE.MeshStandardMaterial({
+            color:0x41505a,
+            roughness:.75
+        })
+    );
+
+factoryRoof.position.y =
+    5.3;
+
+factory.add(factoryRoof);
+
+
+/*
+    Factory windows
+*/
+
+for(let x=-4;x<=4;x+=2){
+
+    const windowMesh =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                1.2,
+                .8,
+                .08
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x69bed4,
+                emissive:0x164c58,
+                emissiveIntensity:.45
+            })
+        );
+
+    windowMesh.position.set(
+        x,
+        3,
+        3.54
+    );
+
+    factory.add(windowMesh);
+}
+
+
+/*
+    Chimneys
+*/
+
+for(let i=0;i<3;i++){
+
+    const stack =
+        new THREE.Mesh(
+            new THREE.CylinderGeometry(
+                .55,
+                .72,
+                7+i*.4,
+                14
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x6e7779,
+                roughness:.85
+            })
+        );
+
+    stack.position.set(
+        -3+i*3,
+        8,
+        -1
+    );
+
+    stack.castShadow = true;
+
+    factory.add(stack);
+}
+
+
+factory.position.set(
+    22,
+    .35,
+    -22
+);
+
+buildingGroup.add(factory);
+
+/* =========================================================
+   17. FACTORY PIPE
+========================================================= */
+const pipeMaterial =
+    new THREE.MeshStandardMaterial({
+        color:0x555f61,
+        metalness:.35,
+        roughness:.55
+    });
+
+
+const pipeHorizontal =
+    new THREE.Mesh(
+        new THREE.CylinderGeometry(
+            .48,
+            .48,
+            8,
+            16
+        ),
+        pipeMaterial
+    );
+
+pipeHorizontal.rotation.z =
+    Math.PI/2;
+
+pipeHorizontal.position.set(
+    17,
+    1.1,
+    -12.5
+);
+
+buildingGroup.add(pipeHorizontal);
+
+
+const pipeVertical =
+    new THREE.Mesh(
+        new THREE.CylinderGeometry(
+            .48,
+            .48,
+            5,
+            16
+        ),
+        pipeMaterial
+    );
+
+pipeVertical.position.set(
+    13,
+    2.8,
+    -12.5
+);
+
+buildingGroup.add(pipeVertical);
+
+
+/*
+    Pipe outlet toward river
+*/
+
+const outletPipe =
+    new THREE.Mesh(
+        new THREE.CylinderGeometry(
+            .55,
+            .55,
+            4.8,
+            18
+        ),
+        pipeMaterial
+    );
+
+outletPipe.rotation.x =
+    Math.PI/2;
+
+outletPipe.position.set(
+    13,
+    .85,
+    -9.4
+);
+
+buildingGroup.add(outletPipe);
+
+/* =========================================================
+   18. FARM
+========================================================= */
+const farmGroup =
+    new THREE.Group();
+
+for(let row=0;row<5;row++){
+
+    const farmRow =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                15,
+                .15,
+                .65
+            ),
+            new THREE.MeshStandardMaterial({
+                color:0x704f2c
+            })
+        );
+
+    farmRow.position.set(
+        0,
+        .45,
+        row*1.7
+    );
+
+    farmGroup.add(farmRow);
+
+
+    for(let i=0;i<14;i++){
+
+        const plant =
+            new THREE.Mesh(
+                new THREE.ConeGeometry(
+                    .16,
+                    .65,
+                    5
+                ),
+                new THREE.MeshStandardMaterial({
+                    color:0x66a83f
+                })
+            );
+
+        plant.position.set(
+            -6.5+i,
+            .82,
+            row*1.7
+        );
+
+        farmGroup.add(plant);
+    }
+}
+
+farmGroup.position.set(
+    26,
+    0,
+    16
+);
+
+terrainGroup.add(farmGroup);
+
+/* =========================================================
+   19. SMALL BRIDGE
+========================================================= */
+const bridge =
+    new THREE.Group();
+
+const bridgeDeck =
+    new THREE.Mesh(
+        new THREE.BoxGeometry(
+            4,
+            .7,
+            21
+        ),
+        concreteMaterial
+    );
+
+bridgeDeck.position.y =
+    1.8;
+
+bridgeDeck.castShadow = true;
+
+bridgeDeck.receiveShadow = true;
+
+bridge.add(bridgeDeck);
+
+
+for(let z=-8;z<=8;z+=8){
+
+    const support =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                .7,
+                3.5,
+                .7
+            ),
+            concreteMaterial
+        );
+
+    support.position.set(
+        0,
+        .2,
+        z
+    );
+
+    bridge.add(support);
+}
+
+bridge.position.x =
+    -4;
+
+world.add(bridge);
+
+/* =========================================================
+   20. FISH
+========================================================= */
+const fishes = [];
+
+function createFish(){
+
+    const group =
+        new THREE.Group();
+
+
+    const body =
+        new THREE.Mesh(
+            new THREE.SphereGeometry(
+                .3,
+                10,
+                7
+            ),
+            new THREE.MeshStandardMaterial({
+                color:
+                    [
+                        0xd6b752,
+                        0xa8c16b,
+                        0x66a6a5
+                    ][
+                        Math.floor(
+                            Math.random()*3
+                        )
+                    ],
+                roughness:.55
+            })
+        );
+
+    body.scale.set(
+        1.65,
+        .65,
+        .72
+    );
+
+    group.add(body);
+
+
+    const tail =
+        new THREE.Mesh(
+            new THREE.ConeGeometry(
+                .25,
+                .55,
+                3
+            ),
+            body.material
+        );
+
+    tail.rotation.z =
+        -Math.PI/2;
+
+    tail.position.x =
+        -.55;
+
+    group.add(tail);
+
+
+    group.position.set(
+        -42 + Math.random()*80,
+        -.15-Math.random()*.45,
+        -7.3+Math.random()*14.6
+    );
+
+    group.rotation.y =
+        Math.random()>.5
+            ? 0
+            : Math.PI;
+
+    group.userData.speed =
+        .018 + Math.random()*.045;
+
+    group.userData.offset =
+        Math.random()*Math.PI*2;
+
+    fishGroup.add(group);
+
+    fishes.push(group);
+}
+
+
+for(let i=0;i<30;i++){
+    createFish();
+}
+
+/* =========================================================
+   21. POLLUTION PARTICLES
+========================================================= */
+const pollutionParticles = [];
+
+function createPollutionParticle(){
+
+    const geometry =
+        new THREE.SphereGeometry(
+            .09 + Math.random()*.16,
+            6,
+            5
+        );
+
+    const material =
+        new THREE.MeshBasicMaterial({
+
+            color:0x79532f,
+
+            transparent:true,
+
+            opacity:.7
+        });
+
+
+    const particle =
+        new THREE.Mesh(
+            geometry,
+            material
+        );
+
+
+    resetPollutionParticle(
+        particle,
+        true
+    );
+
+    pollutionGroup.add(particle);
+
+    pollutionParticles.push(
+        particle
+    );
+}
+
+
+function resetPollutionParticle(
+    p,
+    randomStart=false
+){
+
+    /*
+        Main pollutant source near industrial pipe.
+        Water moves from right to left.
+    */
+
+    p.position.set(
+        12.5 -
+        (
+            randomStart
+                ? Math.random()*60
+                : 0
+        ),
+
+        .1 + Math.random()*.35,
+
+        -7.3 + Math.random()*3.4
+    );
+
+
+    p.scale.setScalar(
+        .65+Math.random()*1.5
+    );
+
+    p.userData.speed =
+        .045 + Math.random()*.055;
+
+    p.userData.drift =
+        (Math.random()-.5)*.012;
+
+    p.userData.phase =
+        Math.random()*Math.PI*2;
+}
+
+
+for(let i=0;i<400;i++){
+
+    createPollutionParticle();
+}
+
+/* =========================================================
+   22. SEWAGE PLUME
+========================================================= */
+const plumeGeometry =
+    new THREE.PlaneGeometry(
+        39,
+        7,
+        60,
+        12
+    );
+
+
+const plumeMaterial =
+    new THREE.MeshBasicMaterial({
+
+        color:0x6c4d2e,
+
+        transparent:true,
+
+        opacity:.06,
+
+        side:THREE.DoubleSide,
+
+        depthWrite:false,
+
+        blending:THREE.NormalBlending
+    });
+
+
+const pollutionPlume =
+    new THREE.Mesh(
+        plumeGeometry,
+        plumeMaterial
+    );
+
+pollutionPlume.rotation.x =
+    -Math.PI/2;
+
+pollutionPlume.position.set(
+    -7,
+    .28,
+    -4.8
+);
+
+pollutionGroup.add(
+    pollutionPlume
+);
+
+/* =========================================================
+   23. TRASH / DEBRIS
+========================================================= */
+const debrisItems = [];
+
+function createDebris(){
+
+    const type =
+        Math.floor(Math.random()*3);
+
+    let geometry;
+
+    if(type===0){
+
+        geometry =
+            new THREE.BoxGeometry(
+                .28,
+                .05,
+                .12
+            );
+
+    }else if(type===1){
+
+        geometry =
+            new THREE.CylinderGeometry(
+                .07,
+                .07,
+                .38,
+                7
+            );
+
+    }else{
+
+        geometry =
+            new THREE.PlaneGeometry(
+                .28,
+                .18
+            );
+    }
+
+
+    const material =
+        new THREE.MeshStandardMaterial({
+
+            color:[
+                0xd7d6c7,
+                0x468fb3,
+                0x8f9168,
+                0xbd675c
+            ][
+                Math.floor(
+                    Math.random()*4
+                )
+            ],
+
+            roughness:.7,
+
+            side:THREE.DoubleSide
+        });
+
+
+    const debris =
+        new THREE.Mesh(
+            geometry,
+            material
+        );
+
+
+    debris.rotation.x =
+        Math.random()*Math.PI;
+
+    debris.rotation.z =
+        Math.random()*Math.PI;
+
+
+    debris.position.set(
+        -40 + Math.random()*80,
+        .37,
+        -7+Math.random()*14
+    );
+
+
+    debris.userData.speed =
+        .025+Math.random()*.04;
+
+
+    debrisGroup.add(debris);
+
+    debrisItems.push(debris);
+}
+
+
+for(let i=0;i<38;i++){
+
+    createDebris();
+}
+
+/* =========================================================
+   24. BUBBLES / POLLUTED FOAM
+========================================================= */
+const dirtyFoam = [];
+
+function createDirtyFoam(){
+
+    const mesh =
+        new THREE.Mesh(
+            new THREE.SphereGeometry(
+                .08+Math.random()*.12,
+                7,
+                5
+            ),
+            new THREE.MeshBasicMaterial({
+
+                color:0xd5cfa9,
+
+                transparent:true,
+
+                opacity:.5
+            })
+        );
+
+    mesh.scale.y=.15;
+
+    mesh.position.set(
+        -40+Math.random()*65,
+        .34,
+        -7+Math.random()*14
+    );
+
+    mesh.userData.speed =
+        .02+Math.random()*.04;
+
+    pollutionGroup.add(mesh);
+
+    dirtyFoam.push(mesh);
+}
+
+
+for(let i=0;i<80;i++){
+
+    createDirtyFoam();
+}
+
+/* =========================================================
+   25. FLOOD WATER OVERLAY
+========================================================= */
+const floodMaterial =
+    new THREE.MeshPhysicalMaterial({
+
+        color:0x6b6c48,
+
+        transparent:true,
+
+        opacity:0,
+
+        roughness:.3
+    });
+
+
+const floodWater =
+    new THREE.Mesh(
+        new THREE.PlaneGeometry(
+            91,
+            33
+        ),
+        floodMaterial
+    );
+
+floodWater.rotation.x =
+    -Math.PI/2;
+
+floodWater.position.set(
+    0,
+    .3,
+    0
+);
+
+scene.add(floodWater);
+
+/* =========================================================
+   26. RAIN PARTICLES FOR FLOOD SCENARIO
+========================================================= */
+const rainCount = 1400;
+
+const rainPositions =
+    new Float32Array(
+        rainCount*3
+    );
+
+
+for(let i=0;i<rainCount;i++){
+
+    rainPositions[i*3] =
+        -50+Math.random()*100;
+
+    rainPositions[i*3+1] =
+        3+Math.random()*30;
+
+    rainPositions[i*3+2] =
+        -30+Math.random()*60;
+}
+
+
+const rainGeometry =
+    new THREE.BufferGeometry();
+
+rainGeometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(
+        rainPositions,
+        3
+    )
+);
+
+
+const rainMaterial =
+    new THREE.PointsMaterial({
+
+        color:0xa7e2ef,
+
+        size:.09,
+
+        transparent:true,
+
+        opacity:0
+    });
+
+
+const rain =
+    new THREE.Points(
+        rainGeometry,
+        rainMaterial
+    );
+
+scene.add(rain);
+
+/* =========================================================
+   27. SMOKE
+========================================================= */
+const smokeParticles = [];
+
+for(let i=0;i<45;i++){
+
+    const smoke =
+        new THREE.Mesh(
+            new THREE.SphereGeometry(
+                .35+Math.random()*.45,
+                7,
+                6
+            ),
+            new THREE.MeshBasicMaterial({
+
+                color:0x879093,
+
+                transparent:true,
+
+                opacity:.05+Math.random()*.08,
+
+                depthWrite:false
+            })
+        );
+
+
+    smoke.position.set(
+        19+Math.random()*6,
+        7+Math.random()*10,
+        -23+Math.random()*3
+    );
+
+
+    smoke.userData.offset =
+        Math.random()*Math.PI*2;
+
+
+    scene.add(smoke);
+
+    smokeParticles.push(smoke);
+}
+
+/* =========================================================
+   28. SKY CLOUDS
+========================================================= */
+const clouds = [];
+
+function createCloud(
+    x,
+    y,
+    z,
+    scale
+){
+
+    const g =
+        new THREE.Group();
+
+
+    for(let i=0;i<6;i++){
+
+        const puff =
+            new THREE.Mesh(
+                new THREE.SphereGeometry(
+                    .8+Math.random(),
+                    8,
+                    7
+                ),
+                new THREE.MeshBasicMaterial({
+
+                    color:0xd2e4e7,
+
+                    transparent:true,
+
+                    opacity:.12,
+
+                    depthWrite:false
+                })
+            );
+
+
+        puff.position.set(
+            (Math.random()-.5)*3,
+            (Math.random()-.5),
+            (Math.random()-.5)*1.7
+        );
+
+        g.add(puff);
+    }
+
+
+    g.position.set(
+        x,
+        y,
+        z
+    );
+
+
+    g.scale.setScalar(scale);
+
+    scene.add(g);
+
+    clouds.push(g);
+}
+
+
+for(let i=0;i<8;i++){
+
+    createCloud(
+        -45+Math.random()*90,
+        18+Math.random()*8,
+        -30+Math.random()*25,
+        1.2+Math.random()*1.3
+    );
+}
+
+/* =========================================================
+   29. SCENARIO CONFIGURATION
+========================================================= */
+const scenarioConfig = {
+
+    normal:{
+        pollution:10,
+        treatment:70
+    },
+
+    sewage:{
+        pollution:62,
+        treatment:25
+    },
+
+    chemical:{
+        pollution:85,
+        treatment:12
+    },
+
+    flood:{
+        pollution:72,
+        treatment:20
+    }
+};
+
+
+/* =========================================================
+   30. SET SCENARIO
+========================================================= */
+function setScenario(
+    scenario
+){
+
+    state.scenario =
+        scenario;
+
+
+    document
+        .querySelectorAll(".scenario")
+        .forEach(btn=>{
+
+            btn.classList.toggle(
+                "active",
+                btn.dataset.scenario === scenario
+            );
+
+        });
+
+
+    const config =
+        scenarioConfig[scenario];
+
+
+    state.pollution =
+        config.pollution;
+
+    state.treatment =
+        config.treatment;
+
+
+    pollutionSlider.value =
+        state.pollution;
+
+    treatmentSlider.value =
+        state.treatment;
+
+
+    updateUI();
+
+
+    if(
+        state.sound &&
+        scenario !== "normal"
+    ){
+        playWarningTone();
+    }
+}
+
+
+/* =========================================================
+   31. WATER QUALITY MODEL
+========================================================= */
+function calculateEnvironment(){
+
+    /*
+        Educational simulation.
+        Values are illustrative rather than laboratory measurements.
+    */
+
+    const P =
+        state.pollution / 100;
+
+    const T =
+        state.treatment / 100;
+
+    const flow =
+        state.flow;
+
+
+    let effective =
+        P * (1 - T*.72);
+
+
+    if(
+        state.scenario === "chemical"
+    ){
+        effective *= 1.18;
+    }
+
+
+    if(
+        state.scenario === "flood"
+    ){
+        effective *= 1.08;
+    }
+
+
+    effective =
+        THREE.MathUtils.clamp(
+            effective,
+            0,
+            1
+        );
+
+
+    /*
+        Dissolved Oxygen
+    */
+
+    let DO =
+        8.5 -
+        effective*7.1 -
+        Math.max(0,P-.6)*1.1;
+
+
+    DO =
+        THREE.MathUtils.clamp(
+            DO,
+            .8,
+            9
+        );
+
+
+    /*
+        pH
+    */
+
+    let pH =
+        7.15;
+
+
+    if(
+        state.scenario === "chemical"
+    ){
+
+        pH -=
+            effective*2.5;
+
+    }else{
+
+        pH -=
+            effective*.75;
+    }
+
+
+    pH =
+        THREE.MathUtils.clamp(
+            pH,
+            4.4,
+            8
+        );
+
+
+    /*
+        Turbidity
+    */
+
+    let turbidity =
+        5+
+        effective*135;
+
+
+    if(
+        state.scenario === "flood"
+    ){
+        turbidity += 55;
+    }
+
+
+    /*
+        Toxic pollutant
+    */
+
+    let toxin =
+        effective*72;
+
+
+    if(
+        state.scenario === "chemical"
+    ){
+        toxin += 28;
+    }
+
+
+    toxin =
+        THREE.MathUtils.clamp(
+            toxin,
+            0,
+            100
+        );
+
+
+    /*
+        Pathogen risk
+    */
+
+    let bacteria =
+        effective*78;
+
+
+    if(
+        state.scenario === "sewage"
+    ){
+        bacteria += 20;
+    }
+
+
+    if(
+        state.scenario === "flood"
+    ){
+        bacteria += 18;
+    }
+
+
+    bacteria =
+        THREE.MathUtils.clamp(
+            bacteria,
+            0,
+            100
+        );
+
+
+    /*
+        Fish health
+    */
+
+    let fish =
+        100 -
+        effective*96 -
+        toxin*.25;
+
+
+    if(DO<4){
+
+        fish -=
+            (4-DO)*11;
+    }
+
+
+    fish =
+        THREE.MathUtils.clamp(
+            fish,
+            0,
+            100
+        );
+
+
+    let plants =
+        100 -
+        effective*76 -
+        turbidity*.12;
+
+
+    plants =
+        THREE.MathUtils.clamp(
+            plants,
+            0,
+            100
+        );
+
+
+    /*
+        WQI
+    */
+
+    let wqi =
+        100 -
+        effective*72 -
+        toxin*.12 -
+        bacteria*.08;
+
+
+    wqi =
+        THREE.MathUtils.clamp(
+            wqi,
+            0,
+            100
+        );
+
+
+    /*
+        Flow transports pollutants farther.
+    */
+
+    const spread =
+        .35 +
+        P*5.5*flow;
+
+
+    return {
+        effective,
+        DO,
+        pH,
+        turbidity,
+        toxin,
+        bacteria,
+        fish,
+        plants,
+        wqi,
+        spread
+    };
+}
+
+/* =========================================================
+   32. UPDATE USER INTERFACE
+========================================================= */
+function updateUI(){
+
+    pollutionValue.textContent =
+        `${Math.round(state.pollution)}%`;
+
+    flowValue.textContent =
+        `${state.flow.toFixed(1)}×`;
+
+    treatmentValue.textContent =
+        `${Math.round(state.treatment)}%`;
+
+
+    const env =
+        calculateEnvironment();
+
+
+    wqiValue.textContent =
+        Math.round(env.wqi);
+
+
+    doValue.textContent =
+        env.DO.toFixed(1);
+
+    phValue.textContent =
+        env.pH.toFixed(1);
+
+    turbidityValue.textContent =
+        Math.round(env.turbidity);
+
+    toxinValue.textContent =
+        Math.round(env.toxin);
+
+    bacteriaValue.textContent =
+        Math.round(env.bacteria);
+
+
+    fishHealth.textContent =
+        `${Math.round(env.fish)}%`;
+
+    plantHealth.textContent =
+        `${Math.round(env.plants)}%`;
+
+    spreadValue.textContent =
+        `${env.spread.toFixed(1)} km`;
+
+
+    if(env.wqi >= 80){
+
+        waterStatus.textContent =
+            "TỐT";
+
+        waterStatus.style.color =
+            "#52efb1";
+
+    }else if(env.wqi >= 60){
+
+        waterStatus.textContent =
+            "CẦN THEO DÕI";
+
+        waterStatus.style.color =
+            "#e5db61";
+
+    }else if(env.wqi >= 40){
+
+        waterStatus.textContent =
+            "Ô NHIỄM";
+
+        waterStatus.style.color =
+            "#ffae55";
+
+    }else{
+
+        waterStatus.textContent =
+            "NGUY HIỂM";
+
+        waterStatus.style.color =
+            "#ff6262";
+    }
+
+
+    /*
+        Human health risk
+    */
+
+    if(
+        env.bacteria > 65 ||
+        env.toxin > 65
+    ){
+
+        humanRisk.textContent =
+            "Rất cao";
+
+        humanRisk.style.color =
+            "#ff6565";
+
+    }else if(
+        env.bacteria > 35 ||
+        env.toxin > 35
+    ){
+
+        humanRisk.textContent =
+            "Cao";
+
+        humanRisk.style.color =
+            "#ffae55";
+
+    }else if(
+        env.bacteria > 15 ||
+        env.toxin > 15
+    ){
+
+        humanRisk.textContent =
+            "Trung bình";
+
+        humanRisk.style.color =
+            "#e9dd61";
+
+    }else{
+
+        humanRisk.textContent =
+            "Thấp";
+
+        humanRisk.style.color =
+            "#5ce9b1";
+    }
+
+
+    setMetric(
+        doBar,
+        env.DO/9*100,
+        env.DO<4
+    );
+
+    setMetric(
+        phBar,
+        Math.max(
+            0,
+            100-Math.abs(env.pH-7)*35
+        ),
+        env.pH<6
+    );
+
+    setMetric(
+        turbidityBar,
+        Math.min(
+            100,
+            env.turbidity/1.8
+        ),
+        env.turbidity>70,
+        true
+    );
+
+    setMetric(
+        toxinBar,
+        env.toxin,
+        env.toxin>55,
+        true
+    );
+
+    setMetric(
+        bacteriaBar,
+        env.bacteria,
+        env.bacteria>55,
+        true
+    );
+
+
+    updateAlert(env);
+
+    updateVisualState(env);
+}
+
+
+/* =========================================================
+   33. METRIC VISUALS
+========================================================= */
+function setMetric(
+    element,
+    value,
+    danger,
+    inverse=false
+){
+
+    const v =
+        THREE.MathUtils.clamp(
+            value,
+            0,
+            100
+        );
+
+
+    element.style.width =
+        `${v}%`;
+
+
+    let color;
+
+
+    if(inverse){
+
+        if(v > 65){
+
+            color="#ff5959";
+
+        }else if(v > 35){
+
+            color="#ffae4d";
+
+        }else{
+
+            color="#44dfc0";
+        }
+
+    }else{
+
+        if(danger){
+
+            color="#ff5f5f";
+
+        }else if(v<55){
+
+            color="#ffb24d";
+
+        }else{
+
+            color="#45e0ca";
+        }
+    }
+
+
+    element.style.background =
+        color;
+}
+
+/* =========================================================
+   34. ALERT SYSTEM
+========================================================= */
+function updateAlert(env){
+
+    if(env.wqi >= 80){
+
+        alertBox.classList.add(
+            "safe"
+        );
+
+        alertIcon.textContent =
+            "✓";
+
+        alertTitle.textContent =
+            "HỆ SINH THÁI ĐANG ỔN ĐỊNH";
+
+        alertMessage.textContent =
+            "Nước còn tương đối sạch, oxy hòa tan cao và sức khỏe sinh vật thủy sinh được duy trì.";
+
+    }else{
+
+        alertBox.classList.remove(
+            "safe"
+        );
+
+        alertIcon.textContent =
+            "⚠";
+
+
+        if(env.DO < 3){
+
+            alertTitle.textContent =
+                "THIẾU OXY NGHIÊM TRỌNG";
+
+            alertMessage.textContent =
+                "Oxy hòa tan giảm mạnh. Cá và nhiều sinh vật thủy sinh có nguy cơ chết hoặc phải rời khỏi khu vực.";
+
+        }else if(env.toxin > 70){
+
+            alertTitle.textContent =
+                "CẢNH BÁO ĐỘC CHẤT";
+
+            alertMessage.textContent =
+                "Nồng độ chất ô nhiễm cao có thể gây độc cho sinh vật và làm nguồn nước không an toàn cho con người.";
+
+        }else if(env.bacteria > 70){
+
+            alertTitle.textContent =
+                "NGUY CƠ Ô NHIỄM VI SINH";
+
+            alertMessage.textContent =
+                "Nước thải và chất bẩn làm tăng nguy cơ vi sinh vật gây bệnh trong nguồn nước.";
+
+        }else{
+
+            alertTitle.textContent =
+                "CHẤT LƯỢNG NƯỚC ĐANG SUY GIẢM";
+
+            alertMessage.textContent =
+                "Chất ô nhiễm đang lan theo dòng chảy, làm tăng độ đục và gây sức ép lên hệ sinh thái.";
+        }
+    }
+}
+
+/* =========================================================
+   35. VISUAL RESPONSE TO POLLUTION
+========================================================= */
+function updateVisualState(env){
+
+    /*
+        Clean water
+        RGB approximately blue/cyan.
+
+        Polluted water gradually shifts
+        toward brown-green.
+    */
+
+    const clean =
+        new THREE.Color(
+            0x168eae
+        );
+
+    const polluted =
+        state.scenario === "chemical"
+            ? new THREE.Color(0x756a28)
+            : new THREE.Color(0x5e5635);
+
+
+    waterMaterial.color
+        .copy(clean)
+        .lerp(
+            polluted,
+            env.effective*.9
+        );
+
+
+    waterMaterial.opacity =
+        .90 -
+        env.effective*.13;
+
+
+    pollutionPlume.material.opacity =
+        .02 +
+        env.effective*.48;
+
+
+    pollutionPlume.scale.z =
+        .5 +
+        state.flow*.7;
+
+
+    /*
+        Pollutant particles
+    */
+
+    const visibleCount =
+        Math.floor(
+            env.effective *
+            pollutionParticles.length
+        );
+
+
+    pollutionParticles.forEach(
+        (p,i)=>{
+            p.visible =
+                i < visibleCount;
+        }
+    );
+
+
+    /*
+        Waste amount
+    */
+
+    const debrisCount =
+        Math.floor(
+            env.effective *
+            debrisItems.length *
+            1.3
+        );
+
+
+    debrisItems.forEach(
+        (d,i)=>{
+            d.visible =
+                i < debrisCount;
+        }
+    );
+
+
+    /*
+        Dirty foam
+    */
+
+    const foamCount =
+        Math.floor(
+            env.effective *
+            dirtyFoam.length
+        );
+
+
+    dirtyFoam.forEach(
+        (f,i)=>{
+            f.visible =
+                i < foamCount;
+        }
+    );
+
+
+    /*
+        Vegetation becomes dull.
+    */
+
+    const plantFactor =
+        env.plants/100;
+
+
+    reeds.forEach(
+        reed=>{
+
+            reed.children.forEach(
+                stem=>{
+
+                    if(
+                        stem.material &&
+                        stem.material.color
+                    ){
+
+                        stem.material.color.setRGB(
+                            .25 + plantFactor*.08,
+                            .28 + plantFactor*.28,
+                            .15 + plantFactor*.08
+                        );
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+    /*
+        Fish visibility represents ecosystem decline.
+    */
+
+    const healthyFish =
+        Math.round(
+            fishes.length *
+            env.fish/100
+        );
+
+
+    fishes.forEach(
+        (fish,i)=>{
+
+            fish.visible =
+                i < healthyFish;
+
+        }
+    );
+
+
+    /*
+        Flood scenario
+    */
+
+    const flood =
+        state.scenario === "flood";
+
+
+    floodMaterial.opacity =
+        flood
+            ? .46
+            : 0;
+
+
+    rainMaterial.opacity =
+        flood
+            ? .55
+            : 0;
+
+
+    floodWater.visible =
+        flood;
+
+    rain.visible =
+        flood;
+}
+
+/* =========================================================
+   36. INPUT EVENTS
+========================================================= */
+pollutionSlider.addEventListener(
+    "input",
+    ()=>{
+
+        state.pollution =
+            Number(
+                pollutionSlider.value
+            );
+
+        updateUI();
+    }
+);
+
+
+flowSlider.addEventListener(
+    "input",
+    ()=>{
+
+        state.flow =
+            Number(
+                flowSlider.value
+            ) / 100;
+
+        updateUI();
+    }
+);
+
+
+treatmentSlider.addEventListener(
+    "input",
+    ()=>{
+
+        state.treatment =
+            Number(
+                treatmentSlider.value
+            );
+
+        updateUI();
+    }
+);
+
+
+document
+    .querySelectorAll(".scenario")
+    .forEach(button=>{
+
+        button.addEventListener(
+            "click",
+            ()=>{
+
+                setScenario(
+                    button.dataset.scenario
+                );
+
+            }
+        );
+
+    });
+
+/* =========================================================
+   37. CAMERA PRESETS
+========================================================= */
+const cameraViews = {
+
+    impact:{
+        position:new THREE.Vector3(
+            38,
+            28,
+            45
+        ),
+        target:new THREE.Vector3(
+            0,
+            0,
+            0
+        )
+    },
+
+    clean:{
+        position:new THREE.Vector3(
+            -34,
+            17,
+            28
+        ),
+        target:new THREE.Vector3(
+            -18,
+            0,
+            0
+        )
+    },
+
+    polluted:{
+        position:new THREE.Vector3(
+            31,
+            13,
+            25
+        ),
+        target:new THREE.Vector3(
+            5,
+            0,
+            -3
+        )
+    },
+
+    top:{
+        position:new THREE.Vector3(
+            0,
+            62,
+            .01
+        ),
+        target:new THREE.Vector3(
+            0,
+            0,
+            0
+        )
+    }
+};
+
+
+/*
+    Camera animation state
+*/
+
+let cameraAnimation = null;
+
+
+function setCameraView(
+    name
+){
+
+    const view =
+        cameraViews[name];
+
+    if(!view) return;
+
+
+    cameraAnimation = {
+
+        startPos:
+            camera.position.clone(),
+
+        endPos:
+            view.position.clone(),
+
+        startTarget:
+            controls.target.clone(),
+
+        endTarget:
+            view.target.clone(),
+
+        t:0
+    };
+}
+
+
+/* =========================================================
+   38. VIEW BUTTONS
+========================================================= */
+document
+    .querySelectorAll(".view-btn")
+    .forEach(button=>{
+
+        button.addEventListener(
+            "click",
+            ()=>{
+
+                document
+                    .querySelectorAll(".view-btn")
+                    .forEach(
+                        b=>b.classList.remove(
+                            "active"
+                        )
+                    );
+
+                button.classList.add(
+                    "active"
+                );
+
+
+                state.view =
+                    button.dataset.view;
+
+
+                if(
+                    state.view === "clean"
+                ){
+
+                    state.pollution=3;
+
+                    pollutionSlider.value=3;
+
+                    updateUI();
+
+                }
+
+
+                if(
+                    state.view === "polluted"
+                ){
+
+                    state.pollution=95;
+
+                    pollutionSlider.value=95;
+
+                    updateUI();
+
+                }
+
+
+                setCameraView(
+                    state.view
+                );
+
+            }
+        );
+
+    });
+
+
+resetCameraBtn.addEventListener(
+    "click",
+    ()=>{
+
+        setCameraView(
+            "impact"
+        );
+
+    }
+);
+
+
+resetBtn.addEventListener(
+    "click",
+    ()=>{
+
+        state.pollution=10;
+
+        state.flow=1;
+
+        state.treatment=70;
+
+        state.scenario="normal";
+
+
+        pollutionSlider.value=10;
+
+        flowSlider.value=100;
+
+        treatmentSlider.value=70;
+
+
+        setScenario(
+            "normal"
+        );
+
+
+        setCameraView(
+            "impact"
+        );
+
+    }
+);
+
+/* =========================================================
+   39. AUDIO ENGINE
+========================================================= */
+let audioContext = null;
+let waterGain = null;
+let waterSource = null;
+let lowGain = null;
+let lowOsc = null;
+
+
+/*
+    Procedural river sound using filtered noise.
+    No external audio file required.
+*/
+
+function createRiverSound(){
+
+    audioContext =
+        new (
+            window.AudioContext ||
+            window.webkitAudioContext
+        )();
+
+
+    const bufferSize =
+        audioContext.sampleRate*2;
+
+
+    const buffer =
+        audioContext.createBuffer(
+            1,
+            bufferSize,
+            audioContext.sampleRate
+        );
+
+
+    const data =
+        buffer.getChannelData(0);
+
+
+    for(
+        let i=0;
+        i<bufferSize;
+        i++
+    ){
+
+        data[i] =
+            Math.random()*2-1;
+
+    }
+
+
+    waterSource =
+        audioContext.createBufferSource();
+
+    waterSource.buffer =
+        buffer;
+
+    waterSource.loop =
+        true;
+
+
+    const filter =
+        audioContext.createBiquadFilter();
+
+    filter.type =
+        "lowpass";
+
+    filter.frequency.value =
+        1250;
+
+
+    waterGain =
+        audioContext.createGain();
+
+    waterGain.gain.value =
+        .025;
+
+
+    waterSource
+        .connect(filter)
+        .connect(waterGain)
+        .connect(
+            audioContext.destination
+        );
+
+
+    waterSource.start();
+
+
+    /*
+        Deep ambient river tone.
+    */
+
+    lowOsc =
+        audioContext.createOscillator();
+
+    lowGain =
+        audioContext.createGain();
+
+    lowOsc.type =
+        "sine";
+
+    lowOsc.frequency.value =
+        58;
+
+    lowGain.gain.value =
+        .008;
+
+
+    lowOsc
+        .connect(lowGain)
+        .connect(
+            audioContext.destination
+        );
+
+
+    lowOsc.start();
+}
+
+
+/*
+    Short warning tone.
+*/
+
+function playWarningTone(){
+
+    if(
+        !audioContext ||
+        !state.sound
+    ){
+        return;
+    }
+
+
+    const osc =
+        audioContext.createOscillator();
+
+    const gain =
+        audioContext.createGain();
+
+
+    osc.type="sine";
+
+    osc.frequency.setValueAtTime(
+        620,
+        audioContext.currentTime
+    );
+
+    osc.frequency.exponentialRampToValueAtTime(
+        350,
+        audioContext.currentTime+.42
+    );
+
+
+    gain.gain.setValueAtTime(
+        .08,
+        audioContext.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        .001,
+        audioContext.currentTime+.45
+    );
+
+
+    osc.connect(gain);
+
+    gain.connect(
+        audioContext.destination
+    );
+
+
+    osc.start();
+
+    osc.stop(
+        audioContext.currentTime+.46
+    );
+}
+
+
+soundBtn.addEventListener(
+    "click",
+    async()=>{
+
+        if(!audioContext){
+
+            createRiverSound();
+
+        }
+
+
+        if(
+            audioContext.state ===
+            "suspended"
+        ){
+
+            await audioContext.resume();
+
+        }
+
+
+        state.sound =
+            !state.sound;
+
+
+        waterGain.gain.setTargetAtTime(
+            state.sound
+                ? .027
+                : 0,
+            audioContext.currentTime,
+            .08
+        );
+
+
+        lowGain.gain.setTargetAtTime(
+            state.sound
+                ? .007
+                : 0,
+            audioContext.currentTime,
+            .08
+        );
+
+
+        soundBtn.classList.toggle(
+            "active",
+            state.sound
+        );
+
+
+        soundBtn.innerHTML =
+            state.sound
+                ? '🔊 <span class="btn-label">Âm thanh</span>'
+                : '🔇 <span class="btn-label">Âm thanh</span>';
+
+    }
+);
+
+/* =========================================================
+   40. HTML SCENE LABELS
+========================================================= */
+const labelObjects = [
+
+    {
+        el:
+            document.getElementById(
+                "factoryLabel"
+            ),
+
+        position:
+            new THREE.Vector3(
+                22,
+                11,
+                -22
+            )
+    },
+
+    {
+        el:
+            document.getElementById(
+                "farmLabel"
+            ),
+
+        position:
+            new THREE.Vector3(
+                26,
+                5,
+                19
+            )
+    },
+
+    {
+        el:
+            document.getElementById(
+                "cityLabel"
+            ),
+
+        position:
+            new THREE.Vector3(
+                -23,
+                7,
+                -22
+            )
+    },
+
+    {
+        el:
+            document.getElementById(
+                "downstreamLabel"
+            ),
+
+        position:
+            new THREE.Vector3(
+                -37,
+                4,
+                4
+            )
+    }
+
+];
+
+
+function updateLabels(){
+
+    const width =
+        window.innerWidth;
+
+    const height =
+        window.innerHeight;
+
+
+    labelObjects.forEach(
+        item=>{
+
+            const vector =
+                item.position.clone();
+
+
+            vector.project(
+                camera
+            );
+
+
+            const x =
+                (
+                    vector.x*.5+.5
+                ) * width;
+
+
+            const y =
+                (
+                    -vector.y*.5+.5
+                ) * height;
+
+
+            item.el.style.left =
+                `${x}px`;
+
+            item.el.style.top =
+                `${y}px`;
+
+
+            item.el.style.opacity =
+                vector.z < 1
+                    ? "1"
+                    : "0";
+
+        }
+    );
+}
+
+/* =========================================================
+   41. RIVER SURFACE ANIMATION
+========================================================= */
+const riverPosition =
+    river.geometry.attributes.position;
+
+const riverOriginal =
+    riverPosition.array.slice();
+
+
+function animateRiver(time){
+
+    for(
+        let i=0;
+        i<riverPosition.count;
+        i++
+    ){
+
+        const ix=i*3;
+
+        const x=
+            riverOriginal[ix];
+
+        const y=
+            riverOriginal[ix+1];
+
+
+        /*
+            Plane local z controls vertical displacement
+            after rotation.
+        */
+
+        riverPosition.array[ix+2] =
+            Math.sin(
+                x*.34 +
+                time*1.6
+            )*.07
+            +
+            Math.sin(
+                y*.8 -
+                time*1.15
+            )*.035;
+
+    }
+
+
+    riverPosition.needsUpdate =
+        true;
+}
+
+/* =========================================================
+   42. POLLUTION PARTICLE ANIMATION
+========================================================= */
+function animatePollution(
+    time,
+    env
+){
+
+    pollutionParticles.forEach(
+        p=>{
+
+            if(!p.visible) return;
+
+
+            p.position.x -=
+                p.userData.speed *
+                state.flow;
+
+
+            p.position.z +=
+                p.userData.drift +
+                Math.sin(
+                    time*1.4+
+                    p.userData.phase
+                )*.003;
+
+
+            /*
+                Plume spreads as it travels downstream.
+            */
+
+            const distance =
+                Math.abs(
+                    p.position.x-12
+                );
+
+
+            p.position.z +=
+                (
+                    Math.random()-.5
+                )
+                *
+                .002
+                *
+                distance;
+
+
+            if(
+                p.position.x < -47 ||
+                Math.abs(p.position.z)>9
+            ){
+
+                resetPollutionParticle(
+                    p
+                );
+            }
+
+        }
+    );
+}
+
+/* =========================================================
+   43. FISH ANIMATION
+========================================================= */
+function animateFish(
+    time,
+    env
+){
+
+    fishes.forEach(
+        fish=>{
+
+            if(!fish.visible){
+                return;
+            }
+
+
+            const direction =
+                fish.rotation.y <
+                    1
+                    ? 1
+                    : -1;
+
+
+            fish.position.x +=
+                direction *
+                fish.userData.speed *
+                (
+                    .7+
+                    env.fish/100
+                );
+
+
+            fish.position.z +=
+                Math.sin(
+                    time*1.5+
+                    fish.userData.offset
+                )*.004;
+
+
+            fish.position.y =
+                -.24 +
+                Math.sin(
+                    time*2+
+                    fish.userData.offset
+                )*.07;
+
+
+            if(
+                fish.position.x > 43
+            ){
+
+                fish.position.x=-43;
+
+            }
+
+
+            if(
+                fish.position.x < -43
+            ){
+
+                fish.position.x=43;
+            }
+
+        }
+    );
+}
+
+/* =========================================================
+   44. DEBRIS ANIMATION
+========================================================= */
+function animateDebris(){
+
+    debrisItems.forEach(
+        debris=>{
+
+            if(!debris.visible) return;
+
+
+            debris.position.x -=
+                debris.userData.speed *
+                state.flow;
+
+
+            debris.rotation.y +=
+                .005;
+
+
+            if(
+                debris.position.x < -46
+            ){
+
+                debris.position.x =
+                    15+Math.random()*30;
+
+                debris.position.z =
+                    -7+Math.random()*14;
+            }
+
+        }
+    );
+
+
+    dirtyFoam.forEach(
+        foam=>{
+
+            if(!foam.visible) return;
+
+
+            foam.position.x -=
+                foam.userData.speed *
+                state.flow;
+
+
+            if(
+                foam.position.x < -46
+            ){
+
+                foam.position.x =
+                    14+Math.random()*30;
+
+                foam.position.z =
+                    -7+Math.random()*14;
+            }
+
+        }
+    );
+}
+
+/* =========================================================
+   45. FOAM LINES
+========================================================= */
+function animateFoam(){
+
+    foamLines.forEach(
+        foam=>{
+
+            foam.position.x -=
+                foam.userData.speed *
+                state.flow;
+
+
+            if(
+                foam.position.x < -47
+            ){
+
+                foam.position.x =
+                    47;
+
+                foam.position.z =
+                    -8+Math.random()*16;
+            }
+
+        }
+    );
+}
+
+/* =========================================================
+   46. RAIN ANIMATION
+========================================================= */
+function animateRain(){
+
+    if(
+        state.scenario !== "flood"
+    ){
+        return;
+    }
+
+
+    const positions =
+        rain.geometry.attributes.position.array;
+
+
+    for(
+        let i=0;
+        i<rainCount;
+        i++
+    ){
+
+        positions[
+            i*3+1
+        ] -= .48;
+
+
+        positions[
+            i*3
+        ] -= .06;
+
+
+        if(
+            positions[i*3+1] < 0
+        ){
+
+            positions[i*3+1] =
+                15+Math.random()*18;
+
+            positions[i*3] =
+                -50+Math.random()*100;
+
+            positions[i*3+2] =
+                -30+Math.random()*60;
+        }
+
+    }
+
+
+    rain.geometry
+        .attributes
+        .position
+        .needsUpdate = true;
+}
+
+/* =========================================================
+   47. CLOUD ANIMATION
+========================================================= */
+function animateClouds(){
+
+    clouds.forEach(
+        cloud=>{
+
+            cloud.position.x -=
+                .004;
+
+
+            if(
+                cloud.position.x < -58
+            ){
+
+                cloud.position.x =
+                    58;
+            }
+
+        }
+    );
+}
+
+/* =========================================================
+   48. SMOKE ANIMATION
+========================================================= */
+function animateSmoke(time){
+
+    smokeParticles.forEach(
+        (smoke,index)=>{
+
+            smoke.position.y +=
+                .004 +
+                index*.00002;
+
+
+            smoke.position.x +=
+                Math.sin(
+                    time*.25+
+                    smoke.userData.offset
+                )*.002;
+
+
+            if(
+                smoke.position.y > 20
+            ){
+
+                smoke.position.y =
+                    7+Math.random()*3;
+
+                smoke.position.x =
+                    19+Math.random()*6;
+
+                smoke.position.z =
+                    -23+Math.random()*3;
+            }
+
+        }
+    );
+}
+
+/* =========================================================
+   49. CAMERA ANIMATION
+========================================================= */
+function animateCamera(){
+
+    if(!cameraAnimation){
+        return;
+    }
+
+
+    cameraAnimation.t +=
+        .025;
+
+
+    const t =
+        Math.min(
+            1,
+            cameraAnimation.t
+        );
+
+
+    const smooth =
+        t*t*(3-2*t);
+
+
+    camera.position.lerpVectors(
+        cameraAnimation.startPos,
+        cameraAnimation.endPos,
+        smooth
+    );
+
+
+    controls.target.lerpVectors(
+        cameraAnimation.startTarget,
+        cameraAnimation.endTarget,
+        smooth
+    );
+
+
+    if(t>=1){
+
+        cameraAnimation =
+            null;
+    }
+}
+
+/* =========================================================
+   50. AUDIO RESPONSE
+========================================================= */
+function updateAudio(){
+
+    if(
+        !audioContext ||
+        !state.sound
+    ){
+        return;
+    }
+
+
+    /*
+        Faster stream -> slightly louder sound.
+    */
+
+    waterGain.gain.setTargetAtTime(
+        .018+
+        state.flow*.012,
+        audioContext.currentTime,
+        .3
+    );
+}
+
+/* =========================================================
+   51. ANIMATION LOOP
+========================================================= */
+const clock =
+    new THREE.Clock();
+
+
+function animate(){
+
+    requestAnimationFrame(
+        animate
+    );
+
+
+    const delta =
+        clock.getDelta();
+
+    state.time +=
+        delta;
+
+
+    const env =
+        calculateEnvironment();
+
+
+    animateRiver(
+        state.time
+    );
+
+    animatePollution(
+        state.time,
+        env
+    );
+
+    animateFish(
+        state.time,
+        env
+    );
+
+    animateDebris();
+
+    animateFoam();
+
+    animateRain();
+
+    animateClouds();
+
+    animateSmoke(
+        state.time
+    );
+
+    animateCamera();
+
+    updateAudio();
+
+
+    controls.update();
+
+    updateLabels();
+
+
+    renderer.render(
+        scene,
+        camera
+    );
+}
+
+
+updateUI();
+
+animate();
+
+/* =========================================================
+   52. WINDOW RESIZE
+========================================================= */
+window.addEventListener(
+    "resize",
+    ()=>{
+
+        camera.aspect =
+            window.innerWidth /
+            window.innerHeight;
+
+
+        camera.updateProjectionMatrix();
+
+
+        renderer.setSize(
+            window.innerWidth,
+            window.innerHeight
+        );
+
+    }
+);
+
+</script>
+
+</body>
+</html>

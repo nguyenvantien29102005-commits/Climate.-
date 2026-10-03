@@ -1,0 +1,4547 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Flood Impact 3D – Mô phỏng ngập lụt</title>
+
+<style>
+:root{
+  --bg:#04111f;
+  --panel:rgba(6,24,43,.78);
+  --line:rgba(92,220,255,.24);
+  --cyan:#47e5ff;
+  --blue:#168dff;
+  --teal:#34f1c6;
+  --warning:#ffd166;
+  --danger:#ff5f73;
+  --text:#eefbff;
+  --muted:#9fc5d5;
+  --shadow:0 22px 70px rgba(0,0,0,.38);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+html,
+body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:var(--bg);
+  font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;
+  color:var(--text);
+}
+
+#app{
+  position:relative;
+  width:100%;
+  height:100%;
+  background:
+    radial-gradient(circle at 30% 10%,rgba(0,157,255,.12),transparent 30%),
+    linear-gradient(180deg,#071827,#020910 80%);
+}
+
+canvas{
+  display:block;
+}
+
+#hud{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+
+.glass{
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8,31,54,.88),
+      rgba(4,18,32,.72)
+    );
+  border:1px solid var(--line);
+  box-shadow:
+    var(--shadow),
+    inset 0 0 36px rgba(38,191,255,.04);
+  backdrop-filter:blur(17px);
+  -webkit-backdrop-filter:blur(17px);
+}
+
+/* =========================
+   TOP BAR
+========================= */
+
+#topbar{
+  pointer-events:auto;
+  position:absolute;
+  left:18px;
+  right:18px;
+  top:14px;
+  height:72px;
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  min-width:0;
+}
+
+.logo{
+  width:44px;
+  height:44px;
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+  font-size:23px;
+  background:linear-gradient(135deg,#1aa8ff,#38efce);
+  color:#02243c;
+  box-shadow:0 0 28px rgba(56,239,206,.25);
+}
+
+.brand h1{
+  margin:0;
+  font-size:clamp(15px,1.8vw,24px);
+  letter-spacing:.6px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.brand p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:12px;
+  letter-spacing:.2px;
+}
+
+.top-actions{
+  display:flex;
+  gap:9px;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+button{
+  border:1px solid rgba(100,228,255,.25);
+  background:rgba(12,43,71,.82);
+  color:var(--text);
+  border-radius:12px;
+  padding:10px 13px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.2s;
+  letter-spacing:.2px;
+}
+
+button:hover{
+  transform:translateY(-1px);
+  background:rgba(20,70,108,.9);
+  border-color:rgba(100,228,255,.55);
+}
+
+button.primary{
+  background:linear-gradient(135deg,#118cff,#26d4d0);
+  color:#031621;
+  border:0;
+}
+
+button.danger{
+  background:linear-gradient(135deg,#ff6b6b,#ff8e53);
+  color:#241109;
+  border:0;
+}
+
+button.active{
+  box-shadow:
+    0 0 0 2px rgba(71,229,255,.35),
+    0 0 26px rgba(71,229,255,.20);
+}
+
+/* =========================
+   LEFT / RIGHT PANEL
+========================= */
+
+#leftPanel{
+  pointer-events:auto;
+  position:absolute;
+  left:18px;
+  top:99px;
+  bottom:18px;
+  width:min(355px,31vw);
+  border-radius:22px;
+  padding:14px;
+  overflow:auto;
+  scrollbar-width:thin;
+  scrollbar-color:#27759a transparent;
+}
+
+#rightPanel{
+  pointer-events:auto;
+  position:absolute;
+  right:18px;
+  top:99px;
+  width:min(326px,30vw);
+  border-radius:22px;
+  padding:14px;
+  max-height:calc(100vh - 117px);
+  overflow:auto;
+  scrollbar-width:thin;
+}
+
+/* =========================
+   SECTION
+========================= */
+
+.section{
+  padding:12px;
+  border-radius:16px;
+  background:rgba(5,25,43,.55);
+  border:1px solid rgba(99,220,255,.10);
+  margin-bottom:10px;
+}
+
+.section h3{
+  font-size:13px;
+  margin:0 0 10px;
+  text-transform:uppercase;
+  letter-spacing:1.25px;
+  color:#8cecff;
+}
+
+/* =========================
+   CONTROL
+========================= */
+
+.row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin:8px 0;
+}
+
+.label{
+  font-size:12px;
+  color:#cce4ee;
+}
+
+.value{
+  font-size:12px;
+  font-weight:800;
+  color:var(--cyan);
+  white-space:nowrap;
+}
+
+input[type="range"]{
+  width:100%;
+  accent-color:#1bc4e6;
+}
+
+.control{
+  margin:12px 0;
+}
+
+.control-head{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:5px;
+}
+
+/* =========================
+   LEGEND
+========================= */
+
+.legend{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin-top:8px;
+}
+
+.pill{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:7px 8px;
+  border:1px solid rgba(109,222,255,.13);
+  border-radius:10px;
+  background:rgba(0,0,0,.12);
+  font-size:11px;
+  color:#c7dfe9;
+}
+
+.dot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+}
+
+/* =========================
+   STAT
+========================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.stat{
+  padding:11px;
+  border-radius:14px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(16,54,83,.74),
+      rgba(6,28,47,.58)
+    );
+  border:1px solid rgba(88,207,255,.13);
+  min-height:77px;
+}
+
+.stat b{
+  display:block;
+  font-size:22px;
+  color:#fff;
+}
+
+.stat span{
+  font-size:10px;
+  color:#9fc5d5;
+  line-height:1.25;
+}
+
+/* =========================
+   RISK BAR
+========================= */
+
+.bar{
+  height:9px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  overflow:hidden;
+  margin-top:6px;
+}
+
+.bar i{
+  display:block;
+  height:100%;
+  border-radius:999px;
+  background:
+    linear-gradient(
+      90deg,
+      #2ef2c7,
+      #22a9ff,
+      #ffcc66,
+      #ff667d
+    );
+  width:30%;
+}
+
+.risk{
+  padding:11px 12px;
+  border-radius:14px;
+  font-size:12px;
+  line-height:1.45;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(0,0,0,.13);
+}
+
+.risk strong{
+  color:#fff;
+}
+
+/* =========================
+   HELP
+========================= */
+
+#miniHelp{
+  position:absolute;
+  pointer-events:none;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  padding:9px 13px;
+  border-radius:12px;
+  background:rgba(1,13,24,.62);
+  border:1px solid rgba(109,222,255,.13);
+  color:#bfd6df;
+  font-size:11px;
+  white-space:nowrap;
+}
+
+/* =========================
+   TOOLTIP
+========================= */
+
+#tooltip{
+  position:absolute;
+  display:none;
+  pointer-events:none;
+  z-index:12;
+  max-width:260px;
+  background:rgba(2,14,26,.94);
+  border:1px solid rgba(90,222,255,.35);
+  border-radius:12px;
+  padding:10px 12px;
+  box-shadow:0 12px 40px rgba(0,0,0,.38);
+  font-size:12px;
+  line-height:1.45;
+}
+
+#tooltip b{
+  color:#66ebff;
+}
+
+/* =========================
+   SWITCH
+========================= */
+
+.switches{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+}
+
+.switches button{
+  font-size:11px;
+  padding:9px;
+}
+
+.info-list{
+  margin:0;
+  padding-left:17px;
+  color:#bad6e0;
+  font-size:11px;
+  line-height:1.5;
+}
+
+.alert{
+  display:flex;
+  gap:8px;
+  align-items:flex-start;
+  padding:10px;
+  border-radius:12px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,118,83,.14),
+      rgba(255,204,102,.08)
+    );
+  border:1px solid rgba(255,162,108,.18);
+  font-size:11px;
+  color:#ffd7c7;
+}
+
+.kpiLine{
+  display:flex;
+  justify-content:space-between;
+  font-size:11px;
+  color:#b7d4df;
+  margin:7px 0;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+  #leftPanel{
+    width:300px;
+  }
+
+  #rightPanel{
+    width:260px;
+  }
+
+  .brand p{
+    display:none;
+  }
+}
+
+@media(max-width:700px){
+
+  #rightPanel{
+    display:none;
+  }
+
+  #leftPanel{
+    width:290px;
+    max-width:calc(100vw - 36px);
+  }
+
+  #topbar{
+    height:64px;
+  }
+
+  #leftPanel{
+    top:91px;
+  }
+
+  .top-actions button span{
+    display:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+<div id="hud">
+
+<!-- =========================
+     TOP BAR
+========================= -->
+
+<div id="topbar" class="glass">
+
+  <div class="brand">
+
+    <div class="logo">
+      ≈
+    </div>
+
+    <div>
+      <h1>
+        FLOOD IMPACT 3D – NGẬP LỤT ĐÔ THỊ
+      </h1>
+
+      <p>
+        Mô phỏng giáo dục:
+        mưa lớn • triều cường • thoát nước • thiệt hại
+      </p>
+    </div>
+
+  </div>
+
+  <div class="top-actions">
+
+    <button
+      id="btnPlay"
+      class="primary"
+    >
+      ▶
+      <span>
+        Chạy mô phỏng
+      </span>
+    </button>
+
+    <button id="btnSound">
+      🔊
+      <span>
+        Âm thanh
+      </span>
+    </button>
+
+    <button id="btnReset">
+      ↺
+      <span>
+        Đặt lại
+      </span>
+    </button>
+
+  </div>
+
+</div>
+
+<!-- =========================
+     LEFT PANEL
+========================= -->
+
+<aside
+  id="leftPanel"
+  class="glass"
+>
+
+<div class="section">
+
+<h3>
+01 • Tác nhân gây ngập
+</h3>
+
+<div class="control">
+
+<div class="control-head">
+
+<span class="label">
+Cường độ mưa
+</span>
+
+<span
+  class="value"
+  id="rainVal"
+>
+75 mm/h
+</span>
+
+</div>
+
+<input
+  id="rain"
+  type="range"
+  min="0"
+  max="180"
+  value="75"
+/>
+
+</div>
+
+<div class="control">
+
+<div class="control-head">
+
+<span class="label">
+Thời lượng mưa
+</span>
+
+<span
+  class="value"
+  id="durationVal"
+>
+90 phút
+</span>
+
+</div>
+
+<input
+  id="duration"
+  type="range"
+  min="15"
+  max="240"
+  step="15"
+  value="90"
+/>
+
+</div>
+
+<div class="control">
+
+<div class="control-head">
+
+<span class="label">
+Mực triều / nước sông
+</span>
+
+<span
+  class="value"
+  id="tideVal"
+>
++0.45 m
+</span>
+
+</div>
+
+<input
+  id="tide"
+  type="range"
+  min="0"
+  max="150"
+  value="45"
+/>
+
+</div>
+
+<div class="control">
+
+<div class="control-head">
+
+<span class="label">
+Hiệu suất thoát nước
+</span>
+
+<span
+  class="value"
+  id="drainVal"
+>
+62%
+</span>
+
+</div>
+
+<input
+  id="drain"
+  type="range"
+  min="10"
+  max="100"
+  value="62"
+/>
+
+</div>
+
+<div class="control">
+
+<div class="control-head">
+
+<span class="label">
+Bề mặt bê tông hóa
+</span>
+
+<span
+  class="value"
+  id="imperviousVal"
+>
+78%
+</span>
+
+</div>
+
+<input
+  id="impervious"
+  type="range"
+  min="20"
+  max="100"
+  value="78"
+/>
+
+</div>
+
+<div class="control">
+
+<div class="control-head">
+
+<span class="label">
+Rác gây tắc cống
+</span>
+
+<span
+  class="value"
+  id="clogVal"
+>
+28%
+</span>
+
+</div>
+
+<input
+  id="clog"
+  type="range"
+  min="0"
+  max="90"
+  value="28"
+/>
+
+</div>
+
+</div>
+
+<!-- =========================
+     PRESET
+========================= -->
+
+<div class="section">
+
+<h3>
+02 • Kịch bản nhanh
+</h3>
+
+<div class="switches">
+
+<button data-preset="normal">
+Mưa vừa
+</button>
+
+<button data-preset="urban">
+Đô thị ngập
+</button>
+
+<button data-preset="extreme">
+Mưa cực đoan
+</button>
+
+<button data-preset="tide">
+Triều + mưa
+</button>
+
+</div>
+
+</div>
+
+<!-- =========================
+     DISPLAY
+========================= -->
+
+<div class="section">
+
+<h3>
+03 • Lớp hiển thị
+</h3>
+
+<div class="switches">
+
+<button
+  id="toggleRain"
+  class="active"
+>
+Mưa
+</button>
+
+<button
+  id="toggleFlow"
+  class="active"
+>
+Dòng chảy
+</button>
+
+<button
+  id="toggleLabels"
+  class="active"
+>
+Điểm nguy cơ
+</button>
+
+<button id="toggleNight">
+Ban đêm
+</button>
+
+</div>
+
+</div>
+
+<!-- =========================
+     LEGEND
+========================= -->
+
+<div class="section">
+
+<h3>
+04 • Thang độ sâu ngập
+</h3>
+
+<div class="legend">
+
+<div class="pill">
+
+<i
+  class="dot"
+  style="background:#38e7d3"
+></i>
+
+0–0,2 m
+
+</div>
+
+<div class="pill">
+
+<i
+  class="dot"
+  style="background:#20a4ff"
+></i>
+
+0,2–0,5 m
+
+</div>
+
+<div class="pill">
+
+<i
+  class="dot"
+  style="background:#ffc857"
+></i>
+
+0,5–1,0 m
+
+</div>
+
+<div class="pill">
+
+<i
+  class="dot"
+  style="background:#ff5f73"
+></i>
+
+&gt;1,0 m
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =========================
+     HELP
+========================= -->
+
+<div class="section">
+
+<h3>
+05 • Cách quan sát
+</h3>
+
+<ul class="info-list">
+
+<li>
+Kéo chuột để xoay,
+lăn chuột để phóng to hoặc thu nhỏ.
+</li>
+
+<li>
+Nhấp vào nhà,
+xe,
+cây,
+cống hoặc vùng trũng
+để xem thông tin.
+</li>
+
+<li>
+Thay đổi các thanh điều khiển
+để quan sát phản ứng của hệ thống.
+</li>
+
+<li>
+Mức ngập là mô phỏng giáo dục tương đối,
+không dùng để dự báo thực tế.
+</li>
+
+</ul>
+
+</div>
+
+</aside>
+
+<!-- =========================
+     RIGHT PANEL
+========================= -->
+
+<aside
+  id="rightPanel"
+  class="glass"
+>
+
+<div class="section">
+
+<h3>
+Chỉ số thời gian thực
+</h3>
+
+<div class="stats">
+
+<div class="stat">
+
+<b id="waterStat">
+0.22 m
+</b>
+
+<span>
+Độ sâu ngập trung bình
+</span>
+
+</div>
+
+<div class="stat">
+
+<b id="areaStat">
+18%
+</b>
+
+<span>
+Diện tích khu vực bị ngập
+</span>
+
+</div>
+
+<div class="stat">
+
+<b id="buildingStat">
+7
+</b>
+
+<span>
+Công trình bị ảnh hưởng
+</span>
+
+</div>
+
+<div class="stat">
+
+<b id="roadStat">
+0.6 km
+</b>
+
+<span>
+Đường giao thông ngập
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- =========================
+     RISK
+========================= -->
+
+<div class="section">
+
+<h3>
+Mức độ rủi ro tổng hợp
+</h3>
+
+<div class="row">
+
+<span class="label">
+Chỉ số rủi ro
+</span>
+
+<span
+  class="value"
+  id="riskVal"
+>
+38 / 100
+</span>
+
+</div>
+
+<div class="bar">
+<i id="riskBar"></i>
+</div>
+
+<div
+  class="risk"
+  id="riskText"
+  style="margin-top:10px"
+>
+
+<strong>
+Mức trung bình.
+</strong>
+
+Nước bắt đầu tích tụ tại đường thấp
+và quanh miệng cống.
+
+</div>
+
+</div>
+
+<!-- =========================
+     WATER BALANCE
+========================= -->
+
+<div class="section">
+
+<h3>
+Cân bằng nước
+</h3>
+
+<div class="kpiLine">
+
+<span>
+Nước mưa đầu vào
+</span>
+
+<b id="inputKpi">
+75 mm/h
+</b>
+
+</div>
+
+<div class="kpiLine">
+
+<span>
+Khả năng thoát hiệu dụng
+</span>
+
+<b id="drainKpi">
+44 mm/h
+</b>
+
+</div>
+
+<div class="kpiLine">
+
+<span>
+Dòng chảy bề mặt
+</span>
+
+<b id="runoffKpi">
+58%
+</b>
+
+</div>
+
+<div class="kpiLine">
+
+<span>
+Áp lực triều
+</span>
+
+<b id="tideKpi">
+Thấp
+</b>
+
+</div>
+
+</div>
+
+<!-- =========================
+     IMPACT
+========================= -->
+
+<div class="section">
+
+<h3>
+Hệ quả đang quan sát
+</h3>
+
+<div class="alert">
+
+⚠
+
+<span id="impactText">
+
+Nước phủ một phần mặt đường;
+giao thông chậm,
+nguy cơ tràn vào tầng trệt còn hạn chế.
+
+</span>
+
+</div>
+
+</div>
+
+<!-- =========================
+     RECOMMENDATION
+========================= -->
+
+<div class="section">
+
+<h3>
+Khuyến nghị ứng phó
+</h3>
+
+<ul
+  class="info-list"
+  id="recommendList"
+>
+
+<li>
+Khơi thông miệng cống
+và rãnh thoát nước.
+</li>
+
+<li>
+Không đi vào khu vực
+nước chảy xiết
+hoặc đường ngập sâu.
+</li>
+
+<li>
+Di chuyển thiết bị điện
+và tài sản lên vị trí cao.
+</li>
+
+<li>
+Theo dõi cảnh báo mưa lớn
+và hướng dẫn sơ tán địa phương.
+</li>
+
+</ul>
+
+</div>
+
+</aside>
+
+<div id="miniHelp">
+Chuột trái: xoay •
+Con lăn: zoom •
+Nhấp đối tượng: xem chi tiết
+</div>
+
+<div id="tooltip"></div>
+
+</div>
+
+</div>
+
+<!-- =========================
+     THREE.JS IMPORT MAP
+========================= -->
+
+<script type="importmap">
+{
+  "imports": {
+    "three":
+    "https://unpkg.com/three@0.160.0/build/three.module.js",
+
+    "three/addons/":
+    "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+
+import * as THREE
+from "three";
+
+import {
+  OrbitControls
+}
+from "three/addons/controls/OrbitControls.js";
+
+/* =========================
+   BASIC SETUP
+========================= */
+
+const app =
+document.getElementById("app");
+
+const scene =
+new THREE.Scene();
+
+scene.fog =
+new THREE.FogExp2(
+  0x071523,
+  0.011
+);
+
+const camera =
+new THREE.PerspectiveCamera(
+  48,
+  innerWidth / innerHeight,
+  0.1,
+  400
+);
+
+camera.position.set(
+  35,
+  31,
+  43
+);
+
+const renderer =
+new THREE.WebGLRenderer({
+  antialias:true,
+  powerPreference:"high-performance"
+});
+
+renderer.setPixelRatio(
+  Math.min(
+    devicePixelRatio,
+    2
+  )
+);
+
+renderer.setSize(
+  innerWidth,
+  innerHeight
+);
+
+renderer.shadowMap.enabled = true;
+
+renderer.shadowMap.type =
+THREE.PCFSoftShadowMap;
+
+renderer.outputColorSpace =
+THREE.SRGBColorSpace;
+
+renderer.toneMapping =
+THREE.ACESFilmicToneMapping;
+
+renderer.toneMappingExposure =
+1.16;
+
+app.prepend(
+  renderer.domElement
+);
+
+/* =========================
+   CAMERA CONTROL
+========================= */
+
+const controls =
+new OrbitControls(
+  camera,
+  renderer.domElement
+);
+
+controls.target.set(
+  0,
+  2,
+  0
+);
+
+controls.enableDamping = true;
+
+controls.dampingFactor =
+0.055;
+
+controls.minDistance =
+16;
+
+controls.maxDistance =
+82;
+
+controls.maxPolarAngle =
+Math.PI * 0.48;
+
+/* =========================
+   LIGHT
+========================= */
+
+const hemi =
+new THREE.HemisphereLight(
+  0x9ad8ff,
+  0x172817,
+  1.2
+);
+
+scene.add(
+  hemi
+);
+
+const sun =
+new THREE.DirectionalLight(
+  0xfff1d7,
+  2.2
+);
+
+sun.position.set(
+  -18,
+  33,
+  16
+);
+
+sun.castShadow =
+true;
+
+sun.shadow.mapSize.set(
+  2048,
+  2048
+);
+
+sun.shadow.camera.left =
+-42;
+
+sun.shadow.camera.right =
+42;
+
+sun.shadow.camera.top =
+42;
+
+sun.shadow.camera.bottom =
+-42;
+
+scene.add(
+  sun
+);
+
+/* =========================
+   WORLD
+========================= */
+
+const world =
+new THREE.Group();
+
+scene.add(
+  world
+);
+
+/* =========================
+   GROUND
+========================= */
+
+const groundMat =
+new THREE.MeshStandardMaterial({
+  color:0x375744,
+  roughness:0.95,
+  metalness:0
+});
+
+const ground =
+new THREE.Mesh(
+  new THREE.BoxGeometry(
+    64,
+    1.1,
+    50
+  ),
+  groundMat
+);
+
+ground.position.y =
+-0.7;
+
+ground.receiveShadow =
+true;
+
+world.add(
+  ground
+);
+
+/* =========================
+   ROADS
+========================= */
+
+const roadMat =
+new THREE.MeshStandardMaterial({
+  color:0x222b31,
+  roughness:0.82
+});
+
+const road1 =
+new THREE.Mesh(
+  new THREE.BoxGeometry(
+    62,
+    0.09,
+    7.8
+  ),
+  roadMat
+);
+
+road1.position.set(
+  0,
+  0.01,
+  2
+);
+
+road1.receiveShadow =
+true;
+
+world.add(
+  road1
+);
+
+const road2 =
+new THREE.Mesh(
+  new THREE.BoxGeometry(
+    8,
+    0.1,
+    48
+  ),
+  roadMat
+);
+
+road2.position.set(
+  -6,
+  0.02,
+  0
+);
+
+road2.receiveShadow =
+true;
+
+world.add(
+  road2
+);
+
+const road3 =
+new THREE.Mesh(
+  new THREE.BoxGeometry(
+    7,
+    0.1,
+    48
+  ),
+  roadMat
+);
+
+road3.position.set(
+  18,
+  0.02,
+  0
+);
+
+road3.receiveShadow =
+true;
+
+world.add(
+  road3
+);
+
+/* =========================
+   ROAD LINE
+========================= */
+
+function lineMark(
+  x,
+  z,
+  w,
+  d
+){
+
+  const mark =
+  new THREE.Mesh(
+    new THREE.BoxGeometry(
+      w,
+      0.012,
+      d
+    ),
+
+    new THREE.MeshBasicMaterial({
+      color:0xe7dcc4
+    })
+  );
+
+  mark.position.set(
+    x,
+    0.075,
+    z
+  );
+
+  world.add(
+    mark
+  );
+}
+
+for(
+  let x=-27;
+  x<30;
+  x+=6
+){
+
+  lineMark(
+    x,
+    2,
+    2.8,
+    0.14
+  );
+}
+
+for(
+  let z=-20;
+  z<22;
+  z+=6
+){
+
+  lineMark(
+    -6,
+    z,
+    0.14,
+    2.8
+  );
+
+  lineMark(
+    18,
+    z,
+    0.14,
+    2.8
+  );
+}
+
+/* =========================
+   SIDEWALK
+========================= */
+
+const sidewalkMat =
+new THREE.MeshStandardMaterial({
+  color:0x7c8585,
+  roughness:0.95
+});
+
+function sidewalk(
+  x,
+  z,
+  w,
+  d
+){
+
+  const s =
+  new THREE.Mesh(
+    new THREE.BoxGeometry(
+      w,
+      0.22,
+      d
+    ),
+    sidewalkMat
+  );
+
+  s.position.set(
+    x,
+    0.13,
+    z
+  );
+
+  s.receiveShadow =
+  true;
+
+  s.castShadow =
+  true;
+
+  world.add(
+    s
+  );
+
+  return s;
+}
+
+sidewalk(
+  -19,
+  -11,
+  17,
+  13
+);
+
+sidewalk(
+  6,
+  -11,
+  16,
+  13
+);
+
+sidewalk(
+  29,
+  -11,
+  11,
+  13
+);
+
+sidewalk(
+  -19,
+  15,
+  17,
+  17
+);
+
+sidewalk(
+  6,
+  15,
+  16,
+  17
+);
+
+sidewalk(
+  29,
+  15,
+  11,
+  17
+);
+
+/* =========================
+   SELECTABLE OBJECT
+========================= */
+
+const selectable =
+[];
+
+function addSelectable(
+  object,
+  data
+){
+
+  object.userData.info =
+  data;
+
+  selectable.push(
+    object
+  );
+}
+
+/* =========================
+   BUILDING
+========================= */
+
+function building(
+  x,
+  z,
+  w,
+  d,
+  h,
+  color,
+  label
+){
+
+  const group =
+  new THREE.Group();
+
+  const base =
+  new THREE.Mesh(
+    new THREE.BoxGeometry(
+      w,
+      h,
+      d
+    ),
+
+    new THREE.MeshStandardMaterial({
+      color:color,
+      roughness:0.72,
+      metalness:0.02
+    })
+  );
+
+  base.position.y =
+  0.28 + h / 2;
+
+  base.castShadow =
+  true;
+
+  base.receiveShadow =
+  true;
+
+  group.add(
+    base
+  );
+
+  const roof =
+  new THREE.Mesh(
+    new THREE.BoxGeometry(
+      w + 0.25,
+      0.22,
+      d + 0.25
+    ),
+
+    new THREE.MeshStandardMaterial({
+      color:0x25333b,
+      roughness:0.8
+    })
+  );
+
+  roof.position.y =
+  0.39 + h;
+
+  roof.castShadow =
+  true;
+
+  group.add(
+    roof
+  );
+
+  const winMat =
+  new THREE.MeshStandardMaterial({
+
+    color:0x74c8e8,
+
+    emissive:0x102a38,
+
+    emissiveIntensity:0.35,
+
+    roughness:0.25,
+
+    metalness:0.15
+  });
+
+  for(
+    let yy=1.2;
+    yy<h-0.4;
+    yy+=1.55
+  ){
+
+    for(
+      let xx=-w/2+0.7;
+      xx<w/2-0.3;
+      xx+=1.15
+    ){
+
+      const win =
+      new THREE.Mesh(
+        new THREE.PlaneGeometry(
+          0.55,
+          0.62
+        ),
+        winMat
+      );
+
+      win.position.set(
+        xx,
+        yy,
+        d/2 + 0.011
+      );
+
+      group.add(
+        win
+      );
+    }
+  }
+
+  group.position.set(
+    x,
+    0,
+    z
+  );
+
+  world.add(
+    group
+  );
+
+  addSelectable(
+    base,
+    {
+
+      type:
+      "Công trình",
+
+      name:
+      label,
+
+      height:
+      h,
+
+      desc:
+      "Tầng trệt có nguy cơ bị nước xâm nhập khi độ sâu ngập vượt khoảng 0,25–0,35 m."
+    }
+  );
+
+  return group;
+}
+
+/* =========================
+   CREATE BUILDINGS
+========================= */
+
+const buildings =
+[];
+
+buildings.push(
+  building(
+    -21,
+    -12,
+    7,
+    6,
+    7.2,
+    0xa9684c,
+    "Nhà ở A"
+  )
+);
+
+buildings.push(
+  building(
+    -13,
+    -11,
+    5.6,
+    6,
+    5.2,
+    0xd0a56e,
+    "Nhà ở B"
+  )
+);
+
+buildings.push(
+  building(
+    4,
+    -12,
+    7.5,
+    6,
+    10.2,
+    0x637b8f,
+    "Chung cư mini"
+  )
+);
+
+buildings.push(
+  building(
+    12,
+    -12,
+    5,
+    6,
+    6.4,
+    0xa9847e,
+    "Cửa hàng"
+  )
+);
+
+buildings.push(
+  building(
+    28,
+    -12,
+    7.8,
+    6.5,
+    8.3,
+    0x8b7f60,
+    "Trường học"
+  )
+);
+
+buildings.push(
+  building(
+    -21,
+    15,
+    7,
+    7,
+    5.5,
+    0x6c855f,
+    "Nhà ở C"
+  )
+);
+
+buildings.push(
+  building(
+    -13,
+    15,
+    5.5,
+    7,
+    8.5,
+    0x8d6d5f,
+    "Văn phòng"
+  )
+);
+
+buildings.push(
+  building(
+    4,
+    15,
+    7,
+    7,
+    6.8,
+    0xb09d67,
+    "Trung tâm y tế"
+  )
+);
+
+buildings.push(
+  building(
+    12,
+    15,
+    5,
+    7,
+    4.8,
+    0x92715d,
+    "Nhà dân"
+  )
+);
+
+buildings.push(
+  building(
+    28,
+    15,
+    7,
+    7,
+    10.5,
+    0x5f7289,
+    "Khối dịch vụ"
+  )
+);
+
+/* =========================
+   TREE
+========================= */
+
+function tree(
+  x,
+  z,
+  scale=1
+){
+
+  const group =
+  new THREE.Group();
+
+  const trunk =
+  new THREE.Mesh(
+
+    new THREE.CylinderGeometry(
+      0.18 * scale,
+      0.24 * scale,
+      2.2 * scale,
+      8
+    ),
+
+    new THREE.MeshStandardMaterial({
+      color:0x684a31,
+      roughness:1
+    })
+  );
+
+  trunk.position.y =
+  1.15 * scale;
+
+  trunk.castShadow =
+  true;
+
+  group.add(
+    trunk
+  );
+
+  const crown =
+  new THREE.Mesh(
+
+    new THREE.IcosahedronGeometry(
+      1.18 * scale,
+      1
+    ),
+
+    new THREE.MeshStandardMaterial({
+      color:0x2e8c59,
+      roughness:0.9
+    })
+  );
+
+  crown.position.y =
+  2.85 * scale;
+
+  crown.scale.y =
+  1.18;
+
+  crown.castShadow =
+  true;
+
+  group.add(
+    crown
+  );
+
+  group.position.set(
+    x,
+    0.15,
+    z
+  );
+
+  world.add(
+    group
+  );
+
+  addSelectable(
+    crown,
+    {
+
+      type:
+      "Cây xanh",
+
+      name:
+      "Cây đô thị",
+
+      desc:
+      "Thảm thực vật làm chậm dòng chảy bề mặt và tăng khả năng thấm nước tại chỗ."
+    }
+  );
+}
+
+[
+  [-27,-17],
+  [-17,-18],
+  [-2,-17],
+  [8,-18],
+  [24,-18],
+  [32,-18],
+  [-27,21],
+  [-17,21],
+  [-1,21],
+  [9,21],
+  [24,21],
+  [33,21]
+
+].forEach(
+  p => tree(
+    ...p,
+    0.95
+  )
+);
+
+/* =========================
+   CAR
+========================= */
+
+function car(
+  x,
+  z,
+  rot=0,
+  color=0xe55d5d
+){
+
+  const group =
+  new THREE.Group();
+
+  const body =
+  new THREE.Mesh(
+
+    new THREE.BoxGeometry(
+      2.4,
+      0.55,
+      1.15
+    ),
+
+    new THREE.MeshStandardMaterial({
+      color:color,
+      roughness:0.45,
+      metalness:0.25
+    })
+  );
+
+  body.position.y =
+  0.55;
+
+  body.castShadow =
+  true;
+
+  group.add(
+    body
+  );
+
+  const cabin =
+  new THREE.Mesh(
+
+    new THREE.BoxGeometry(
+      1.25,
+      0.52,
+      0.95
+    ),
+
+    new THREE.MeshStandardMaterial({
+      color:0xa9d5e4,
+      roughness:0.24,
+      metalness:0.18
+    })
+  );
+
+  cabin.position.set(
+    -0.1,
+    1,
+    0
+  );
+
+  group.add(
+    cabin
+  );
+
+  const wheelMat =
+  new THREE.MeshStandardMaterial({
+    color:0x111417,
+    roughness:0.8
+  });
+
+  for(
+    const dx
+    of [-0.75,0.75]
+  ){
+
+    for(
+      const dz
+      of [-0.58,0.58]
+    ){
+
+      const wheel =
+      new THREE.Mesh(
+
+        new THREE.CylinderGeometry(
+          0.23,
+          0.23,
+          0.18,
+          14
+        ),
+
+        wheelMat
+      );
+
+      wheel.rotation.x =
+      Math.PI / 2;
+
+      wheel.position.set(
+        dx,
+        0.32,
+        dz
+      );
+
+      group.add(
+        wheel
+      );
+    }
+  }
+
+  group.position.set(
+    x,
+    0.05,
+    z
+  );
+
+  group.rotation.y =
+  rot;
+
+  world.add(
+    group
+  );
+
+  addSelectable(
+    body,
+    {
+
+      type:
+      "Phương tiện",
+
+      name:
+      "Ô tô",
+
+      desc:
+      "Xe con có thể chết máy khi nước đủ sâu xâm nhập hệ thống điện hoặc động cơ; không nên cố đi qua vùng ngập sâu."
+    }
+  );
+
+  return group;
+}
+
+const cars =
+[
+
+car(
+  -23,
+  2,
+  0,
+  0xdf6f56
+),
+
+car(
+  2,
+  2,
+  0,
+  0x4f8bd4
+),
+
+car(
+  15,
+  -6,
+  Math.PI/2,
+  0xd8b558
+),
+
+car(
+  18,
+  10,
+  Math.PI/2,
+  0x75a86f
+),
+
+car(
+  -6,
+  12,
+  Math.PI/2,
+  0xb46fd1
+)
+
+];
+
+/* =========================
+   DRAIN
+========================= */
+
+function drain(
+  x,
+  z
+){
+
+  const rim =
+  new THREE.Mesh(
+
+    new THREE.CylinderGeometry(
+      0.62,
+      0.62,
+      0.08,
+      24
+    ),
+
+    new THREE.MeshStandardMaterial({
+      color:0x151a1d,
+      metalness:0.65,
+      roughness:0.43
+    })
+  );
+
+  rim.position.set(
+    x,
+    0.12,
+    z
+  );
+
+  world.add(
+    rim
+  );
+
+  addSelectable(
+    rim,
+    {
+
+      type:
+      "Hạ tầng thoát nước",
+
+      name:
+      "Miệng cống",
+
+      desc:
+      "Khả năng tiêu thoát giảm khi cống bị tắc bởi rác, bùn hoặc khi mực nước ngoài hệ thống quá cao."
+    }
+  );
+}
+
+[
+  [-12,4],
+  [0,4],
+  [12,4],
+  [-4,-6],
+  [-4,10],
+  [20,-7],
+  [20,9]
+
+].forEach(
+  p => drain(
+    ...p
+  )
+);
+
+/* =========================
+   LOW-LYING AREA
+========================= */
+
+const basin =
+new THREE.Mesh(
+
+  new THREE.CircleGeometry(
+    4.5,
+    64
+  ),
+
+  new THREE.MeshStandardMaterial({
+
+    color:0x254f3a,
+
+    roughness:1,
+
+    transparent:true,
+
+    opacity:0.7
+  })
+);
+
+basin.rotation.x =
+-Math.PI/2;
+
+basin.position.set(
+  8,
+  0.12,
+  7.5
+);
+
+world.add(
+  basin
+);
+
+addSelectable(
+  basin,
+  {
+
+    type:
+    "Địa hình",
+
+    name:
+    "Vùng trũng",
+
+    desc:
+    "Khu vực thấp dễ tích nước nhanh hơn các vị trí xung quanh khi lượng nước đầu vào vượt khả năng tiêu thoát."
+  }
+);
+
+/* =========================
+   WATER
+========================= */
+
+const waterMat =
+new THREE.MeshPhysicalMaterial({
+
+  color:0x137ab7,
+
+  roughness:0.18,
+
+  metalness:0.05,
+
+  transmission:0.08,
+
+  transparent:true,
+
+  opacity:0.62,
+
+  thickness:0.9,
+
+  ior:1.33,
+
+  clearcoat:0.6,
+
+  clearcoatRoughness:0.18
+});
+
+const water =
+new THREE.Mesh(
+
+  new THREE.PlaneGeometry(
+    62,
+    48,
+    32,
+    24
+  ),
+
+  waterMat
+);
+
+water.rotation.x =
+-Math.PI/2;
+
+water.position.y =
+0.08;
+
+water.receiveShadow =
+true;
+
+scene.add(
+  water
+);
+
+const waterGeo =
+water.geometry;
+
+const waterBase =
+waterGeo.attributes.position.array.slice();
+
+/* =========================
+   RIVER
+========================= */
+
+const riverMat =
+new THREE.MeshPhysicalMaterial({
+
+  color:0x2c94be,
+
+  transparent:true,
+
+  opacity:0.78,
+
+  roughness:0.18,
+
+  metalness:0.05
+});
+
+const river =
+new THREE.Mesh(
+
+  new THREE.PlaneGeometry(
+    70,
+    7
+  ),
+
+  riverMat
+);
+
+river.rotation.x =
+-Math.PI/2;
+
+river.position.set(
+  0,
+  -0.05,
+  -27
+);
+
+scene.add(
+  river
+);
+
+/* =========================
+   SURFACE FLOW
+========================= */
+
+const flowGroup =
+new THREE.Group();
+
+scene.add(
+  flowGroup
+);
+
+for(
+  let i=0;
+  i<52;
+  i++
+){
+
+  const dash =
+  new THREE.Mesh(
+
+    new THREE.BoxGeometry(
+      0.7,
+      0.025,
+      0.06
+    ),
+
+    new THREE.MeshBasicMaterial({
+
+      color:0xa8f6ff,
+
+      transparent:true,
+
+      opacity:0.55
+    })
+  );
+
+  dash.position.set(
+
+    (Math.random()-0.5)*55,
+
+    0.22,
+
+    (Math.random()-0.5)*37
+  );
+
+  dash.rotation.y =
+  Math.random() * Math.PI * 2;
+
+  dash.userData.speed =
+  0.012 +
+  Math.random() * 0.025;
+
+  flowGroup.add(
+    dash
+  );
+}
+
+/* =========================
+   RAIN
+========================= */
+
+const rainCount =
+5200;
+
+const rainGeo =
+new THREE.BufferGeometry();
+
+const rainPos =
+new Float32Array(
+  rainCount * 3
+);
+
+const rainSpeed =
+new Float32Array(
+  rainCount
+);
+
+for(
+  let i=0;
+  i<rainCount;
+  i++
+){
+
+  rainPos[i*3] =
+  (Math.random()-0.5)*70;
+
+  rainPos[i*3+1] =
+  Math.random()*34 + 1;
+
+  rainPos[i*3+2] =
+  (Math.random()-0.5)*58;
+
+  rainSpeed[i] =
+  0.25 +
+  Math.random()*0.35;
+}
+
+rainGeo.setAttribute(
+  "position",
+
+  new THREE.BufferAttribute(
+    rainPos,
+    3
+  )
+);
+
+const rainMat =
+new THREE.PointsMaterial({
+
+  color:0xbcecff,
+
+  size:0.07,
+
+  transparent:true,
+
+  opacity:0.76,
+
+  sizeAttenuation:true
+});
+
+const rainPts =
+new THREE.Points(
+  rainGeo,
+  rainMat
+);
+
+scene.add(
+  rainPts
+);
+
+/* =========================
+   FLOOD HOTSPOTS
+========================= */
+
+const hotspotGroup =
+new THREE.Group();
+
+scene.add(
+  hotspotGroup
+);
+
+function hotspot(
+  x,
+  z,
+  label
+){
+
+  const group =
+  new THREE.Group();
+
+  const ring =
+  new THREE.Mesh(
+
+    new THREE.RingGeometry(
+      0.65,
+      0.86,
+      32
+    ),
+
+    new THREE.MeshBasicMaterial({
+
+      color:0xff735d,
+
+      side:
+      THREE.DoubleSide,
+
+      transparent:true,
+
+      opacity:0.9
+    })
+  );
+
+  ring.rotation.x =
+  -Math.PI/2;
+
+  ring.position.y =
+  0.45;
+
+  group.add(
+    ring
+  );
+
+  const core =
+  new THREE.Mesh(
+
+    new THREE.SphereGeometry(
+      0.15,
+      16,
+      16
+    ),
+
+    new THREE.MeshBasicMaterial({
+      color:0xffd36e
+    })
+  );
+
+  core.position.y =
+  0.48;
+
+  group.add(
+    core
+  );
+
+  group.position.set(
+    x,
+    0,
+    z
+  );
+
+  group.userData.label =
+  label;
+
+  hotspotGroup.add(
+    group
+  );
+}
+
+hotspot(
+  -6,
+  2,
+  "Giao lộ thấp"
+);
+
+hotspot(
+  8,
+  7.5,
+  "Vùng trũng"
+);
+
+hotspot(
+  18,
+  2,
+  "Trục đường thoát chậm"
+);
+
+/* =========================
+   CLOUD
+========================= */
+
+const cloudGroup =
+new THREE.Group();
+
+scene.add(
+  cloudGroup
+);
+
+const cloudMat =
+new THREE.MeshStandardMaterial({
+
+  color:0x71849a,
+
+  roughness:1,
+
+  transparent:true,
+
+  opacity:0.72
+});
+
+for(
+  let c=0;
+  c<9;
+  c++
+){
+
+  const group =
+  new THREE.Group();
+
+  for(
+    let j=0;
+    j<7;
+    j++
+  ){
+
+    const cloud =
+    new THREE.Mesh(
+
+      new THREE.SphereGeometry(
+
+        2.2 +
+        Math.random()*1.7,
+
+        18,
+
+        12
+      ),
+
+      cloudMat
+    );
+
+    cloud.position.set(
+
+      (Math.random()-0.5)*6,
+
+      (Math.random()-0.5)*2,
+
+      (Math.random()-0.5)*4
+    );
+
+    group.add(
+      cloud
+    );
+  }
+
+  group.position.set(
+
+    (Math.random()-0.5)*55,
+
+    22 +
+    Math.random()*5,
+
+    (Math.random()-0.5)*35
+  );
+
+  group.scale.setScalar(
+
+    0.65 +
+    Math.random()*0.45
+  );
+
+  cloudGroup.add(
+    group
+  );
+}
+
+/* =========================
+   SIMULATION DATA
+========================= */
+
+let sim = {
+
+  running:false,
+
+  time:0,
+
+  waterDepth:0.22,
+
+  rainVisible:true,
+
+  flowVisible:true,
+
+  labelsVisible:true,
+
+  night:false,
+
+  sound:false
+};
+
+/* =========================
+   UI REFERENCES
+========================= */
+
+const ui = {};
+
+[
+  "rain",
+  "duration",
+  "tide",
+  "drain",
+  "impervious",
+  "clog"
+
+].forEach(
+
+  id =>
+  ui[id] =
+  document.getElementById(id)
+
+);
+
+function val(
+  id
+){
+
+  return Number(
+    ui[id].value
+  );
+}
+
+/* =========================
+   FLOOD MODEL
+========================= */
+
+function modelTargetDepth(){
+
+  const rain =
+  val("rain");
+
+  const duration =
+  val("duration") / 60;
+
+  const tide =
+  val("tide") / 100;
+
+  const drainEff =
+  (
+    val("drain") / 100
+  )
+  *
+  (
+    1 -
+    val("clog") / 115
+  );
+
+  const impervious =
+  val("impervious") / 100;
+
+  const runoff =
+  rain
+  *
+  duration
+  *
+  (
+    0.32 +
+    impervious * 0.58
+  );
+
+  const capacity =
+  115
+  *
+  duration
+  *
+  drainEff;
+
+  const storage =
+  Math.max(
+    0,
+    runoff -
+    capacity
+  );
+
+  const tidePenalty =
+  tide
+  *
+  (
+    0.18 +
+    0.55
+    *
+    (
+      1 -
+      drainEff
+    )
+  );
+
+  return THREE.MathUtils.clamp(
+
+    storage / 135
+    +
+    tidePenalty,
+
+    0,
+
+    1.65
+  );
+}
+
+/* =========================
+   RISK INDEX
+========================= */
+
+function riskFromDepth(
+  depth
+){
+
+  const intensity =
+  val("rain") / 180;
+
+  const clog =
+  val("clog") / 90;
+
+  const tide =
+  val("tide") / 150;
+
+  return Math.round(
+
+    THREE.MathUtils.clamp(
+
+      depth / 1.5 * 0.68
+
+      +
+
+      intensity * 0.14
+
+      +
+
+      clog * 0.08
+
+      +
+
+      tide * 0.10,
+
+      0,
+
+      1
+
+    )
+
+    * 100
+  );
+}
+
+/* =========================
+   UPDATE LABEL
+========================= */
+
+function updateLabels(){
+
+  document.getElementById(
+    "rainVal"
+  ).textContent =
+  `${val("rain")} mm/h`;
+
+  document.getElementById(
+    "durationVal"
+  ).textContent =
+  `${val("duration")} phút`;
+
+  document.getElementById(
+    "tideVal"
+  ).textContent =
+  `+${(val("tide")/100).toFixed(2)} m`;
+
+  document.getElementById(
+    "drainVal"
+  ).textContent =
+  `${val("drain")}%`;
+
+  document.getElementById(
+    "imperviousVal"
+  ).textContent =
+  `${val("impervious")}%`;
+
+  document.getElementById(
+    "clogVal"
+  ).textContent =
+  `${val("clog")}%`;
+}
+
+Object.values(
+  ui
+).forEach(
+
+el =>
+el.addEventListener(
+  "input",
+  ()=>{
+
+    updateLabels();
+
+    if(
+      !sim.running
+    ){
+
+      updateDashboard();
+    }
+  }
+)
+
+);
+
+/* =========================
+   DASHBOARD
+========================= */
+
+function updateDashboard(){
+
+  const depth =
+  sim.waterDepth;
+
+  const risk =
+  riskFromDepth(
+    depth
+  );
+
+  const area =
+  Math.round(
+
+    THREE.MathUtils.clamp(
+
+      depth / 1.35,
+
+      0,
+
+      1
+
+    )
+
+    * 92
+  );
+
+  const affected =
+  Math.min(
+
+    buildings.length,
+
+    Math.round(
+
+      depth * 7.4
+      +
+      area / 24
+    )
+  );
+
+  const road =
+  (
+    depth * 2.85
+    +
+    area * 0.015
+  ).toFixed(1);
+
+  document.getElementById(
+    "waterStat"
+  ).textContent =
+  `${depth.toFixed(2)} m`;
+
+  document.getElementById(
+    "areaStat"
+  ).textContent =
+  `${area}%`;
+
+  document.getElementById(
+    "buildingStat"
+  ).textContent =
+  affected;
+
+  document.getElementById(
+    "roadStat"
+  ).textContent =
+  `${road} km`;
+
+  document.getElementById(
+    "riskVal"
+  ).textContent =
+  `${risk} / 100`;
+
+  document.getElementById(
+    "riskBar"
+  ).style.width =
+  `${risk}%`;
+
+  const efficiency =
+  Math.round(
+
+    val("drain")
+    *
+    (
+      1 -
+      val("clog") / 115
+    )
+  );
+
+  const effectiveDrain =
+  Math.round(
+
+    92
+    *
+    (
+      efficiency / 100
+    )
+  );
+
+  const runoff =
+  Math.round(
+
+    32
+    +
+    val("impervious")
+    *
+    0.58
+  );
+
+  document.getElementById(
+    "inputKpi"
+  ).textContent =
+  `${val("rain")} mm/h`;
+
+  document.getElementById(
+    "drainKpi"
+  ).textContent =
+  `${effectiveDrain} mm/h`;
+
+  document.getElementById(
+    "runoffKpi"
+  ).textContent =
+  `${Math.min(runoff,95)}%`;
+
+  document.getElementById(
+    "tideKpi"
+  ).textContent =
+  val("tide") < 40
+  ?
+  "Thấp"
+  :
+  val("tide") < 90
+  ?
+  "Trung bình"
+  :
+  "Cao";
+
+  const riskText =
+  document.getElementById(
+    "riskText"
+  );
+
+  const impact =
+  document.getElementById(
+    "impactText"
+  );
+
+  if(
+    risk < 25
+  ){
+
+    riskText.innerHTML =
+    `
+    <strong>
+      Mức thấp.
+    </strong>
+
+    Nước chủ yếu đọng cục bộ
+    tại vùng trũng và mép đường.
+    `;
+
+    impact.textContent =
+    "Ảnh hưởng giao thông còn nhẹ; các miệng cống vẫn tiêu thoát phần lớn lượng nước.";
+
+  }
+
+  else if(
+    risk < 50
+  ){
+
+    riskText.innerHTML =
+    `
+    <strong>
+      Mức trung bình.
+    </strong>
+
+    Nước bắt đầu phủ mặt đường,
+    một số công trình thấp bị đe dọa.
+    `;
+
+    impact.textContent =
+    "Giao thông chậm, xe máy hoặc ô tô con có nguy cơ chết máy tại điểm trũng; nước có thể tràn vào tầng trệt.";
+
+  }
+
+  else if(
+    risk < 75
+  ){
+
+    riskText.innerHTML =
+    `
+    <strong>
+      Mức cao.
+    </strong>
+
+    Ngập lan rộng,
+    nhiều tuyến đường khó lưu thông
+    và hạ tầng chịu áp lực lớn.
+    `;
+
+    impact.textContent =
+    "Nhiều tuyến đường mất khả năng lưu thông bình thường; nguy cơ điện giật, ô nhiễm nước và thiệt hại tài sản tăng mạnh.";
+
+  }
+
+  else{
+
+    riskText.innerHTML =
+    `
+    <strong>
+      Mức rất cao.
+    </strong>
+
+    Ngập sâu diện rộng,
+    khả năng cô lập khu dân cư
+    và gián đoạn dịch vụ thiết yếu.
+    `;
+
+    impact.textContent =
+    "Nguy cơ cô lập, dòng nước nguy hiểm, hư hỏng phương tiện – thiết bị, ô nhiễm và gián đoạn trường học hoặc y tế.";
+
+  }
+}
+
+/* =========================
+   PRESET
+========================= */
+
+function applyPreset(
+  name
+){
+
+  const sets = {
+
+    normal:
+    [
+      45,
+      60,
+      25,
+      78,
+      58,
+      12
+    ],
+
+    urban:
+    [
+      95,
+      120,
+      55,
+      55,
+      88,
+      38
+    ],
+
+    extreme:
+    [
+      165,
+      180,
+      80,
+      45,
+      92,
+      55
+    ],
+
+    tide:
+    [
+      90,
+      120,
+      125,
+      55,
+      82,
+      32
+    ]
+  };
+
+  const values =
+  sets[name];
+
+  [
+    "rain",
+    "duration",
+    "tide",
+    "drain",
+    "impervious",
+    "clog"
+
+  ].forEach(
+
+    (
+      key,
+      index
+    ) =>
+
+    ui[key].value =
+    values[index]
+
+  );
+
+  updateLabels();
+
+  if(
+    !sim.running
+  ){
+
+    sim.waterDepth =
+    modelTargetDepth()
+    *
+    0.32;
+
+    updateDashboard();
+  }
+}
+
+document
+.querySelectorAll(
+  "[data-preset]"
+)
+.forEach(
+
+button =>
+
+button.addEventListener(
+
+  "click",
+
+  () =>
+  applyPreset(
+    button.dataset.preset
+  )
+
+)
+
+);
+
+/* =========================
+   PLAY
+========================= */
+
+const btnPlay =
+document.getElementById(
+  "btnPlay"
+);
+
+btnPlay.onclick =
+()=>{
+
+  sim.running =
+  !sim.running;
+
+  btnPlay.textContent =
+  sim.running
+  ?
+  "⏸ Tạm dừng"
+  :
+  "▶ Chạy mô phỏng";
+
+  btnPlay.classList.toggle(
+    "danger",
+    sim.running
+  );
+
+  if(
+    sim.sound
+  ){
+
+    startAudio();
+  }
+};
+
+/* =========================
+   RESET
+========================= */
+
+document.getElementById(
+  "btnReset"
+).onclick =
+()=>{
+
+  sim.running =
+  false;
+
+  sim.time =
+  0;
+
+  sim.waterDepth =
+  0.02;
+
+  btnPlay.textContent =
+  "▶ Chạy mô phỏng";
+
+  btnPlay.classList.remove(
+    "danger"
+  );
+
+  applyPreset(
+    "normal"
+  );
+
+  sim.waterDepth =
+  0.02;
+
+  updateDashboard();
+};
+
+/* =========================
+   TOGGLE RAIN
+========================= */
+
+document.getElementById(
+  "toggleRain"
+).onclick =
+event =>{
+
+  sim.rainVisible =
+  !sim.rainVisible;
+
+  event.currentTarget
+  .classList.toggle(
+
+    "active",
+
+    sim.rainVisible
+  );
+};
+
+/* =========================
+   TOGGLE FLOW
+========================= */
+
+document.getElementById(
+  "toggleFlow"
+).onclick =
+event =>{
+
+  sim.flowVisible =
+  !sim.flowVisible;
+
+  event.currentTarget
+  .classList.toggle(
+
+    "active",
+
+    sim.flowVisible
+  );
+
+  flowGroup.visible =
+  sim.flowVisible;
+};
+
+/* =========================
+   TOGGLE LABEL
+========================= */
+
+document.getElementById(
+  "toggleLabels"
+).onclick =
+event =>{
+
+  sim.labelsVisible =
+  !sim.labelsVisible;
+
+  event.currentTarget
+  .classList.toggle(
+
+    "active",
+
+    sim.labelsVisible
+  );
+
+  hotspotGroup.visible =
+  sim.labelsVisible;
+};
+
+/* =========================
+   NIGHT
+========================= */
+
+document.getElementById(
+  "toggleNight"
+).onclick =
+event =>{
+
+  sim.night =
+  !sim.night;
+
+  event.currentTarget
+  .classList.toggle(
+
+    "active",
+
+    sim.night
+  );
+
+  scene.fog.color.set(
+
+    sim.night
+    ?
+    0x020912
+    :
+    0x071523
+  );
+
+  hemi.intensity =
+  sim.night
+  ?
+  0.35
+  :
+  1.2;
+
+  sun.intensity =
+  sim.night
+  ?
+  0.35
+  :
+  2.2;
+
+  renderer.toneMappingExposure =
+  sim.night
+  ?
+  0.72
+  :
+  1.16;
+};
+
+/* =========================
+   AUDIO
+========================= */
+
+let audioCtx =
+null;
+
+let rainNode =
+null;
+
+let rumbleNode =
+null;
+
+function noiseBuffer(
+  ctx
+){
+
+  const length =
+  ctx.sampleRate * 2;
+
+  const buffer =
+  ctx.createBuffer(
+    1,
+    length,
+    ctx.sampleRate
+  );
+
+  const data =
+  buffer.getChannelData(
+    0
+  );
+
+  for(
+    let i=0;
+    i<length;
+    i++
+  ){
+
+    data[i] =
+    Math.random()*2 - 1;
+  }
+
+  return buffer;
+}
+
+function startAudio(){
+
+  if(
+    !sim.sound
+  ){
+
+    return;
+  }
+
+  if(
+    !audioCtx
+  ){
+
+    audioCtx =
+    new (
+      window.AudioContext
+      ||
+      window.webkitAudioContext
+    )();
+  }
+
+  if(
+    audioCtx.state ===
+    "suspended"
+  ){
+
+    audioCtx.resume();
+  }
+
+  if(
+    rainNode
+  ){
+
+    return;
+  }
+
+  const rainSource =
+  audioCtx.createBufferSource();
+
+  rainSource.buffer =
+  noiseBuffer(
+    audioCtx
+  );
+
+  rainSource.loop =
+  true;
+
+  const rainFilter =
+  audioCtx.createBiquadFilter();
+
+  rainFilter.type =
+  "highpass";
+
+  rainFilter.frequency.value =
+  2200;
+
+  const rainGain =
+  audioCtx.createGain();
+
+  rainGain.gain.value =
+  0.055;
+
+  rainSource
+  .connect(
+    rainFilter
+  )
+  .connect(
+    rainGain
+  )
+  .connect(
+    audioCtx.destination
+  );
+
+  rainSource.start();
+
+  rainNode = {
+
+    src:
+    rainSource,
+
+    gain:
+    rainGain
+  };
+
+  const rumbleSource =
+  audioCtx.createBufferSource();
+
+  rumbleSource.buffer =
+  noiseBuffer(
+    audioCtx
+  );
+
+  rumbleSource.loop =
+  true;
+
+  const rumbleFilter =
+  audioCtx.createBiquadFilter();
+
+  rumbleFilter.type =
+  "lowpass";
+
+  rumbleFilter.frequency.value =
+  180;
+
+  const rumbleGain =
+  audioCtx.createGain();
+
+  rumbleGain.gain.value =
+  0.02;
+
+  rumbleSource
+  .connect(
+    rumbleFilter
+  )
+  .connect(
+    rumbleGain
+  )
+  .connect(
+    audioCtx.destination
+  );
+
+  rumbleSource.start();
+
+  rumbleNode = {
+
+    src:
+    rumbleSource,
+
+    gain:
+    rumbleGain
+  };
+}
+
+function stopAudio(){
+
+  if(
+    rainNode
+  ){
+
+    rainNode.src.stop();
+
+    rainNode =
+    null;
+  }
+
+  if(
+    rumbleNode
+  ){
+
+    rumbleNode.src.stop();
+
+    rumbleNode =
+    null;
+  }
+}
+
+document.getElementById(
+  "btnSound"
+).onclick =
+event =>{
+
+  sim.sound =
+  !sim.sound;
+
+  event.currentTarget
+  .classList.toggle(
+
+    "active",
+
+    sim.sound
+  );
+
+  event.currentTarget.textContent =
+  sim.sound
+  ?
+  "🔊 Âm thanh: bật"
+  :
+  "🔇 Âm thanh: tắt";
+
+  if(
+    sim.sound
+  ){
+
+    startAudio();
+  }
+
+  else{
+
+    stopAudio();
+  }
+};
+
+/* =========================
+   RAYCAST TOOLTIP
+========================= */
+
+const raycaster =
+new THREE.Raycaster();
+
+const pointer =
+new THREE.Vector2();
+
+const tooltip =
+document.getElementById(
+  "tooltip"
+);
+
+renderer.domElement
+.addEventListener(
+
+"pointerdown",
+
+event =>{
+
+  const rect =
+  renderer.domElement
+  .getBoundingClientRect();
+
+  pointer.x =
+  (
+    (
+      event.clientX -
+      rect.left
+    )
+    /
+    rect.width
+  )
+  *
+  2
+  -
+  1;
+
+  pointer.y =
+  -
+  (
+    (
+      event.clientY -
+      rect.top
+    )
+    /
+    rect.height
+  )
+  *
+  2
+  +
+  1;
+
+  raycaster.setFromCamera(
+    pointer,
+    camera
+  );
+
+  const hit =
+  raycaster.intersectObjects(
+
+    selectable,
+
+    true
+  )[0];
+
+  if(
+    !hit
+  ){
+
+    tooltip.style.display =
+    "none";
+
+    return;
+  }
+
+  let object =
+  hit.object;
+
+  while(
+    object
+    &&
+    !object.userData.info
+    &&
+    object.parent
+  ){
+
+    object =
+    object.parent;
+  }
+
+  if(
+    !object
+    ||
+    !object.userData.info
+  ){
+
+    return;
+  }
+
+  const info =
+  object.userData.info;
+
+  tooltip.innerHTML =
+  `
+  <b>
+    ${info.type}: ${info.name}
+  </b>
+
+  <br>
+
+  ${info.desc}
+
+  ${
+    info.height
+    ?
+    `
+    <br>
+    Chiều cao mô hình:
+    ${info.height.toFixed(1)} m
+    `
+    :
+    ""
+  }
+  `;
+
+  tooltip.style.display =
+  "block";
+
+  tooltip.style.left =
+  Math.min(
+
+    event.clientX + 14,
+
+    innerWidth - 280
+
+  ) + "px";
+
+  tooltip.style.top =
+  Math.min(
+
+    event.clientY + 14,
+
+    innerHeight - 150
+
+  ) + "px";
+
+}
+
+);
+
+/* =========================
+   UPDATE RAIN
+========================= */
+
+function updateRain(
+  dt
+){
+
+  rainPts.visible =
+  sim.rainVisible
+  &&
+  val("rain") > 2;
+
+  rainMat.opacity =
+  0.22
+  +
+  val("rain") / 180
+  *
+  0.68;
+
+  const positions =
+  rainGeo.attributes.position.array;
+
+  const intensity =
+  0.7
+  +
+  val("rain") / 180
+  *
+  2.2;
+
+  for(
+    let i=0;
+    i<rainCount;
+    i++
+  ){
+
+    positions[i*3+1] -=
+
+    rainSpeed[i]
+    *
+    intensity
+    *
+    (
+      dt * 60
+    );
+
+    positions[i*3] +=
+
+    0.016
+    *
+    intensity
+    *
+    (
+      dt * 60
+    );
+
+    if(
+      positions[i*3+1]
+      <
+      0.2
+    ){
+
+      positions[i*3+1] =
+      28
+      +
+      Math.random()*10;
+
+      positions[i*3] =
+      (Math.random()-0.5)*70;
+
+      positions[i*3+2] =
+      (Math.random()-0.5)*58;
+    }
+  }
+
+  rainGeo
+  .attributes
+  .position
+  .needsUpdate =
+  true;
+}
+
+/* =========================
+   UPDATE WATER
+========================= */
+
+function updateWater(
+  time
+){
+
+  const positions =
+  waterGeo
+  .attributes
+  .position
+  .array;
+
+  for(
+    let i=0;
+    i<positions.length;
+    i+=3
+  ){
+
+    positions[i] =
+    waterBase[i];
+
+    positions[i+1] =
+    waterBase[i+1];
+
+    positions[i+2] =
+    waterBase[i+2]
+    +
+    Math.sin(
+
+      time * 1.55
+
+      +
+
+      waterBase[i]
+      *
+      0.18
+
+      +
+
+      waterBase[i+1]
+      *
+      0.14
+
+    )
+    *
+    0.07;
+  }
+
+  waterGeo
+  .attributes
+  .position
+  .needsUpdate =
+  true;
+
+  water.position.y =
+  0.06
+  +
+  sim.waterDepth;
+
+  water.visible =
+  sim.waterDepth > 0.025;
+
+  const risk =
+  riskFromDepth(
+    sim.waterDepth
+  );
+
+  if(
+    risk < 35
+  ){
+
+    waterMat.color.set(
+      0x168dbd
+    );
+  }
+
+  else if(
+    risk < 70
+  ){
+
+    waterMat.color.set(
+      0x176f9c
+    );
+  }
+
+  else{
+
+    waterMat.color.set(
+      0x315b6e
+    );
+  }
+
+  cars.forEach(
+
+    (
+      carObject,
+      index
+    ) =>{
+
+      const threshold =
+      0.42
+      +
+      (
+        index % 3
+      )
+      *
+      0.08;
+
+      if(
+        sim.waterDepth >
+        threshold
+      ){
+
+        carObject.position.y =
+        0.05
+        +
+        (
+          sim.waterDepth
+          -
+          threshold
+        )
+        *
+        0.55;
+
+        carObject.rotation.z =
+        Math.sin(
+          time * 0.8
+          +
+          index
+        )
+        *
+        Math.min(
+          0.08,
+          sim.waterDepth * 0.05
+        );
+
+        carObject.position.x +=
+
+        Math.sin(
+          time * 0.45
+          +
+          index
+        )
+        *
+        0.0007
+        *
+        sim.waterDepth;
+      }
+
+      else{
+
+        carObject.position.y =
+        0.05;
+
+        carObject.rotation.z =
+        0;
+      }
+    }
+  );
+}
+
+/* =========================
+   FLOW
+========================= */
+
+function updateFlow(
+  time,
+  dt
+){
+
+  if(
+    !sim.flowVisible
+  ){
+
+    return;
+  }
+
+  const speed =
+  0.25
+  +
+  sim.waterDepth * 1.8
+  +
+  val("rain") / 180 * 0.75;
+
+  flowGroup
+  .children
+  .forEach(
+
+  (
+    dash,
+    index
+  ) =>{
+
+    dash.position.x +=
+
+    dash.userData.speed
+
+    *
+
+    speed
+
+    *
+
+    (
+      dt * 60
+    )
+
+    *
+
+    (
+      index % 2
+      ?
+      1
+      :
+      -0.45
+    );
+
+    dash.material.opacity =
+    THREE.MathUtils.clamp(
+
+      0.18
+      +
+      sim.waterDepth * 0.45,
+
+      0,
+
+      0.7
+    );
+
+    if(
+      dash.position.x > 30
+    ){
+
+      dash.position.x =
+      -30;
+    }
+
+    if(
+      dash.position.x < -30
+    ){
+
+      dash.position.x =
+      30;
+    }
+
+    dash.position.y =
+    0.15
+    +
+    sim.waterDepth
+    +
+    0.02;
+
+  }
+
+  );
+}
+
+/* =========================
+   HOTSPOT
+========================= */
+
+function updateHotspots(
+  time
+){
+
+  hotspotGroup
+  .children
+  .forEach(
+
+  (
+    group,
+    index
+  ) =>{
+
+    const scale =
+    1
+    +
+    Math.sin(
+
+      time * 3
+      +
+      index
+
+    )
+    *
+    0.18;
+
+    group.scale.setScalar(
+      scale
+    );
+
+    group.position.y =
+    sim.waterDepth > 0.15
+    ?
+    sim.waterDepth * 0.13
+    :
+    0;
+  }
+
+  );
+}
+
+/* =========================
+   CLOUD
+========================= */
+
+function updateClouds(
+  dt
+){
+
+  cloudGroup
+  .children
+  .forEach(
+
+  (
+    group,
+    index
+  ) =>{
+
+    group.position.x +=
+
+    (
+      0.0028
+      +
+      0.001 * index
+    )
+    *
+    (
+      dt * 60
+    );
+
+    if(
+      group.position.x > 38
+    ){
+
+      group.position.x =
+      -38;
+    }
+  }
+
+  );
+
+  cloudMat.opacity =
+  0.42
+  +
+  val("rain") / 180
+  *
+  0.42;
+}
+
+/* =========================
+   AUDIO UPDATE
+========================= */
+
+function updateAudio(){
+
+  if(
+    !sim.sound
+    ||
+    !rainNode
+  ){
+
+    return;
+  }
+
+  rainNode
+  .gain
+  .gain
+  .setTargetAtTime(
+
+    0.012
+    +
+    val("rain") / 180
+    *
+    0.085,
+
+    audioCtx.currentTime,
+
+    0.12
+  );
+
+  rumbleNode
+  .gain
+  .gain
+  .setTargetAtTime(
+
+    0.006
+    +
+    sim.waterDepth
+    *
+    0.035,
+
+    audioCtx.currentTime,
+
+    0.2
+  );
+}
+
+/* =========================
+   ANIMATION LOOP
+========================= */
+
+const clock =
+new THREE.Clock();
+
+let lastDashboardUpdate =
+0;
+
+function animate(){
+
+  requestAnimationFrame(
+    animate
+  );
+
+  const dt =
+  Math.min(
+
+    clock.getDelta(),
+
+    0.033
+  );
+
+  const time =
+  clock.elapsedTime;
+
+  controls.update();
+
+  if(
+    sim.running
+  ){
+
+    sim.time +=
+    dt;
+
+    const target =
+    modelTargetDepth();
+
+    const buildRate =
+    0.11
+    +
+    val("rain") / 180
+    *
+    0.22;
+
+    sim.waterDepth +=
+
+    (
+      target
+      -
+      sim.waterDepth
+    )
+
+    *
+
+    dt
+
+    *
+
+    buildRate;
+
+    if(
+      val("rain") < 15
+      &&
+      target < sim.waterDepth
+    ){
+
+      sim.waterDepth -=
+      dt * 0.02;
+    }
+  }
+
+  updateRain(
+    dt
+  );
+
+  updateWater(
+    time
+  );
+
+  updateFlow(
+    time,
+    dt
+  );
+
+  updateHotspots(
+    time
+  );
+
+  updateClouds(
+    dt
+  );
+
+  updateAudio();
+
+  if(
+    time
+    -
+    lastDashboardUpdate
+    >
+    0.18
+  ){
+
+    updateDashboard();
+
+    lastDashboardUpdate =
+    time;
+  }
+
+  renderer.render(
+    scene,
+    camera
+  );
+}
+
+/* =========================
+   START
+========================= */
+
+updateLabels();
+
+applyPreset(
+  "normal"
+);
+
+sim.waterDepth =
+0.02;
+
+updateDashboard();
+
+animate();
+
+/* =========================
+   RESIZE
+========================= */
+
+addEventListener(
+
+"resize",
+
+()=>{
+
+  camera.aspect =
+  innerWidth / innerHeight;
+
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(
+    innerWidth,
+    innerHeight
+  );
+}
+
+);
+
+</script>
+
+</body>
+</html>

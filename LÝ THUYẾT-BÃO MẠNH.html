@@ -1,0 +1,3137 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Bão mạnh | CLIMASCORE</title>
+
+<style>
+/* =========================================================
+   01. RESET + BIẾN MÀU
+========================================================= */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --navy:#061426;
+    --navy2:#08223b;
+    --blue:#0c67c7;
+    --cyan:#24d6ff;
+    --cyan2:#7deeff;
+    --white:#f7fcff;
+    --muted:#a9c3d7;
+    --orange:#ffad42;
+    --red:#ff5d5d;
+    --purple:#a782ff;
+    --green:#46e2ae;
+
+    --glass:rgba(12,40,67,.72);
+    --glass2:rgba(12,47,79,.55);
+    --line:rgba(104,213,255,.20);
+
+    --radius:24px;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    background:
+        radial-gradient(circle at 15% 10%,
+        rgba(18,117,189,.18), transparent 30%),
+
+        radial-gradient(circle at 85% 25%,
+        rgba(69,211,255,.10), transparent 30%),
+
+        linear-gradient(
+            180deg,
+            #04111f,
+            #061827 45%,
+            #04111c
+        );
+
+    color:var(--white);
+    line-height:1.7;
+    overflow-x:hidden;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+button{
+    font-family:inherit;
+}
+
+img{
+    max-width:100%;
+}
+
+
+/* =========================================================
+   02. THANH TIẾN TRÌNH
+========================================================= */
+#progressBar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:0;
+    height:4px;
+    z-index:9999;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--cyan),
+            #5c83ff,
+            var(--purple)
+        );
+
+    box-shadow:0 0 14px var(--cyan);
+}
+
+
+/* =========================================================
+   03. NAVIGATION
+========================================================= */
+.navbar{
+    position:sticky;
+    top:0;
+    z-index:1000;
+
+    backdrop-filter:blur(18px);
+    background:rgba(3,17,29,.82);
+    border-bottom:1px solid var(--line);
+}
+
+.nav-wrap{
+    max-width:1280px;
+    margin:auto;
+    padding:14px 24px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    font-size:18px;
+    font-weight:900;
+    letter-spacing:.5px;
+}
+
+.logo-icon{
+    width:38px;
+    height:38px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:12px;
+    background:
+        linear-gradient(
+            135deg,
+            #0d6ad6,
+            #23d6ff
+        );
+
+    box-shadow:
+        0 0 25px rgba(35,214,255,.32);
+}
+
+.logo span{
+    color:var(--cyan);
+}
+
+.nav-links{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+}
+
+.nav-links a{
+    padding:8px 11px;
+    border-radius:10px;
+
+    color:#bed3e2;
+    font-size:13px;
+    font-weight:700;
+
+    transition:.25s;
+}
+
+.nav-links a:hover{
+    background:rgba(37,216,255,.12);
+    color:white;
+}
+
+
+/* =========================================================
+   04. DÙNG CHUNG
+========================================================= */
+.container{
+    max-width:1280px;
+    margin:auto;
+    padding:0 24px;
+}
+
+.section{
+    padding:85px 0;
+}
+
+.section-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+    padding:7px 13px;
+    border-radius:999px;
+
+    border:1px solid rgba(47,215,255,.28);
+    background:rgba(36,214,255,.07);
+
+    color:var(--cyan2);
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:1.6px;
+    text-transform:uppercase;
+}
+
+.section-title{
+    margin-top:18px;
+    max-width:900px;
+
+    font-size:clamp(30px,5vw,52px);
+    line-height:1.13;
+    letter-spacing:-1.6px;
+}
+
+.section-title span{
+    color:var(--cyan);
+}
+
+.section-desc{
+    margin-top:16px;
+    max-width:850px;
+    color:var(--muted);
+    font-size:16px;
+}
+
+.grid-2{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:22px;
+}
+
+.grid-3{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.grid-4{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:18px;
+}
+
+.card{
+    position:relative;
+    overflow:hidden;
+
+    padding:25px;
+
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(12,43,72,.82),
+            rgba(5,25,42,.76)
+        );
+
+    box-shadow:
+        0 24px 70px rgba(0,0,0,.16);
+
+    transition:
+        transform .28s ease,
+        border-color .28s ease;
+}
+
+.card:hover{
+    transform:translateY(-4px);
+    border-color:rgba(54,221,255,.44);
+}
+
+.card h3{
+    font-size:20px;
+    margin-bottom:9px;
+}
+
+.card p{
+    color:var(--muted);
+    font-size:14px;
+}
+
+.glow-line{
+    position:absolute;
+    left:0;
+    top:0;
+
+    width:100%;
+    height:2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--cyan),
+            transparent
+        );
+
+    opacity:.55;
+}
+
+.icon{
+    width:52px;
+    height:52px;
+
+    display:grid;
+    place-items:center;
+
+    margin-bottom:18px;
+
+    border-radius:16px;
+    background:rgba(36,214,255,.11);
+    border:1px solid rgba(36,214,255,.18);
+
+    font-size:26px;
+}
+
+
+/* =========================================================
+   05. HERO
+========================================================= */
+.hero{
+    position:relative;
+    min-height:calc(100vh - 68px);
+
+    display:flex;
+    align-items:center;
+
+    overflow:hidden;
+}
+
+.hero::before{
+    content:"";
+    position:absolute;
+    width:700px;
+    height:700px;
+    right:-160px;
+    top:-100px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(46,213,255,.10),
+            transparent 64%
+        );
+}
+
+.hero-grid{
+    position:relative;
+    z-index:2;
+
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    align-items:center;
+    gap:30px;
+
+    width:100%;
+}
+
+.eyebrow{
+    display:inline-flex;
+    gap:8px;
+    align-items:center;
+
+    padding:7px 12px;
+    border-radius:999px;
+
+    background:rgba(255,117,70,.08);
+    border:1px solid rgba(255,145,92,.25);
+
+    color:#ffd0ad;
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:1px;
+}
+
+.hero h1{
+    margin:20px 0 13px;
+
+    font-size:clamp(48px,8vw,94px);
+    line-height:.92;
+    letter-spacing:-4px;
+}
+
+.hero h1 span{
+    display:block;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #66e6ff
+        );
+
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.hero-sub{
+    max-width:650px;
+    color:#b7ccdc;
+    font-size:17px;
+}
+
+.hero-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+
+    margin-top:28px;
+}
+
+.btn{
+    cursor:pointer;
+
+    padding:13px 19px;
+    border-radius:13px;
+    border:1px solid rgba(61,216,255,.28);
+
+    font-weight:850;
+    transition:.25s;
+}
+
+.btn-primary{
+    border:none;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0d75de,
+            #21d3f8
+        );
+
+    color:white;
+
+    box-shadow:
+        0 10px 30px rgba(25,190,241,.22);
+}
+
+.btn-secondary{
+    background:rgba(255,255,255,.04);
+    color:white;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.hero-note{
+    display:flex;
+    gap:10px;
+
+    margin-top:20px;
+    color:#8eacbf;
+    font-size:12px;
+}
+
+
+/* =========================================================
+   06. MÔ PHỎNG BÃO HERO
+========================================================= */
+.storm-stage{
+    position:relative;
+
+    height:580px;
+    min-height:520px;
+
+    border:1px solid rgba(72,219,255,.16);
+    border-radius:38px;
+
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(31,161,215,.15),
+            transparent 33%
+        ),
+        linear-gradient(
+            180deg,
+            #0a3652,
+            #06304c 45%,
+            #05283c
+        );
+
+    box-shadow:
+        inset 0 0 100px rgba(0,0,0,.38),
+        0 40px 90px rgba(0,0,0,.27);
+}
+
+/* nước biển */
+.ocean{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+
+    height:32%;
+
+    background:
+        linear-gradient(
+            180deg,
+            #106b8f,
+            #06364c
+        );
+}
+
+.ocean::before{
+    content:"";
+    position:absolute;
+    width:160%;
+    height:50px;
+    left:-20%;
+    top:-15px;
+
+    opacity:.32;
+
+    background:
+        repeating-radial-gradient(
+            ellipse at 50% 100%,
+            transparent 0 17px,
+            rgba(129,230,255,.5) 18px 20px
+        );
+
+    animation:waves 5s linear infinite;
+}
+
+@keyframes waves{
+    to{transform:translateX(70px);}
+}
+
+.storm-core{
+    position:absolute;
+    width:350px;
+    height:350px;
+
+    left:50%;
+    top:42%;
+
+    transform:translate(-50%,-50%);
+}
+
+.cloud-ring{
+    position:absolute;
+    inset:0;
+
+    border-radius:50%;
+
+    background:
+        conic-gradient(
+            from 0deg,
+            transparent 0 8%,
+            rgba(238,250,255,.87) 12% 23%,
+            transparent 28% 38%,
+            rgba(218,246,255,.80) 43% 57%,
+            transparent 61% 71%,
+            rgba(235,250,255,.92) 76% 89%,
+            transparent 94%
+        );
+
+    filter:
+        blur(8px)
+        drop-shadow(0 0 18px rgba(202,244,255,.28));
+
+    animation:spin 9s linear infinite;
+}
+
+.cloud-ring.two{
+    inset:45px;
+
+    opacity:.85;
+    animation-duration:6s;
+    animation-direction:reverse;
+}
+
+.eye-wall{
+    position:absolute;
+
+    width:138px;
+    height:138px;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            #092438 0 30%,
+            #f3fbff 34% 45%,
+            #8beaff 46% 53%,
+            transparent 55%
+        );
+
+    box-shadow:
+        0 0 40px rgba(255,255,255,.28);
+}
+
+.eye{
+    position:absolute;
+
+    width:49px;
+    height:49px;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    border-radius:50%;
+
+    background:#061927;
+
+    box-shadow:
+        inset 0 0 20px #000,
+        0 0 18px rgba(90,222,255,.2);
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg);}
+}
+
+.rain{
+    position:absolute;
+
+    width:2px;
+    height:70px;
+
+    background:
+        linear-gradient(
+            transparent,
+            rgba(142,227,255,.85)
+        );
+
+    opacity:.5;
+    transform:rotate(18deg);
+
+    animation:rainFall 1.2s linear infinite;
+}
+
+.r1{left:18%; top:28%;}
+.r2{left:30%; top:40%; animation-delay:.3s;}
+.r3{right:25%; top:29%; animation-delay:.5s;}
+.r4{right:15%; top:46%; animation-delay:.1s;}
+.r5{left:43%; top:61%; animation-delay:.8s;}
+
+@keyframes rainFall{
+    from{translate:0 -25px;}
+    to{translate:25px 100px; opacity:0;}
+}
+
+.label{
+    position:absolute;
+
+    padding:7px 11px;
+
+    border-radius:10px;
+    border:1px solid rgba(106,223,255,.24);
+
+    background:rgba(4,25,42,.82);
+    color:#dff9ff;
+
+    font-size:11px;
+    font-weight:800;
+
+    backdrop-filter:blur(7px);
+}
+
+.label-eye{
+    top:41%;
+    left:53%;
+}
+
+.label-wall{
+    top:25%;
+    right:7%;
+}
+
+.label-band{
+    top:55%;
+    left:6%;
+}
+
+.label-sea{
+    bottom:9%;
+    left:9%;
+}
+
+.storm-stats{
+    position:absolute;
+
+    right:18px;
+    bottom:18px;
+
+    width:205px;
+
+    padding:15px;
+
+    border-radius:18px;
+
+    background:rgba(4,18,31,.76);
+    border:1px solid rgba(85,214,255,.20);
+
+    backdrop-filter:blur(12px);
+}
+
+.storm-stats small{
+    color:#81acc6;
+}
+
+.storm-stats strong{
+    display:block;
+
+    margin-top:3px;
+
+    color:#78eaff;
+    font-size:17px;
+}
+
+
+/* =========================================================
+   07. KHÁI NIỆM
+========================================================= */
+.definition{
+    margin-top:35px;
+
+    display:grid;
+    grid-template-columns:1.25fr .75fr;
+    gap:20px;
+}
+
+.definition-main{
+    padding:32px;
+}
+
+.quote{
+    font-size:clamp(20px,3vw,28px);
+    line-height:1.5;
+}
+
+.quote strong{
+    color:var(--cyan);
+}
+
+.warning-card{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(140,47,39,.38),
+            rgba(51,24,32,.55)
+        );
+}
+
+.big-number{
+    font-size:53px;
+    font-weight:950;
+    color:#ffb27a;
+    line-height:1;
+}
+
+
+/* =========================================================
+   08. ĐIỀU KIỆN HÌNH THÀNH
+========================================================= */
+.process{
+    position:relative;
+    margin-top:36px;
+}
+
+.process::before{
+    content:"";
+    position:absolute;
+
+    left:26px;
+    top:25px;
+    bottom:25px;
+
+    width:2px;
+
+    background:
+        linear-gradient(
+            var(--cyan),
+            transparent
+        );
+}
+
+.process-item{
+    position:relative;
+
+    display:grid;
+    grid-template-columns:56px 1fr;
+    gap:18px;
+
+    margin-bottom:17px;
+}
+
+.step-num{
+    position:relative;
+    z-index:2;
+
+    width:54px;
+    height:54px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:50%;
+
+    background:#082b47;
+    border:1px solid #24cefa;
+
+    color:#74e9ff;
+
+    font-weight:950;
+}
+
+.step-content{
+    padding:18px 21px;
+
+    border:1px solid var(--line);
+    border-radius:16px;
+
+    background:rgba(8,38,62,.55);
+}
+
+.step-content strong{
+    display:block;
+    margin-bottom:4px;
+    color:white;
+}
+
+.step-content p{
+    color:var(--muted);
+    font-size:14px;
+}
+
+
+/* =========================================================
+   09. CẤU TRÚC BÃO
+========================================================= */
+.anatomy{
+    margin-top:34px;
+
+    display:grid;
+    grid-template-columns:.9fr 1.1fr;
+    gap:26px;
+}
+
+.anatomy-visual{
+    min-height:490px;
+
+    position:relative;
+    overflow:hidden;
+
+    display:grid;
+    place-items:center;
+}
+
+.mini-storm{
+    position:relative;
+    width:340px;
+    height:340px;
+}
+
+.mini-ring{
+    position:absolute;
+    inset:0;
+
+    border-radius:50%;
+
+    border:
+        55px solid rgba(171,237,255,.18);
+
+    box-shadow:
+        inset 0 0 65px rgba(255,255,255,.12),
+        0 0 70px rgba(39,207,255,.12);
+}
+
+.mini-ring::before{
+    content:"";
+    position:absolute;
+    inset:-35px;
+
+    border:
+        2px dashed rgba(82,223,255,.38);
+
+    border-radius:50%;
+
+    animation:spin 12s linear infinite;
+}
+
+.mini-eyewall{
+    position:absolute;
+    width:128px;
+    height:128px;
+
+    border-radius:50%;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    border:
+        35px solid rgba(238,251,255,.88);
+}
+
+.mini-eye{
+    position:absolute;
+
+    width:50px;
+    height:50px;
+
+    left:50%;
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    border-radius:50%;
+    background:#03121d;
+
+    box-shadow:
+        0 0 20px rgba(63,216,255,.4);
+}
+
+.anatomy-list{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.anatomy-item{
+    display:grid;
+    grid-template-columns:45px 1fr;
+    gap:13px;
+
+    padding:16px;
+
+    border-radius:16px;
+    border:1px solid var(--line);
+
+    background:rgba(10,41,66,.58);
+}
+
+.anatomy-item span{
+    width:43px;
+    height:43px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:12px;
+    background:rgba(40,215,255,.09);
+}
+
+.anatomy-item p{
+    margin-top:4px;
+    font-size:13px;
+    color:var(--muted);
+}
+
+
+/* =========================================================
+   10. PHÂN CẤP
+========================================================= */
+.scale-wrap{
+    margin-top:35px;
+
+    overflow-x:auto;
+
+    border-radius:22px;
+    border:1px solid var(--line);
+}
+
+.scale-table{
+    width:100%;
+    min-width:850px;
+
+    border-collapse:collapse;
+
+    background:rgba(6,30,49,.72);
+}
+
+.scale-table th,
+.scale-table td{
+    padding:16px;
+    text-align:left;
+
+    border-bottom:
+        1px solid rgba(134,211,237,.11);
+}
+
+.scale-table th{
+    color:#82e9ff;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.8px;
+}
+
+.scale-table td{
+    font-size:14px;
+    color:#dce9f1;
+}
+
+.level{
+    display:inline-flex;
+    align-items:center;
+
+    padding:5px 10px;
+
+    border-radius:999px;
+    font-size:11px;
+    font-weight:900;
+}
+
+.l1{
+    color:#bdf7e7;
+    background:rgba(46,220,166,.12);
+}
+
+.l2{
+    color:#ffe09d;
+    background:rgba(255,177,54,.12);
+}
+
+.l3{
+    color:#ffb7a0;
+    background:rgba(255,105,65,.12);
+}
+
+.l4{
+    color:#ffc2e4;
+    background:rgba(255,74,147,.13);
+}
+
+
+/* =========================================================
+   11. DỮ LIỆU 2026
+========================================================= */
+.data-box{
+    margin-top:35px;
+}
+
+.stat-card{
+    min-height:200px;
+}
+
+.stat-card .number{
+    margin:15px 0 5px;
+
+    font-size:46px;
+    font-weight:950;
+    line-height:1;
+
+    color:#7eeaff;
+}
+
+.stat-card .unit{
+    font-size:12px;
+    color:#7d9fb4;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.stat-card.orange .number{
+    color:#ffbb68;
+}
+
+.stat-card.purple .number{
+    color:#b99aff;
+}
+
+.stat-card.green .number{
+    color:#69e7bb;
+}
+
+.data-note{
+    margin-top:18px;
+
+    padding:16px 19px;
+
+    border-left:3px solid #25cdf4;
+    border-radius:0 14px 14px 0;
+
+    background:rgba(33,196,238,.06);
+
+    color:#a8c4d7;
+    font-size:13px;
+}
+
+
+/* =========================================================
+   12. VIỆT NAM TIMELINE
+========================================================= */
+.vn-grid{
+    margin-top:35px;
+
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.storm-card{
+    padding:20px;
+
+    border-radius:20px;
+
+    border:1px solid var(--line);
+    background:rgba(7,34,55,.66);
+}
+
+.storm-no{
+    color:#75e6ff;
+    font-weight:950;
+    font-size:12px;
+    text-transform:uppercase;
+}
+
+.storm-card h3{
+    margin:8px 0;
+}
+
+.storm-card p{
+    font-size:13px;
+    color:#9eb9ca;
+}
+
+
+/* =========================================================
+   13. HẬU QUẢ
+========================================================= */
+.impact-card{
+    min-height:260px;
+}
+
+.impact-card .impact-icon{
+    font-size:36px;
+    margin-bottom:15px;
+}
+
+.impact-card ul{
+    margin-top:14px;
+    padding-left:19px;
+
+    color:#abc2d1;
+    font-size:13px;
+}
+
+.impact-card li{
+    margin:6px 0;
+}
+
+.impact-flow{
+    margin-top:30px;
+
+    padding:27px;
+
+    border-radius:24px;
+    border:1px solid var(--line);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(68,26,39,.42),
+            rgba(9,43,68,.45)
+        );
+}
+
+.flow{
+    margin-top:20px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:9px;
+}
+
+.flow-node{
+    padding:10px 14px;
+
+    border-radius:12px;
+
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.10);
+
+    font-size:12px;
+    font-weight:850;
+}
+
+.arrow{
+    color:#65dbfa;
+}
+
+
+/* =========================================================
+   14. WORLD DATA
+========================================================= */
+.world-highlight{
+    margin-top:35px;
+
+    padding:35px;
+
+    border-radius:28px;
+
+    display:grid;
+    grid-template-columns:.8fr 1.2fr;
+    gap:30px;
+
+    background:
+        radial-gradient(
+            circle at 12% 50%,
+            rgba(151,95,255,.17),
+            transparent 32%
+        ),
+        rgba(7,31,53,.78);
+
+    border:1px solid rgba(160,130,255,.20);
+}
+
+.huge-stat{
+    font-size:clamp(55px,7vw,95px);
+    font-weight:950;
+    line-height:.95;
+
+    color:#d3c2ff;
+}
+
+.world-copy{
+    color:#b2c7d5;
+}
+
+
+/* =========================================================
+   15. BIẾN ĐỔI KHÍ HẬU
+========================================================= */
+.climate-logic{
+    margin-top:35px;
+
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+}
+
+.logic-card{
+    position:relative;
+    min-height:210px;
+}
+
+.logic-index{
+    color:#5ee3ff;
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:1px;
+}
+
+.logic-card h3{
+    margin:10px 0;
+    font-size:18px;
+}
+
+.logic-card p{
+    font-size:13px;
+}
+
+
+/* =========================================================
+   16. VIDEO / MEDIA
+========================================================= */
+.media-grid{
+    margin-top:35px;
+
+    display:grid;
+    grid-template-columns:1.3fr .7fr;
+    gap:20px;
+}
+
+.video-box{
+    min-height:400px;
+
+    display:grid;
+    place-items:center;
+
+    text-align:center;
+
+    border-radius:28px;
+    border:1px solid var(--line);
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(37,215,255,.15),
+            transparent 40%
+        ),
+        linear-gradient(
+            135deg,
+            #092f4b,
+            #071b2d
+        );
+}
+
+.play{
+    width:85px;
+    height:85px;
+
+    margin:auto;
+    display:grid;
+    place-items:center;
+
+    border-radius:50%;
+    background:#1dd2fa;
+
+    color:#052034;
+    font-size:29px;
+
+    box-shadow:
+        0 0 0 15px rgba(29,210,250,.08),
+        0 0 0 30px rgba(29,210,250,.04);
+
+    cursor:pointer;
+}
+
+.video-box h3{
+    margin-top:25px;
+}
+
+.video-box p{
+    margin:7px auto 0;
+    max-width:600px;
+
+    color:#9db9ca;
+    font-size:13px;
+}
+
+.media-side{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.media-mini{
+    flex:1;
+}
+
+.media-mini strong{
+    color:#82eaff;
+}
+
+
+/* =========================================================
+   17. THINKING ZONE
+========================================================= */
+.thinking{
+    background:
+        radial-gradient(
+            circle at center top,
+            rgba(111,64,255,.10),
+            transparent 40%
+        );
+}
+
+.question-list{
+    margin-top:30px;
+    display:grid;
+    gap:13px;
+}
+
+.question{
+    cursor:pointer;
+
+    padding:18px 20px;
+
+    border-radius:17px;
+    border:1px solid var(--line);
+
+    background:rgba(8,35,60,.59);
+}
+
+.question-head{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+
+    font-weight:850;
+}
+
+.answer{
+    max-height:0;
+    overflow:hidden;
+
+    color:#9fb9cb;
+    font-size:13px;
+
+    transition:
+        max-height .35s ease,
+        padding .35s ease;
+}
+
+.question.active .answer{
+    max-height:300px;
+    padding-top:13px;
+}
+
+
+/* =========================================================
+   18. SAFETY
+========================================================= */
+.safety-grid{
+    margin-top:35px;
+}
+
+.safety-card{
+    min-height:230px;
+}
+
+.safety-card h3{
+    margin-bottom:10px;
+}
+
+.safety-card ul{
+    padding-left:18px;
+
+    color:#a7c0d0;
+    font-size:13px;
+}
+
+
+/* =========================================================
+   19. SOURCE
+========================================================= */
+.sources{
+    margin-top:30px;
+}
+
+.source{
+    padding:13px 15px;
+
+    margin-bottom:9px;
+
+    border-radius:13px;
+    border:1px solid rgba(112,207,237,.13);
+
+    background:rgba(255,255,255,.025);
+
+    color:#9fb7c8;
+    font-size:12px;
+}
+
+
+/* =========================================================
+   20. FOOTER
+========================================================= */
+footer{
+    padding:35px 0;
+
+    border-top:1px solid var(--line);
+
+    text-align:center;
+    color:#7895a8;
+
+    font-size:12px;
+}
+
+
+/* =========================================================
+   21. RESPONSIVE
+========================================================= */
+@media(max-width:1050px){
+
+    .hero-grid,
+    .definition,
+    .anatomy,
+    .world-highlight,
+    .media-grid{
+        grid-template-columns:1fr;
+    }
+
+    .grid-4,
+    .climate-logic{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .vn-grid,
+    .grid-3{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .storm-stage{
+        height:520px;
+    }
+}
+
+@media(max-width:700px){
+
+    .nav-links{
+        display:none;
+    }
+
+    .container{
+        padding:0 16px;
+    }
+
+    .section{
+        padding:65px 0;
+    }
+
+    .hero{
+        padding:45px 0 70px;
+    }
+
+    .hero h1{
+        letter-spacing:-2px;
+    }
+
+    .grid-2,
+    .grid-3,
+    .grid-4,
+    .vn-grid,
+    .climate-logic{
+        grid-template-columns:1fr;
+    }
+
+    .storm-stage{
+        min-height:450px;
+        height:450px;
+    }
+
+    .storm-core{
+        width:280px;
+        height:280px;
+    }
+
+    .label{
+        display:none;
+    }
+
+    .storm-stats{
+        width:auto;
+        left:16px;
+        right:16px;
+    }
+
+    .mini-storm{
+        width:260px;
+        height:260px;
+    }
+
+    .mini-eyewall{
+        width:110px;
+        height:110px;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+<!-- Thanh tiến trình -->
+<div id="progressBar"></div>
+
+
+<!-- =======================================================
+     NAVIGATION
+======================================================= -->
+<nav class="navbar">
+    <div class="nav-wrap">
+
+        <a class="logo" href="#top">
+            <div class="logo-icon">🌀</div>
+            CLIMA<span>SCORE</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="#khai-niem">Khái niệm</a>
+            <a href="#hinh-thanh">Hình thành</a>
+            <a href="#cau-truc">Cấu trúc</a>
+            <a href="#phan-cap">Phân cấp</a>
+            <a href="#2026">Dữ liệu 2026</a>
+            <a href="#tac-dong">Tác động</a>
+            <a href="#ung-pho">Ứng phó</a>
+        </div>
+
+    </div>
+</nav>
+
+
+
+<!-- =======================================================
+     HERO
+======================================================= -->
+<header class="hero" id="top">
+
+<div class="container hero-grid">
+
+    <!-- Nội dung trái -->
+    <div>
+
+        <div class="eyebrow">
+            ⚠ HỒ SƠ THIÊN TAI • TROPICAL CYCLONE
+        </div>
+
+        <h1>
+            BÃO
+            <span>MẠNH</span>
+        </h1>
+
+        <p class="hero-sub">
+            Khám phá cơ chế hình thành, cấu trúc, cường độ,
+            tác động và những dữ liệu nổi bật về bão nhiệt đới
+            trong năm 2026. Không chỉ “gió mạnh”, một cơn bão
+            còn là hệ thống tương tác giữa đại dương, khí quyển,
+            địa hình và cộng đồng dân cư.
+        </p>
+
+        <div class="hero-actions">
+            <a class="btn btn-primary" href="#khai-niem">
+                Bắt đầu khám phá ↓
+            </a>
+
+            <a class="btn btn-secondary" href="#2026">
+                Xem dữ liệu 2026
+            </a>
+        </div>
+
+        <div class="hero-note">
+            <span>●</span>
+            Dữ liệu cập nhật đến 02/10/2026.
+            Mùa bão 2026 vẫn đang tiếp diễn.
+        </div>
+
+    </div>
+
+
+    <!-- Mô phỏng phải -->
+    <div class="storm-stage">
+
+        <div class="storm-core">
+            <div class="cloud-ring"></div>
+            <div class="cloud-ring two"></div>
+            <div class="eye-wall"></div>
+            <div class="eye"></div>
+        </div>
+
+        <div class="rain r1"></div>
+        <div class="rain r2"></div>
+        <div class="rain r3"></div>
+        <div class="rain r4"></div>
+        <div class="rain r5"></div>
+
+        <div class="ocean"></div>
+
+        <div class="label label-eye">
+            MẮT BÃO
+        </div>
+
+        <div class="label label-wall">
+            THÀNH MẮT BÃO<br>
+            Gió mạnh nhất
+        </div>
+
+        <div class="label label-band">
+            DẢI MÂY MƯA XOẮN
+        </div>
+
+        <div class="label label-sea">
+            BIỂN ẤM → CUNG CẤP NĂNG LƯỢNG
+        </div>
+
+        <div class="storm-stats">
+            <small>Bão mạnh tại Việt Nam</small>
+            <strong>Cấp 10 – 11</strong>
+            <small>
+                Bão rất mạnh: cấp 12–15<br>
+                Siêu bão: từ cấp 16
+            </small>
+        </div>
+
+    </div>
+
+</div>
+</header>
+
+
+
+<!-- =======================================================
+     01. KHÁI NIỆM
+======================================================= -->
+<section class="section" id="khai-niem">
+
+<div class="container">
+
+    <div class="section-tag">
+        01 • Nhận diện
+    </div>
+
+    <h2 class="section-title">
+        Bão mạnh <span>là gì?</span>
+    </h2>
+
+    <p class="section-desc">
+        Trước khi nghiên cứu hậu quả, cần phân biệt rõ
+        “bão”, “bão mạnh”, “bão rất mạnh” và “siêu bão”.
+    </p>
+
+
+    <div class="definition">
+
+        <div class="card definition-main">
+
+            <div class="glow-line"></div>
+
+            <p class="quote">
+                <strong>Bão</strong> là một xoáy thuận nhiệt đới
+                có sức gió mạnh nhất từ cấp 8 trở lên.
+                Theo hệ thống sử dụng tại Việt Nam,
+                bão có gió mạnh nhất <strong>cấp 10–11</strong>
+                được gọi là <strong>bão mạnh</strong>.
+            </p>
+
+            <p style="
+                color:#9db8ca;
+                margin-top:20px;
+                font-size:14px;
+            ">
+                Bão không chỉ có gió. Một hệ thống bão có thể đồng thời
+                gây mưa cực lớn, sóng cao, nước dâng do bão,
+                lũ, lũ quét, sạt lở đất và ngập lụt đô thị.
+            </p>
+
+        </div>
+
+
+        <div class="card warning-card">
+
+            <span style="
+                color:#ffb58c;
+                font-size:12px;
+                font-weight:900;
+                letter-spacing:1px;
+            ">
+                BÃO MẠNH
+            </span>
+
+            <div class="big-number">
+                10–11
+            </div>
+
+            <p>
+                cấp Beaufort theo phân loại sử dụng trong
+                tài liệu phòng, chống thiên tai Việt Nam.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+
+
+<!-- =======================================================
+     02. HÌNH THÀNH
+======================================================= -->
+<section class="section" id="hinh-thanh">
+
+<div class="container">
+
+    <div class="section-tag">
+        02 • Cơ chế
+    </div>
+
+    <h2 class="section-title">
+        Một cơn bão <span>được “nuôi” như thế nào?</span>
+    </h2>
+
+    <p class="section-desc">
+        Có thể xem bão như một “động cơ nhiệt” khổng lồ.
+        Đại dương cung cấp nhiệt và hơi nước; khí quyển tổ chức
+        nguồn năng lượng đó thành một hệ thống xoáy.
+    </p>
+
+
+    <div class="process">
+
+        <div class="process-item">
+
+            <div class="step-num">1</div>
+
+            <div class="step-content">
+                <strong>Biển ấm cung cấp năng lượng</strong>
+                <p>
+                    Nước biển nhiệt đới ấm làm tăng quá trình bốc hơi.
+                    Không khí phía trên biển trở nên nóng và ẩm.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="process-item">
+
+            <div class="step-num">2</div>
+
+            <div class="step-content">
+                <strong>Không khí nóng ẩm bốc lên</strong>
+                <p>
+                    Không khí bốc lên làm áp suất gần mặt biển giảm.
+                    Không khí xung quanh tiếp tục hội tụ vào vùng áp thấp.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="process-item">
+
+            <div class="step-num">3</div>
+
+            <div class="step-content">
+                <strong>Hơi nước ngưng tụ → giải phóng nhiệt</strong>
+                <p>
+                    Khi hơi nước ngưng tụ tạo mây dông,
+                    nhiệt ẩn được giải phóng và tiếp tục làm
+                    không khí bốc lên mạnh hơn.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="process-item">
+
+            <div class="step-num">4</div>
+
+            <div class="step-content">
+                <strong>Hệ thống bắt đầu xoáy</strong>
+                <p>
+                    Tác động của chuyển động quay Trái Đất
+                    làm luồng không khí hội tụ bị lệch hướng,
+                    góp phần hình thành hoàn lưu xoáy.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="process-item">
+
+            <div class="step-num">5</div>
+
+            <div class="step-content">
+                <strong>Bão tự duy trì và mạnh lên</strong>
+                <p>
+                    Nếu tiếp tục đi trên vùng biển thuận lợi,
+                    độ đứt gió không quá lớn và môi trường đủ ẩm,
+                    hệ thống có thể tổ chức tốt hơn và tăng cường độ.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="process-item">
+
+            <div class="step-num">6</div>
+
+            <div class="step-content">
+                <strong>Vào đất liền → nguồn năng lượng bị cắt</strong>
+                <p>
+                    Khi đổ bộ, bão mất nguồn nhiệt và hơi nước từ đại dương,
+                    đồng thời chịu ma sát địa hình nên thường suy yếu,
+                    nhưng mưa lớn vẫn có thể tiếp tục rất xa tâm bão.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+
+
+<!-- =======================================================
+     03. CẤU TRÚC
+======================================================= -->
+<section class="section" id="cau-truc">
+
+<div class="container">
+
+    <div class="section-tag">
+        03 • Giải phẫu cơn bão
+    </div>
+
+    <h2 class="section-title">
+        Không phải nơi nào trong bão cũng <span>nguy hiểm như nhau</span>
+    </h2>
+
+
+    <div class="anatomy">
+
+        <div class="card anatomy-visual">
+
+            <div class="mini-storm">
+                <div class="mini-ring"></div>
+                <div class="mini-eyewall"></div>
+                <div class="mini-eye"></div>
+            </div>
+
+            <div style="
+                position:absolute;
+                left:22px;
+                bottom:20px;
+                color:#8bb3c9;
+                font-size:12px;
+            ">
+                Sơ đồ mô phỏng nhìn từ trên cao
+            </div>
+
+        </div>
+
+
+        <div class="anatomy-list">
+
+            <div class="anatomy-item">
+                <span>◎</span>
+                <div>
+                    <strong>Mắt bão</strong>
+                    <p>
+                        Trung tâm của bão. Trời có thể ít mây và gió tạm
+                        giảm nhưng hoàn toàn không đồng nghĩa bão đã qua.
+                    </p>
+                </div>
+            </div>
+
+
+            <div class="anatomy-item">
+                <span>◉</span>
+                <div>
+                    <strong>Thành mắt bão</strong>
+                    <p>
+                        Vùng mây dông bao quanh mắt bão; thường tập trung
+                        những luồng gió mạnh và mưa dữ dội nhất.
+                    </p>
+                </div>
+            </div>
+
+
+            <div class="anatomy-item">
+                <span>↻</span>
+                <div>
+                    <strong>Dải mây mưa xoắn</strong>
+                    <p>
+                        Các dải mây dông kéo dài xoắn quanh tâm,
+                        có thể gây mưa lớn, gió giật và dông cách xa tâm bão.
+                    </p>
+                </div>
+            </div>
+
+
+            <div class="anatomy-item">
+                <span>↑</span>
+                <div>
+                    <strong>Dòng khí đi lên</strong>
+                    <p>
+                        Không khí nóng ẩm hội tụ và bốc lên mạnh,
+                        cung cấp năng lượng cho vùng mây đối lưu.
+                    </p>
+                </div>
+            </div>
+
+
+            <div class="anatomy-item">
+                <span>→</span>
+                <div>
+                    <strong>Dòng thoát khí trên cao</strong>
+                    <p>
+                        Không khí sau khi bốc lên được phân tán ra phía ngoài
+                        ở tầng cao, giúp duy trì hệ thống hoàn lưu.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+
+
+<!-- =======================================================
+     04. PHÂN CẤP
+======================================================= -->
+<section class="section" id="phan-cap">
+
+<div class="container">
+
+    <div class="section-tag">
+        04 • Phân loại
+    </div>
+
+    <h2 class="section-title">
+        Từ áp thấp nhiệt đới đến <span>siêu bão</span>
+    </h2>
+
+    <p class="section-desc">
+        Bảng dưới sử dụng cách gọi phổ biến trong tài liệu
+        phòng, chống thiên tai của Việt Nam.
+    </p>
+
+
+    <div class="scale-wrap">
+
+        <table class="scale-table">
+
+            <thead>
+                <tr>
+                    <th>Loại</th>
+                    <th>Cấp gió</th>
+                    <th>Nhận diện</th>
+                    <th>Nguy cơ chính</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>
+                        <span class="level l1">
+                            Áp thấp nhiệt đới
+                        </span>
+                    </td>
+
+                    <td>Cấp 6–7</td>
+
+                    <td>
+                        Hoàn lưu xoáy nhiệt đới đã hình thành
+                        nhưng chưa đạt cường độ bão.
+                    </td>
+
+                    <td>
+                        Mưa lớn, biển động,
+                        gió mạnh.
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>
+                        <span class="level l1">
+                            Bão
+                        </span>
+                    </td>
+
+                    <td>Cấp 8–9</td>
+
+                    <td>
+                        Xoáy thuận nhiệt đới đã đạt ngưỡng bão.
+                    </td>
+
+                    <td>
+                        Gió mạnh, sóng lớn,
+                        mưa lớn.
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>
+                        <span class="level l2">
+                            BÃO MẠNH
+                        </span>
+                    </td>
+
+                    <td>
+                        <strong>Cấp 10–11</strong>
+                    </td>
+
+                    <td>
+                        Khả năng phá hủy tăng đáng kể.
+                    </td>
+
+                    <td>
+                        Tốc mái, cây đổ,
+                        hư hại công trình,
+                        nước dâng.
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>
+                        <span class="level l3">
+                            Bão rất mạnh
+                        </span>
+                    </td>
+
+                    <td>
+                        <strong>Cấp 12–15</strong>
+                    </td>
+
+                    <td>
+                        Cường độ gió rất lớn,
+                        biển đặc biệt nguy hiểm.
+                    </td>
+
+                    <td>
+                        Thiệt hại diện rộng,
+                        sóng lớn, nước dâng,
+                        đứt gãy hạ tầng.
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>
+                        <span class="level l4">
+                            SIÊU BÃO
+                        </span>
+                    </td>
+
+                    <td>
+                        <strong>≥ cấp 16</strong>
+                    </td>
+
+                    <td>
+                        Cấp cao nhất trong cách gọi này.
+                    </td>
+
+                    <td>
+                        Nguy cơ thảm họa rất lớn
+                        nếu ảnh hưởng trực tiếp khu vực đông dân.
+                    </td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+</section>
+
+
+
+<!-- =======================================================
+     05. DATA 2026
+======================================================= -->
+<section class="section" id="2026">
+
+<div class="container">
+
+    <div class="section-tag">
+        05 • Data snapshot
+    </div>
+
+    <h2 class="section-title">
+        Bức tranh bão năm <span>2026</span>
+    </h2>
+
+    <p class="section-desc">
+        Đây là dữ liệu giữa mùa, cập nhật đến đầu tháng 10/2026.
+        Không nên hiểu đây là tổng kết cuối năm.
+    </p>
+
+
+    <div class="grid-4 data-box">
+
+        <div class="card stat-card">
+            <div class="glow-line"></div>
+            <div class="unit">Biển Đông</div>
+            <div class="number">≥ 6</div>
+            <h3>Cơn bão</h3>
+            <p>
+                Đã được đánh số trên Biển Đông
+                tính đến cuối tháng 9/2026.
+            </p>
+        </div>
+
+
+        <div class="card stat-card orange">
+            <div class="unit">
+                Đông Bắc Thái Bình Dương
+            </div>
+            <div class="number">17</div>
+            <h3>Bão được đặt tên</h3>
+            <p>
+                Theo NOAA,
+                cập nhật ngày 01/10/2026.
+            </p>
+        </div>
+
+
+        <div class="card stat-card purple">
+            <div class="unit">
+                Eastern Pacific
+            </div>
+            <div class="number">7</div>
+            <h3>Hurricane</h3>
+            <p>
+                Trong đó có 5 cơn đạt
+                mức major hurricane.
+            </p>
+        </div>
+
+
+        <div class="card stat-card green">
+            <div class="unit">
+                ACE
+            </div>
+            <div class="number">176.4</div>
+            <h3>Năng lượng xoáy tích lũy</h3>
+            <p>
+                Khoảng +91% so với chuẩn 1991–2020
+                trong thống kê NOAA tại thời điểm cập nhật.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div class="data-note">
+        <strong>Lưu ý khoa học:</strong>
+        số lượng bão không phản ánh hoàn toàn mức độ nguy hiểm.
+        Một mùa ít bão vẫn có thể gây thiệt hại rất lớn nếu chỉ một
+        cơn bão mạnh đổ bộ vào khu vực đông dân hoặc gây mưa cực đoan.
+    </div>
+
+</div>
+</section>
+
+
+
+<!-- =======================================================
+     06. VIỆT NAM 2026
+======================================================= -->
+<section class="section">
+
+<div class="container">
+
+    <div class="section-tag">
+        06 • Việt Nam
+    </div>
+
+    <h2 class="section-title">
+        Biển Đông năm 2026:
+        <span>không phải cơn nào cũng đổ bộ</span>
+    </h2>
+
+    <p class="section-desc">
+        Học sinh cần phân biệt:
+        “xuất hiện trên Biển Đông”,
+        “ảnh hưởng vùng biển” và
+        “đổ bộ trực tiếp vào Việt Nam”
+        là ba khái niệm khác nhau.
+    </p>
+
+
+    <div class="vn-grid">
+
+        <div class="storm-card">
+            <div class="storm-no">Bão số 01</div>
+            <h3>Maysak</h3>
+            <p>
+                Hình thành đầu tháng 7/2026.
+                Gió gần tâm ban đầu cấp 8,
+                ảnh hưởng khu vực Bắc Biển Đông
+                và vịnh Bắc Bộ.
+            </p>
+        </div>
+
+
+        <div class="storm-card">
+            <div class="storm-no">Bão số 02</div>
+            <h3>Cuối tháng 7</h3>
+            <p>
+                Có thời điểm trên khu vực gần Quảng Đông,
+                cường độ đạt khoảng cấp 12–13,
+                giật cấp 16.
+            </p>
+        </div>
+
+
+        <div class="storm-card">
+            <div class="storm-no">Bão số 03</div>
+            <h3>Kujira</h3>
+            <p>
+                Hình thành ở phía Đông Nam Bắc Biển Đông.
+                Bản tin dự báo cho biết không ảnh hưởng trực tiếp
+                vùng ven biển và đất liền Việt Nam.
+            </p>
+        </div>
+
+
+        <div class="storm-card">
+            <div class="storm-no">Bão số 04</div>
+            <h3>Vịnh Bắc Bộ</h3>
+            <p>
+                Di chuyển chậm trên vịnh Bắc Bộ,
+                có thời điểm gió mạnh cấp 9,
+                giật cấp 11.
+            </p>
+        </div>
+
+
+        <div class="storm-card">
+            <div class="storm-no">Bão số 05</div>
+            <h3>Đầu tháng 9</h3>
+            <p>
+                Hoạt động ở phía Đông Bắc
+                khu vực Bắc Biển Đông rồi đi về phía Trung Quốc.
+            </p>
+        </div>
+
+
+        <div class="storm-card">
+            <div class="storm-no">Bão số 06</div>
+            <h3>Cuối tháng 9</h3>
+            <p>
+                Hoàn lưu gây mưa rất lớn ở Trung Bộ;
+                nhiều nơi ghi nhận tổng lượng mưa
+                100–200 mm, cục bộ trên 250 mm
+                trong một số giai đoạn.
+            </p>
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+
+
+<!-- =======================================================
+     07. TÁC ĐỘNG
+======================================================= -->
+<section class="section" id="tac-dong">
+
+<div class="container">
+
+    <div class="section-tag">
+        07 • Hậu quả
+    </div>
+
+    <h2 class="section-title">
+        Vì sao bão gây thiệt hại
+        <span>lớn hơn nhiều so với sức gió?</span>
+    </h2>
+
+    <p class="section-desc">
+        Thiệt hại do bão là kết quả của một chuỗi tác động
+        đồng thời và nối tiếp nhau.
+    </p>
+
+
+    <div class="grid-3" style="margin-top:35px;">
+
+        <div class="card impact-card">
+            <div class="impact-icon">💨</div>
+            <h3>1. Gió cực mạnh</h3>
+            <p>
+                Tác động trực tiếp lên nhà cửa,
+                cây xanh, điện lưới và công trình.
+            </p>
+
+            <ul>
+                <li>Tốc mái, sập công trình yếu.</li>
+                <li>Cây và cột điện gãy đổ.</li>
+                <li>Vật thể bị cuốn thành vật nguy hiểm.</li>
+            </ul>
+        </div>
+
+
+        <div class="card impact-card">
+            <div class="impact-icon">🌊</div>
+            <h3>2. Nước dâng & sóng lớn</h3>
+            <p>
+                Gió và áp suất thấp có thể dồn nước biển
+                vào vùng bờ.
+            </p>
+
+            <ul>
+                <li>Ngập ven biển.</li>
+                <li>Xói lở bờ biển.</li>
+                <li>Đe dọa tàu thuyền và khu dân cư thấp.</li>
+            </ul>
+        </div>
+
+
+        <div class="card impact-card">
+            <div class="impact-icon">🌧️</div>
+            <h3>3. Mưa cực lớn</h3>
+            <p>
+                Nhiều thiệt hại nghiêm trọng có thể xảy ra
+                sau khi tâm bão đã suy yếu.
+            </p>
+
+            <ul>
+                <li>Lũ sông.</li>
+                <li>Ngập đô thị.</li>
+                <li>Lũ quét và sạt lở đất.</li>
+            </ul>
+        </div>
+
+
+        <div class="card impact-card">
+            <div class="impact-icon">🌾</div>
+            <h3>4. Nông nghiệp</h3>
+
+            <ul>
+                <li>Lúa và hoa màu bị ngập, đổ.</li>
+                <li>Nuôi trồng thủy sản bị phá hủy.</li>
+                <li>Đất sản xuất bị xói mòn.</li>
+                <li>Gián đoạn mùa vụ.</li>
+            </ul>
+        </div>
+
+
+        <div class="card impact-card">
+            <div class="impact-icon">⚡</div>
+            <h3>5. Hạ tầng</h3>
+
+            <ul>
+                <li>Mất điện, mất liên lạc.</li>
+                <li>Đường bị ngập hoặc sạt lở.</li>
+                <li>Cầu, cảng và công trình ven biển hư hại.</li>
+                <li>Hoạt động trường học bị gián đoạn.</li>
+            </ul>
+        </div>
+
+
+        <div class="card impact-card">
+            <div class="impact-icon">👥</div>
+            <h3>6. Xã hội</h3>
+
+            <ul>
+                <li>Thương vong và sơ tán dân cư.</li>
+                <li>Mất sinh kế.</li>
+                <li>Thiếu nước sạch và thực phẩm.</li>
+                <li>Chi phí phục hồi kéo dài.</li>
+            </ul>
+        </div>
+
+    </div>
+
+
+    <div class="impact-flow">
+
+        <h3>
+            Một cơn bão có thể tạo ra
+            “hiệu ứng domino”
+        </h3>
+
+        <div class="flow">
+
+            <div class="flow-node">BÃO</div>
+            <div class="arrow">→</div>
+
+            <div class="flow-node">MƯA LỚN</div>
+            <div class="arrow">→</div>
+
+            <div class="flow-node">LŨ</div>
+            <div class="arrow">→</div>
+
+            <div class="flow-node">SẠT LỞ</div>
+            <div class="arrow">→</div>
+
+            <div class="flow-node">ĐỨT ĐƯỜNG</div>
+            <div class="arrow">→</div>
+
+            <div class="flow-node">CÔ LẬP DÂN CƯ</div>
+            <div class="arrow">→</div>
+
+            <div class="flow-node">GIÁN ĐOẠN CỨU HỘ</div>
+
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+
+
+<!-- =======================================================
+     08. THẾ GIỚI
+======================================================= -->
+<section class="section">
+
+<div class="container">
+
+    <div class="section-tag">
+        08 • Góc nhìn toàn cầu
+    </div>
+
+    <h2 class="section-title">
+        Bão nhiệt đới là một trong những
+        <span>thiên tai gây tổn thất lớn nhất</span>
+    </h2>
+
+
+    <div class="world-highlight">
+
+        <div>
+            <div class="huge-stat">
+                1,945
+            </div>
+
+            <p style="
+                margin-top:12px;
+                color:#ccbfff;
+                font-weight:850;
+            ">
+                thảm họa liên quan đến
+                xoáy thuận nhiệt đới
+            </p>
+
+            <small style="color:#829fb3;">
+                WMO, giai đoạn 1970–2019
+            </small>
+        </div>
+
+
+        <div class="world-copy">
+
+            <p>
+                Theo thống kê dài hạn của Tổ chức Khí tượng Thế giới,
+                các xoáy thuận nhiệt đới trong giai đoạn 1970–2019
+                liên quan tới khoảng
+                <strong style="color:white;">
+                    779.000 người thiệt mạng
+                </strong>
+                và khoảng
+                <strong style="color:white;">
+                    1,4 nghìn tỷ USD tổn thất kinh tế
+                </strong>.
+            </p>
+
+            <br>
+
+            <p>
+                Điểm đáng chú ý là cảnh báo sớm,
+                dự báo tốt hơn và công tác phòng chống thiên tai
+                đã giúp giảm đáng kể số người tử vong,
+                dù thiệt hại kinh tế vẫn rất lớn.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+
+
+<!-- =======================================================
+     09. BÃO & BIẾN ĐỔI KHÍ HẬU
+======================================================= -->
+<section class="section">
+
+<div class="container">
+
+    <div class="section-tag">
+        09 • Climate connection
+    </div>
+
+    <h2 class="section-title">
+        Biến đổi khí hậu có phải cứ làm
+        <span>“nhiều bão hơn”?</span>
+    </h2>
+
+    <p class="section-desc">
+        Câu trả lời khoa học không đơn giản là
+        “Trái Đất nóng lên = mọi nơi có nhiều bão hơn”.
+        Điều đáng quan tâm hơn là cường độ, lượng mưa,
+        nước biển dâng và mức độ phơi bày của con người.
+    </p>
+
+
+    <div class="climate-logic">
+
+        <div class="card logic-card">
+            <div class="logic-index">01</div>
+
+            <h3>Đại dương ấm</h3>
+
+            <p>
+                Nước biển ấm hơn có thể cung cấp nhiều
+                nhiệt và hơi nước cho xoáy thuận nhiệt đới
+                khi các điều kiện khí quyển khác thuận lợi.
+            </p>
+        </div>
+
+
+        <div class="card logic-card">
+            <div class="logic-index">02</div>
+
+            <h3>Mưa cực đoan</h3>
+
+            <p>
+                Không khí ấm có khả năng chứa nhiều hơi nước hơn,
+                làm tăng nguy cơ lượng mưa rất lớn
+                trong các xoáy thuận mạnh.
+            </p>
+        </div>
+
+
+        <div class="card logic-card">
+            <div class="logic-index">03</div>
+
+            <h3>Mực nước biển cao</h3>
+
+            <p>
+                Cùng một mức nước dâng do bão,
+                nền mực nước biển cao hơn có thể làm
+                tình trạng ngập ven biển nghiêm trọng hơn.
+            </p>
+        </div>
+
+
+        <div class="card logic-card">
+            <div class="logic-index">04</div>
+
+            <h3>Rủi ro ≠ chỉ là cường độ</h3>
+
+            <p>
+                Một cơn bão chỉ trở thành thảm họa lớn khi
+                hiểm họa gặp cộng đồng có mức độ phơi bày
+                và dễ bị tổn thương cao.
+            </p>
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+
+
+<!-- =======================================================
+     10. MEDIA
+======================================================= -->
+<section class="section">
+
+<div class="container">
+
+    <div class="section-tag">
+        10 • Hình ảnh & Video
+    </div>
+
+    <h2 class="section-title">
+        Quan sát bão từ <span>không gian</span>
+    </h2>
+
+    <p class="section-desc">
+        Khi hoàn thiện website, nên ưu tiên ảnh vệ tinh
+        và video từ NOAA, NASA, WMO hoặc Trung tâm Dự báo
+        Khí tượng Thủy văn Quốc gia thay vì hình minh họa
+        không rõ nguồn.
+    </p>
+
+
+    <div class="media-grid">
+
+        <!-- =================================================
+             VIDEO
+             THAY VIDEO TẠI ĐÂY
+        ================================================== -->
+        <div class="video-box">
+
+            <div>
+
+                <div
+                    class="play"
+                    onclick="showVideoGuide()"
+                    title="Thêm video minh họa"
+                >
+                    ▶
+                </div>
+
+                <h3>
+                    VIDEO: BÃO HÌNH THÀNH NHƯ THẾ NÀO?
+                </h3>
+
+                <p>
+                    Vị trí này dành cho video NOAA / NASA /
+                    WMO / NCHMF hoặc video AI tiếng Việt của bạn.
+                </p>
+
+                <p style="
+                    margin-top:15px;
+                    color:#63ddf7;
+                    font-weight:800;
+                ">
+                    Bấm nút ▶ để xem hướng dẫn thay video
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="media-side">
+
+            <div class="card media-mini">
+                <strong>ẢNH 01</strong>
+                <h3>Ảnh vệ tinh bão</h3>
+                <p>
+                    Sử dụng ảnh cho thấy rõ mắt bão,
+                    thành mắt và các dải mây xoắn.
+                </p>
+            </div>
+
+
+            <div class="card media-mini">
+                <strong>ẢNH 02</strong>
+                <h3>Nước dâng do bão</h3>
+                <p>
+                    Minh họa nước biển dâng vào khu vực bờ,
+                    tránh nhầm với sóng thần.
+                </p>
+            </div>
+
+
+            <div class="card media-mini">
+                <strong>ẢNH 03</strong>
+                <h3>Hậu quả sau bão</h3>
+                <p>
+                    Nên chọn ảnh thể hiện cả gió,
+                    ngập lụt và sạt lở để HS thấy tác động chuỗi.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+
+
+<!-- =======================================================
+     11. TƯ DUY
+======================================================= -->
+<section class="section thinking">
+
+<div class="container">
+
+    <div class="section-tag">
+        11 • Thinking zone
+    </div>
+
+    <h2 class="section-title">
+        Đừng chỉ nhớ số liệu —
+        <span>hãy giải thích hiện tượng</span>
+    </h2>
+
+
+    <div class="question-list">
+
+
+        <div class="question">
+            <div class="question-head">
+                <span>
+                    01. Vì sao bão thường suy yếu
+                    khi đi sâu vào đất liền?
+                </span>
+                <span>＋</span>
+            </div>
+
+            <div class="answer">
+                Bão mất nguồn cung cấp nhiệt và hơi nước liên tục
+                từ đại dương, đồng thời chịu ma sát lớn hơn với
+                bề mặt đất và địa hình nên hoàn lưu dần suy yếu.
+            </div>
+        </div>
+
+
+        <div class="question">
+            <div class="question-head">
+                <span>
+                    02. Vì sao tâm bão đã đi qua
+                    nhưng nguy hiểm chưa kết thúc?
+                </span>
+                <span>＋</span>
+            </div>
+
+            <div class="answer">
+                Hoàn lưu bão có thể tiếp tục gây mưa lớn;
+                nước từ thượng nguồn cần thời gian để tập trung
+                vào sông suối. Vì vậy lũ, lũ quét,
+                sạt lở và ngập lụt có thể xảy ra sau bão.
+            </div>
+        </div>
+
+
+        <div class="question">
+            <div class="question-head">
+                <span>
+                    03. Bão ít hơn có đồng nghĩa
+                    năm đó an toàn hơn không?
+                </span>
+                <span>＋</span>
+            </div>
+
+            <div class="answer">
+                Không nhất thiết. Chỉ một cơn bão rất mạnh
+                đổ bộ vào khu vực đông dân, địa hình dễ sạt lở
+                hoặc vùng ven biển thấp cũng có thể gây
+                thiệt hại đặc biệt nghiêm trọng.
+            </div>
+        </div>
+
+
+        <div class="question">
+            <div class="question-head">
+                <span>
+                    04. Vì sao không nên đánh giá
+                    một cơn bão chỉ dựa vào cấp gió?
+                </span>
+                <span>＋</span>
+            </div>
+
+            <div class="answer">
+                Vì thiệt hại còn phụ thuộc lượng mưa,
+                nước dâng, sóng biển, kích thước hoàn lưu,
+                tốc độ di chuyển, địa hình,
+                mật độ dân cư và khả năng ứng phó.
+            </div>
+        </div>
+
+
+        <div class="question">
+            <div class="question-head">
+                <span>
+                    05. Tại sao cảnh báo sớm có thể cứu sống
+                    nhiều người dù không thể “ngăn bão”?
+                </span>
+                <span>＋</span>
+            </div>
+
+            <div class="answer">
+                Cảnh báo sớm tạo thêm thời gian để tàu thuyền
+                tránh vùng nguy hiểm, sơ tán dân,
+                gia cố công trình và tổ chức lực lượng cứu hộ.
+                Nó làm giảm mức độ phơi bày trước thiên tai.
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+
+
+<!-- =======================================================
+     12. ỨNG PHÓ
+======================================================= -->
+<section class="section" id="ung-pho">
+
+<div class="container">
+
+    <div class="section-tag">
+        12 • Hành động
+    </div>
+
+    <h2 class="section-title">
+        Trước – Trong – Sau <span>cơn bão</span>
+    </h2>
+
+
+    <div class="grid-3 safety-grid">
+
+        <div class="card safety-card">
+            <div class="icon">🟦</div>
+
+            <h3>TRƯỚC BÃO</h3>
+
+            <ul>
+                <li>Theo dõi bản tin chính thức.</li>
+                <li>Gia cố cửa, mái và đồ vật ngoài trời.</li>
+                <li>Chuẩn bị nước, thức ăn, đèn pin.</li>
+                <li>Sạc thiết bị liên lạc.</li>
+                <li>Biết địa điểm sơ tán an toàn.</li>
+                <li>Không để tàu thuyền ở vùng nguy hiểm.</li>
+            </ul>
+        </div>
+
+
+        <div class="card safety-card">
+            <div class="icon">🟥</div>
+
+            <h3>TRONG BÃO</h3>
+
+            <ul>
+                <li>Ở trong công trình an toàn.</li>
+                <li>Tránh xa cửa kính.</li>
+                <li>Không đi qua khu vực nước chảy mạnh.</li>
+                <li>Không trú dưới cây hoặc cột điện.</li>
+                <li>Tuân thủ yêu cầu sơ tán của cơ quan chức năng.</li>
+                <li>Không chủ quan khi thấy mắt bão tạm yên.</li>
+            </ul>
+        </div>
+
+
+        <div class="card safety-card">
+            <div class="icon">🟩</div>
+
+            <h3>SAU BÃO</h3>
+
+            <ul>
+                <li>Tiếp tục theo dõi cảnh báo mưa lũ.</li>
+                <li>Tránh dây điện đứt.</li>
+                <li>Không vào nhà có nguy cơ sập.</li>
+                <li>Đề phòng sạt lở và lũ quét.</li>
+                <li>Kiểm tra nguồn nước.</li>
+                <li>Hỗ trợ người dễ bị tổn thương.</li>
+            </ul>
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+
+
+<!-- =======================================================
+     13. TÀI LIỆU
+======================================================= -->
+<section class="section">
+
+<div class="container">
+
+    <div class="section-tag">
+        13 • Nguồn học thuật
+    </div>
+
+    <h2 class="section-title">
+        Nguồn dùng để <span>kiểm chứng thông tin</span>
+    </h2>
+
+
+    <div class="sources">
+
+        <div class="source">
+            01 • Cục Quản lý đê điều và Phòng, chống thiên tai –
+            tài liệu phổ biến kiến thức về bão,
+            áp thấp nhiệt đới và cấp độ rủi ro thiên tai.
+        </div>
+
+        <div class="source">
+            02 • Trung tâm Dự báo Khí tượng Thủy văn Quốc gia –
+            bản tin bão, mưa lớn, gió mạnh và các cảnh báo liên quan.
+        </div>
+
+        <div class="source">
+            03 • NOAA / National Hurricane Center –
+            dữ liệu mùa bão năm 2026 và thống kê tropical cyclone.
+        </div>
+
+        <div class="source">
+            04 • NOAA NESDIS –
+            ảnh vệ tinh, cấu trúc bão và thư viện truyền thông
+            mùa hurricane 2026.
+        </div>
+
+        <div class="source">
+            05 • World Meteorological Organization – WMO –
+            dữ liệu thiệt hại toàn cầu và nghiên cứu
+            về xoáy thuận nhiệt đới.
+        </div>
+
+    </div>
+
+</div>
+</section>
+
+
+
+<!-- =======================================================
+     FOOTER
+======================================================= -->
+<footer>
+
+<div class="container">
+
+    <strong style="color:#d4f4ff;">
+        CLIMASCORE
+    </strong>
+
+    <br>
+
+    Học liệu số về thích ứng biến đổi khí hậu
+    và hành vi xanh
+
+    <br><br>
+
+    BÃO MẠNH • Cập nhật dữ liệu: 02/10/2026
+
+</div>
+
+</footer>
+
+
+
+<script>
+/* =========================================================
+   01. THANH TIẾN TRÌNH ĐỌC
+========================================================= */
+window.addEventListener("scroll", () => {
+
+    const scrollTop =
+        document.documentElement.scrollTop ||
+        document.body.scrollTop;
+
+    const scrollHeight =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+
+    const progress =
+        (scrollTop / scrollHeight) * 100;
+
+    document.getElementById("progressBar").style.width =
+        progress + "%";
+});
+
+
+/* =========================================================
+   02. CÂU HỎI TƯ DUY DẠNG ACCORDION
+========================================================= */
+const questions =
+    document.querySelectorAll(".question");
+
+questions.forEach(question => {
+
+    question.addEventListener("click", () => {
+
+        const alreadyActive =
+            question.classList.contains("active");
+
+        questions.forEach(item => {
+            item.classList.remove("active");
+
+            const plus =
+                item.querySelector(
+                    ".question-head span:last-child"
+                );
+
+            if(plus){
+                plus.textContent = "＋";
+            }
+        });
+
+        if(!alreadyActive){
+
+            question.classList.add("active");
+
+            const plus =
+                question.querySelector(
+                    ".question-head span:last-child"
+                );
+
+            if(plus){
+                plus.textContent = "−";
+            }
+        }
+
+    });
+
+});
+
+
+/* =========================================================
+   03. HƯỚNG DẪN THAY VIDEO
+========================================================= */
+function showVideoGuide(){
+
+    alert(
+`THÊM VIDEO VÀO WEBSITE
+
+Bạn có thể thay khối video hiện tại bằng:
+
+<iframe
+    width="100%"
+    height="100%"
+    src="LINK_EMBED_VIDEO_CỦA_BẠN"
+    title="Video về bão"
+    frameborder="0"
+    allowfullscreen>
+</iframe>
+
+Gợi ý nguồn:
+• NOAA
+• NASA
+• WMO
+• Trung tâm Dự báo KTTV Quốc gia
+• Video AI tiếng Việt do bạn tự thiết kế
+
+Nên ưu tiên video 1–3 phút để phù hợp học sinh.`
+    );
+
+}
+</script>
+
+
+</body>
+</html>

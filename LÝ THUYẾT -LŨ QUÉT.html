@@ -1,0 +1,4336 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Lũ quét | CLIMASCORE</title>
+
+<style>
+
+/* ==========================================================
+   01. RESET
+========================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+
+    font-family:
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color: #ffffff;
+
+    background:
+        radial-gradient(
+            circle at 12% 10%,
+            rgba(0, 220, 184, 0.13),
+            transparent 27%
+        ),
+        radial-gradient(
+            circle at 88% 18%,
+            rgba(0, 154, 255, 0.17),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 60% 90%,
+            rgba(255, 188, 70, 0.08),
+            transparent 30%
+        ),
+        linear-gradient(
+            145deg,
+            #020a12,
+            #031b29 42%,
+            #06374a 75%,
+            #021018
+        );
+
+    overflow-x: hidden;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font-family: inherit;
+}
+
+
+/* ==========================================================
+   02. COLOR VARIABLES
+========================================================== */
+
+:root {
+
+    --cyan: #25e5ff;
+    --cyan2: #00bfea;
+
+    --green: #23e3ad;
+    --green2: #6cffc9;
+
+    --yellow: #ffd25e;
+
+    --orange: #ffad4d;
+    --red: #ff6f61;
+
+    --blue: #168fff;
+
+    --dark: #02121c;
+
+    --card:
+        rgba(7, 47, 65, 0.78);
+
+    --card-dark:
+        rgba(2, 22, 34, 0.88);
+
+    --border:
+        rgba(92, 225, 255, 0.16);
+
+    --soft:
+        #add5de;
+
+    --muted:
+        #79a9b5;
+}
+
+
+/* ==========================================================
+   03. BACKGROUND
+========================================================== */
+
+.tech-grid {
+    position: fixed;
+    inset: 0;
+
+    z-index: -5;
+
+    opacity: 0.17;
+
+    background-image:
+        linear-gradient(
+            rgba(45, 226, 255, 0.13) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(45, 226, 255, 0.13) 1px,
+            transparent 1px
+        );
+
+    background-size:
+        52px 52px;
+
+    animation:
+        gridMove 20s linear infinite;
+}
+
+@keyframes gridMove {
+
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position:
+            52px 52px;
+    }
+}
+
+
+/* ==========================================================
+   04. LIGHT ORBS
+========================================================== */
+
+.orb {
+    position: fixed;
+
+    border-radius: 50%;
+
+    filter: blur(15px);
+
+    z-index: -4;
+
+    pointer-events: none;
+
+    animation:
+        orbFloat 9s ease-in-out infinite alternate;
+}
+
+.orb-1 {
+
+    width: 300px;
+    height: 300px;
+
+    left: -110px;
+    top: 15%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(36, 226, 172, 0.22),
+            transparent 70%
+        );
+}
+
+.orb-2 {
+
+    width: 380px;
+    height: 380px;
+
+    right: -140px;
+    top: 13%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0, 164, 255, 0.22),
+            transparent 70%
+        );
+
+    animation-delay: -3s;
+}
+
+.orb-3 {
+
+    width: 350px;
+    height: 350px;
+
+    bottom: -150px;
+    left: 38%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255, 205, 84, 0.09),
+            transparent 70%
+        );
+
+    animation-delay: -5s;
+}
+
+@keyframes orbFloat {
+
+    from {
+        transform:
+            translateY(-15px)
+            scale(1);
+    }
+
+    to {
+        transform:
+            translateY(30px)
+            scale(1.08);
+    }
+}
+
+
+/* ==========================================================
+   05. CONTAINER
+========================================================== */
+
+.container {
+
+    width: min(1420px, 92%);
+
+    margin:
+        0 auto;
+}
+
+
+/* ==========================================================
+   06. TOP BAR
+========================================================== */
+
+.topbar {
+
+    position: sticky;
+
+    top: 12px;
+
+    z-index: 100;
+
+    width: min(1420px, 94%);
+
+    margin:
+        14px auto 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding:
+        12px 16px;
+
+    border-radius: 18px;
+
+    border:
+        1px solid
+        rgba(83, 225, 255, 0.17);
+
+    background:
+        rgba(2, 25, 38, 0.77);
+
+    backdrop-filter:
+        blur(20px);
+
+    box-shadow:
+        0 18px 50px
+        rgba(0, 0, 0, 0.22);
+}
+
+.brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.7px;
+}
+
+.brand-logo {
+
+    width: 40px;
+    height: 40px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 12px;
+
+    color: #01171d;
+
+    font-size: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--green),
+            var(--cyan)
+        );
+
+    box-shadow:
+        0 0 25px
+        rgba(35, 225, 211, 0.18);
+}
+
+.top-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+}
+
+.nav-btn {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 40px;
+
+    padding:
+        9px 14px;
+
+    border:
+        1px solid
+        rgba(82, 223, 255, 0.17);
+
+    border-radius: 11px;
+
+    color:
+        #c9edf3;
+
+    background:
+        rgba(9, 69, 89, 0.34);
+
+    cursor: pointer;
+
+    transition:
+        0.25s;
+}
+
+.nav-btn:hover {
+
+    transform:
+        translateY(-2px);
+
+    background:
+        rgba(20, 122, 151, 0.29);
+}
+
+
+/* ==========================================================
+   07. HERO
+========================================================== */
+
+.hero {
+
+    padding:
+        85px 0 65px;
+}
+
+.hero-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        1.05fr 0.95fr;
+
+    gap: 55px;
+
+    align-items: center;
+}
+
+.eyebrow {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-bottom: 18px;
+
+    padding:
+        9px 14px;
+
+    border:
+        1px solid
+        rgba(73, 231, 255, 0.2);
+
+    border-radius: 100px;
+
+    color:
+        #8ceeff;
+
+    font-size: 12px;
+
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    background:
+        rgba(5, 55, 72, 0.35);
+}
+
+.eyebrow-dot {
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background:
+        var(--green);
+
+    box-shadow:
+        0 0 12px
+        var(--green);
+
+    animation:
+        pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+
+    50% {
+
+        opacity: 0.5;
+
+        transform:
+            scale(1.5);
+    }
+}
+
+.hero h1 {
+
+    max-width: 780px;
+
+    margin-bottom: 20px;
+
+    font-size:
+        clamp(
+            52px,
+            8vw,
+            105px
+        );
+
+    line-height:
+        0.95;
+
+    letter-spacing:
+        -4px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #78efff 36%,
+            #34e5b3 73%,
+            #ffd362
+        );
+
+    -webkit-background-clip:
+        text;
+
+    background-clip:
+        text;
+
+    color:
+        transparent;
+}
+
+.hero-lead {
+
+    max-width: 720px;
+
+    color:
+        #c6e6ec;
+
+    font-size:
+        18px;
+
+    line-height:
+        1.75;
+}
+
+.hero-lead strong {
+
+    color:
+        #ffffff;
+}
+
+
+/* ==========================================================
+   08. HERO VISUAL
+========================================================== */
+
+.hero-visual {
+
+    position: relative;
+
+    min-height: 500px;
+
+    overflow: hidden;
+
+    border-radius: 32px;
+
+    border:
+        1px solid
+        rgba(80, 223, 255, 0.2);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(7, 66, 83, 0.7),
+            rgba(1, 20, 31, 0.94)
+        );
+
+    box-shadow:
+        0 35px 100px
+        rgba(0, 0, 0, 0.27);
+}
+
+.hero-visual img {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    opacity: 0.63;
+
+    transition:
+        transform 1.3s ease;
+}
+
+.hero-visual:hover img {
+
+    transform:
+        scale(1.05);
+}
+
+.hero-visual::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(1, 16, 26, 0.98),
+            rgba(1, 20, 30, 0.16)
+        );
+}
+
+.hero-caption {
+
+    position: absolute;
+
+    z-index: 3;
+
+    left: 28px;
+    right: 28px;
+    bottom: 25px;
+}
+
+.hero-caption-tag {
+
+    display: inline-block;
+
+    margin-bottom: 10px;
+
+    padding:
+        6px 10px;
+
+    border-radius: 8px;
+
+    background:
+        rgba(255, 183, 63, 0.17);
+
+    color:
+        #ffd780;
+
+    font-size: 11px;
+
+    font-weight: 800;
+}
+
+.hero-caption h3 {
+
+    margin-bottom: 8px;
+
+    font-size: 24px;
+}
+
+.hero-caption p {
+
+    color:
+        #b8d7de;
+
+    font-size: 13px;
+
+    line-height: 1.55;
+}
+
+
+/* ==========================================================
+   09. QUICK FACTS
+========================================================== */
+
+.quick-facts {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+
+    margin-top: 32px;
+}
+
+.quick-card {
+
+    padding: 20px;
+
+    border-radius: 18px;
+
+    border:
+        1px solid
+        rgba(83, 223, 255, 0.13);
+
+    background:
+        rgba(5, 48, 65, 0.45);
+}
+
+.quick-value {
+
+    margin-bottom: 7px;
+
+    color:
+        var(--cyan);
+
+    font-size: 21px;
+
+    font-weight: 900;
+}
+
+.quick-card p {
+
+    color:
+        #94c1cb;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* ==========================================================
+   10. SECTION
+========================================================== */
+
+.section {
+
+    padding:
+        75px 0;
+}
+
+.section-header {
+
+    margin-bottom:
+        35px;
+}
+
+.section-label {
+
+    margin-bottom: 9px;
+
+    color:
+        var(--green);
+
+    font-size: 12px;
+
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+.section-title {
+
+    max-width: 880px;
+
+    margin-bottom: 12px;
+
+    font-size:
+        clamp(
+            31px,
+            4.5vw,
+            53px
+        );
+
+    line-height:
+        1.08;
+
+    letter-spacing:
+        -1px;
+}
+
+.section-description {
+
+    max-width: 880px;
+
+    color:
+        var(--soft);
+
+    line-height: 1.72;
+}
+
+
+/* ==========================================================
+   11. DEFINITION
+========================================================== */
+
+.definition-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 24px;
+}
+
+.big-card {
+
+    padding: 32px;
+
+    border-radius: 27px;
+
+    border:
+        1px solid
+        var(--border);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10, 67, 86, 0.74),
+            rgba(2, 24, 37, 0.92)
+        );
+
+    box-shadow:
+        0 25px 70px
+        rgba(0, 0, 0, 0.17);
+}
+
+.big-icon {
+
+    width: 58px;
+    height: 58px;
+
+    display: grid;
+
+    place-items: center;
+
+    margin-bottom: 20px;
+
+    border-radius: 17px;
+
+    font-size: 27px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(34, 228, 174, 0.19),
+            rgba(24, 147, 255, 0.2)
+        );
+
+    border:
+        1px solid
+        rgba(77, 230, 255, 0.17);
+}
+
+.big-card h3 {
+
+    margin-bottom: 13px;
+
+    font-size: 24px;
+}
+
+.big-card p {
+
+    color:
+        #afd4dc;
+
+    line-height: 1.72;
+
+    font-size: 14px;
+}
+
+
+/* ==========================================================
+   12. HIGHLIGHT
+========================================================== */
+
+.highlight {
+
+    margin-top: 22px;
+
+    padding:
+        18px 20px;
+
+    border-left:
+        4px solid
+        var(--yellow);
+
+    border-radius:
+        0 15px 15px 0;
+
+    background:
+        rgba(255, 199, 67, 0.07);
+
+    color:
+        #d9e7e9;
+
+    line-height:
+        1.65;
+}
+
+
+/* ==========================================================
+   13. MECHANISM
+========================================================== */
+
+.mechanism {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 13px;
+}
+
+.step {
+
+    position: relative;
+
+    min-height: 235px;
+
+    padding:
+        22px;
+
+    overflow: hidden;
+
+    border-radius: 21px;
+
+    border:
+        1px solid
+        rgba(74, 225, 255, 0.14);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10, 67, 85, 0.71),
+            rgba(2, 24, 37, 0.9)
+        );
+}
+
+.step-number {
+
+    margin-bottom: 14px;
+
+    color:
+        var(--cyan);
+
+    font-size: 34px;
+
+    font-weight: 900;
+}
+
+.step h3 {
+
+    margin-bottom: 10px;
+
+    font-size: 17px;
+}
+
+.step p {
+
+    color:
+        #9dc5cf;
+
+    font-size: 13px;
+
+    line-height: 1.58;
+}
+
+.step-arrow {
+
+    position: absolute;
+
+    top: 50%;
+    right: -14px;
+
+    z-index: 2;
+
+    width: 28px;
+    height: 28px;
+
+    display: grid;
+
+    place-items: center;
+
+    border-radius: 50%;
+
+    color:
+        #04131a;
+
+    background:
+        var(--cyan);
+
+    font-weight: 900;
+}
+
+
+/* ==========================================================
+   14. CONDITIONS
+========================================================== */
+
+.condition-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+.condition-card {
+
+    min-height: 245px;
+
+    padding:
+        26px;
+
+    border-radius: 23px;
+
+    border:
+        1px solid
+        rgba(78, 223, 255, 0.14);
+
+    background:
+        rgba(5, 43, 59, 0.62);
+
+    transition:
+        0.3s;
+}
+
+.condition-card:hover {
+
+    transform:
+        translateY(-6px);
+
+    border-color:
+        rgba(55, 233, 255, 0.36);
+}
+
+.condition-icon {
+
+    margin-bottom: 18px;
+
+    font-size: 34px;
+}
+
+.condition-card h3 {
+
+    margin-bottom: 10px;
+
+    font-size: 20px;
+}
+
+.condition-card p {
+
+    color:
+        #9fcbd3;
+
+    font-size: 13px;
+
+    line-height: 1.62;
+}
+
+
+/* ==========================================================
+   15. COMPARISON
+========================================================== */
+
+.table-wrap {
+
+    overflow-x: auto;
+
+    border-radius: 23px;
+
+    border:
+        1px solid
+        rgba(77, 225, 255, 0.15);
+}
+
+.compare-table {
+
+    width: 100%;
+
+    border-collapse:
+        collapse;
+
+    min-width:
+        820px;
+
+    background:
+        rgba(4, 32, 46, 0.72);
+}
+
+.compare-table th,
+.compare-table td {
+
+    padding:
+        18px;
+
+    text-align:
+        left;
+
+    border-bottom:
+        1px solid
+        rgba(84, 220, 255, 0.09);
+
+    line-height:
+        1.55;
+}
+
+.compare-table th {
+
+    color:
+        var(--cyan);
+
+    font-size:
+        13px;
+
+    background:
+        rgba(14, 76, 96, 0.46);
+}
+
+.compare-table td {
+
+    color:
+        #b4d4db;
+
+    font-size:
+        13px;
+}
+
+.compare-table td:first-child {
+
+    color:
+        #ffffff;
+
+    font-weight:
+        700;
+}
+
+
+/* ==========================================================
+   16. SIGNS
+========================================================== */
+
+.sign-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 17px;
+}
+
+.sign-card {
+
+    display: flex;
+
+    gap: 17px;
+
+    align-items:
+        flex-start;
+
+    padding:
+        22px;
+
+    border-radius:
+        20px;
+
+    border:
+        1px solid
+        rgba(255, 183, 75, 0.16);
+
+    background:
+        rgba(93, 55, 18, 0.17);
+}
+
+.sign-icon {
+
+    flex:
+        0 0 46px;
+
+    width: 46px;
+    height: 46px;
+
+    display: grid;
+
+    place-items:
+        center;
+
+    border-radius:
+        14px;
+
+    font-size:
+        23px;
+
+    background:
+        rgba(255, 181, 61, 0.12);
+}
+
+.sign-card h3 {
+
+    margin-bottom: 7px;
+
+    font-size:
+        17px;
+}
+
+.sign-card p {
+
+    color:
+        #c9d3d4;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.58;
+}
+
+
+/* ==========================================================
+   17. VIETNAM
+========================================================== */
+
+.vietnam-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        0.85fr 1.15fr;
+
+    gap: 25px;
+}
+
+.map-card {
+
+    min-height:
+        470px;
+
+    padding:
+        27px;
+
+    border-radius:
+        28px;
+
+    border:
+        1px solid
+        rgba(72, 224, 255, 0.16);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(7, 69, 85, 0.7),
+            rgba(2, 21, 34, 0.94)
+        );
+}
+
+.fake-map {
+
+    position: relative;
+
+    width: 100%;
+    height: 340px;
+
+    overflow: hidden;
+
+    margin-top: 20px;
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 35% 15%,
+            rgba(255, 88, 62, 0.35),
+            transparent 17%
+        ),
+        radial-gradient(
+            circle at 45% 42%,
+            rgba(255, 183, 64, 0.28),
+            transparent 19%
+        ),
+        radial-gradient(
+            circle at 55% 73%,
+            rgba(255, 220, 79, 0.18),
+            transparent 20%
+        ),
+        linear-gradient(
+            145deg,
+            #103a45,
+            #08232f
+        );
+
+    border:
+        1px solid
+        rgba(83, 225, 255, 0.12);
+}
+
+.region {
+
+    position: absolute;
+
+    padding:
+        7px 10px;
+
+    border-radius:
+        8px;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    background:
+        rgba(2, 16, 25, 0.82);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.11);
+}
+
+.region.north {
+
+    top: 18%;
+    left: 20%;
+
+    color:
+        #ff8e77;
+}
+
+.region.central {
+
+    top: 48%;
+    left: 43%;
+
+    color:
+        #ffd06c;
+}
+
+.region.highland {
+
+    bottom: 20%;
+    right: 15%;
+
+    color:
+        #f7e281;
+}
+
+.vietnam-list {
+
+    display: grid;
+
+    gap: 15px;
+}
+
+.region-card {
+
+    padding:
+        23px;
+
+    border-radius:
+        20px;
+
+    border:
+        1px solid
+        rgba(75, 225, 255, 0.14);
+
+    background:
+        rgba(6, 44, 59, 0.62);
+}
+
+.region-card h3 {
+
+    margin-bottom: 9px;
+
+    color:
+        #ffffff;
+}
+
+.region-card p {
+
+    color:
+        #a9ced6;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.62;
+}
+
+
+/* ==========================================================
+   18. STATS
+========================================================== */
+
+.stats-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 17px;
+}
+
+.stat-card {
+
+    position: relative;
+
+    overflow: hidden;
+
+    min-height: 225px;
+
+    padding:
+        24px;
+
+    border-radius: 22px;
+
+    border:
+        1px solid
+        rgba(79, 223, 255, 0.15);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(9, 65, 83, 0.75),
+            rgba(2, 24, 36, 0.92)
+        );
+}
+
+.stat-year {
+
+    margin-bottom: 13px;
+
+    color:
+        var(--green);
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    letter-spacing: 1.6px;
+}
+
+.stat-number {
+
+    margin-bottom: 8px;
+
+    color:
+        #ffffff;
+
+    font-size:
+        36px;
+
+    font-weight: 900;
+}
+
+.stat-card p {
+
+    color:
+        #9fc8d0;
+
+    font-size:
+        12px;
+
+    line-height:
+        1.58;
+}
+
+.stat-source {
+
+    display: block;
+
+    margin-top: 15px;
+
+    color:
+        var(--cyan);
+
+    font-size:
+        10px;
+}
+
+
+/* ==========================================================
+   19. WARNING
+========================================================== */
+
+.data-warning {
+
+    margin-top: 22px;
+
+    padding:
+        20px 22px;
+
+    border-radius:
+        17px;
+
+    border:
+        1px solid
+        rgba(255, 205, 82, 0.18);
+
+    background:
+        rgba(107, 77, 15, 0.13);
+
+    line-height:
+        1.65;
+
+    color:
+        #d7e2e2;
+}
+
+.data-warning strong {
+
+    color:
+        #ffd36b;
+}
+
+
+/* ==========================================================
+   20. IMPACT
+========================================================== */
+
+.impact-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+.impact-card {
+
+    padding:
+        27px;
+
+    min-height:
+        285px;
+
+    border-radius:
+        23px;
+
+    border:
+        1px solid
+        rgba(80, 223, 255, 0.14);
+
+    background:
+        rgba(5, 43, 58, 0.61);
+}
+
+.impact-number {
+
+    margin-bottom:
+        16px;
+
+    color:
+        rgba(255,255,255,0.13);
+
+    font-size:
+        47px;
+
+    font-weight:
+        900;
+}
+
+.impact-card h3 {
+
+    margin-bottom:
+        10px;
+
+    font-size:
+        20px;
+}
+
+.impact-card p {
+
+    color:
+        #a3cbd3;
+
+    line-height:
+        1.62;
+
+    font-size:
+        13px;
+}
+
+
+/* ==========================================================
+   21. PHOTO GALLERY
+========================================================== */
+
+.gallery {
+
+    display: grid;
+
+    grid-template-columns:
+        1.3fr 0.7fr;
+
+    gap: 18px;
+}
+
+.gallery-main,
+.gallery-side-item {
+
+    position: relative;
+
+    overflow: hidden;
+
+    border-radius:
+        24px;
+
+    border:
+        1px solid
+        rgba(85, 225, 255, 0.15);
+
+    background:
+        #062532;
+}
+
+.gallery-main {
+
+    min-height:
+        470px;
+}
+
+.gallery-side {
+
+    display: grid;
+
+    gap: 18px;
+}
+
+.gallery-side-item {
+
+    min-height:
+        225px;
+}
+
+.gallery img {
+
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+
+    inset: 0;
+
+    object-fit: cover;
+
+    transition:
+        transform 0.7s ease;
+}
+
+.gallery-main:hover img,
+.gallery-side-item:hover img {
+
+    transform:
+        scale(1.05);
+}
+
+.photo-overlay {
+
+    position: absolute;
+
+    z-index: 2;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    padding:
+        50px 22px 20px;
+
+    background:
+        linear-gradient(
+            transparent,
+            rgba(2, 15, 22, 0.96)
+        );
+}
+
+.photo-overlay h3 {
+
+    margin-bottom: 5px;
+
+    font-size:
+        17px;
+}
+
+.photo-overlay p {
+
+    color:
+        #afd0d7;
+
+    font-size:
+        11px;
+
+    line-height:
+        1.45;
+}
+
+
+/* ==========================================================
+   22. VIDEO
+========================================================== */
+
+.video-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        1.25fr 0.75fr;
+
+    gap: 23px;
+}
+
+.video-frame {
+
+    position: relative;
+
+    min-height:
+        430px;
+
+    overflow: hidden;
+
+    border-radius:
+        27px;
+
+    border:
+        1px solid
+        rgba(79, 224, 255, 0.16);
+
+    background:
+        rgba(2, 23, 35, 0.9);
+}
+
+.video-frame iframe {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    border: none;
+}
+
+.video-note {
+
+    padding:
+        27px;
+
+    border-radius:
+        27px;
+
+    border:
+        1px solid
+        rgba(77, 224, 255, 0.15);
+
+    background:
+        rgba(5, 43, 58, 0.67);
+}
+
+.video-note h3 {
+
+    margin-bottom:
+        15px;
+
+    font-size:
+        22px;
+}
+
+.video-note ol {
+
+    padding-left:
+        20px;
+
+    color:
+        #add0d8;
+
+    line-height:
+        1.75;
+
+    font-size:
+        13px;
+}
+
+.video-note li {
+
+    margin-bottom:
+        10px;
+}
+
+
+/* ==========================================================
+   23. WORLD CASES
+========================================================== */
+
+.world-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap:
+        18px;
+}
+
+.world-card {
+
+    padding:
+        26px;
+
+    border-radius:
+        23px;
+
+    border:
+        1px solid
+        rgba(82, 223, 255, 0.15);
+
+    background:
+        rgba(5, 44, 59, 0.61);
+}
+
+.world-flag {
+
+    margin-bottom:
+        15px;
+
+    font-size:
+        35px;
+}
+
+.world-card h3 {
+
+    margin-bottom:
+        10px;
+}
+
+.world-card p {
+
+    color:
+        #a8ccd3;
+
+    line-height:
+        1.6;
+
+    font-size:
+        13px;
+}
+
+
+/* ==========================================================
+   24. THINK BOX
+========================================================== */
+
+.think-box {
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding:
+        38px;
+
+    border-radius:
+        30px;
+
+    border:
+        1px solid
+        rgba(52, 230, 182, 0.21);
+
+    background:
+        radial-gradient(
+            circle at 90% 10%,
+            rgba(32, 226, 176, 0.15),
+            transparent 30%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(5, 65, 75, 0.68),
+            rgba(2, 25, 37, 0.92)
+        );
+}
+
+.think-box h2 {
+
+    margin-bottom:
+        14px;
+
+    font-size:
+        clamp(
+            29px,
+            4vw,
+            45px
+        );
+}
+
+.think-box > p {
+
+    max-width:
+        900px;
+
+    color:
+        #b5d8de;
+
+    line-height:
+        1.72;
+}
+
+.think-questions {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap:
+        15px;
+
+    margin-top:
+        28px;
+}
+
+.think-item {
+
+    padding:
+        20px;
+
+    border-radius:
+        17px;
+
+    background:
+        rgba(3, 26, 38, 0.58);
+
+    border:
+        1px solid
+        rgba(73, 225, 255, 0.12);
+
+    color:
+        #c9dfe3;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.6;
+}
+
+
+/* ==========================================================
+   25. SUMMARY
+========================================================== */
+
+.summary-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap:
+        13px;
+}
+
+.summary-card {
+
+    padding:
+        20px;
+
+    border-radius:
+        18px;
+
+    background:
+        rgba(5, 46, 60, 0.59);
+
+    border:
+        1px solid
+        rgba(77, 224, 255, 0.13);
+}
+
+.summary-index {
+
+    margin-bottom:
+        10px;
+
+    color:
+        var(--cyan);
+
+    font-weight:
+        900;
+
+    font-size:
+        12px;
+}
+
+.summary-card h3 {
+
+    margin-bottom:
+        7px;
+
+    font-size:
+        15px;
+}
+
+.summary-card p {
+
+    color:
+        #9fc6ce;
+
+    line-height:
+        1.52;
+
+    font-size:
+        11px;
+}
+
+
+/* ==========================================================
+   26. SOURCES
+========================================================== */
+
+.sources {
+
+    padding:
+        31px;
+
+    border-radius:
+        25px;
+
+    border:
+        1px solid
+        rgba(78, 222, 255, 0.14);
+
+    background:
+        rgba(3, 29, 43, 0.68);
+}
+
+.sources h3 {
+
+    margin-bottom:
+        16px;
+}
+
+.sources ul {
+
+    padding-left:
+        19px;
+
+    color:
+        #9fc4cd;
+
+    line-height:
+        1.75;
+
+    font-size:
+        12px;
+}
+
+.sources li {
+
+    margin-bottom:
+        7px;
+}
+
+
+/* ==========================================================
+   27. FOOTER
+========================================================== */
+
+.footer {
+
+    margin-top:
+        70px;
+
+    padding:
+        25px 0 42px;
+
+    border-top:
+        1px solid
+        rgba(78, 222, 255, 0.09);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    color:
+        #618d98;
+
+    font-size:
+        12px;
+}
+
+
+/* ==========================================================
+   28. RESPONSIVE
+========================================================== */
+
+@media (max-width: 1150px) {
+
+    .hero-layout,
+    .definition-grid,
+    .vietnam-layout,
+    .gallery,
+    .video-layout {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .mechanism {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+    .stats-grid,
+    .quick-facts {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .summary-grid {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+}
+
+@media (max-width: 850px) {
+
+    .condition-grid,
+    .impact-grid,
+    .world-grid,
+    .think-questions {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .mechanism {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+    .sign-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .step-arrow {
+
+        display:
+            none;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .top-actions {
+
+        display:
+            none;
+    }
+
+    .hero {
+
+        padding-top:
+            55px;
+    }
+
+    .hero h1 {
+
+        letter-spacing:
+            -2px;
+    }
+
+    .quick-facts,
+    .stats-grid,
+    .mechanism,
+    .summary-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .section {
+
+        padding:
+            55px 0;
+    }
+
+    .big-card {
+
+        padding:
+            23px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+<!-- ======================================================
+     BACKGROUND
+======================================================= -->
+
+<div class="tech-grid"></div>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+
+<!-- ======================================================
+     TOP BAR
+======================================================= -->
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <div class="brand-logo">
+            C
+        </div>
+
+        CLIMASCORE
+
+    </div>
+
+
+    <div class="top-actions">
+
+        <!-- =========================================
+             THAY index.html bằng trang CLIMASCORE
+             của bạn nếu tên file khác
+        ========================================== -->
+
+        <a
+            href="index.html"
+            class="nav-btn"
+        >
+            ← Trang chủ
+        </a>
+
+
+        <button
+            class="nav-btn"
+            onclick="scrollToSection('definition')"
+        >
+            Lý thuyết
+        </button>
+
+
+        <button
+            class="nav-btn"
+            onclick="scrollToSection('vietnam')"
+        >
+            Việt Nam
+        </button>
+
+
+        <button
+            class="nav-btn"
+            onclick="scrollToSection('statistics')"
+        >
+            Số liệu 2026
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- ======================================================
+     HERO
+======================================================= -->
+
+<section class="hero">
+
+    <div class="container">
+
+        <div class="hero-layout">
+
+
+            <!-- LEFT -->
+
+            <div>
+
+                <div class="eyebrow">
+
+                    <span class="eyebrow-dot"></span>
+
+                    THIÊN TAI NGUY HIỂM
+
+                </div>
+
+
+                <h1>
+                    LŨ QUÉT
+                </h1>
+
+
+                <p class="hero-lead">
+
+                    Không đơn giản là “nước dâng cao”.
+
+                    <strong>
+                        Lũ quét là dòng lũ hình thành nhanh,
+                        di chuyển với năng lượng lớn
+                    </strong>
+
+                    trong các lưu vực nhỏ,
+                    thường ở vùng núi và địa hình dốc.
+
+                    Dòng lũ có thể cuốn theo
+                    đất, đá, cây gỗ và vật liệu khác,
+                    khiến sức phá hủy tăng mạnh.
+
+                </p>
+
+
+                <div class="quick-facts">
+
+                    <div class="quick-card">
+
+                        <div class="quick-value">
+                            NHANH
+                        </div>
+
+                        <p>
+                            Hình thành trong thời gian ngắn,
+                            nên thời gian phản ứng có thể rất hạn chế.
+                        </p>
+
+                    </div>
+
+
+                    <div class="quick-card">
+
+                        <div class="quick-value">
+                            DỐC
+                        </div>
+
+                        <p>
+                            Thường liên quan lưu vực nhỏ,
+                            địa hình núi có độ dốc lớn.
+                        </p>
+
+                    </div>
+
+
+                    <div class="quick-card">
+
+                        <div class="quick-value">
+                            MẠNH
+                        </div>
+
+                        <p>
+                            Dòng chảy có thể mang theo
+                            đá, bùn, cây và nhiều vật liệu.
+                        </p>
+
+                    </div>
+
+
+                    <div class="quick-card">
+
+                        <div class="quick-value">
+                            KHÓ LƯỜNG
+                        </div>
+
+                        <p>
+                            Diễn biến nhanh,
+                            phạm vi cục bộ và phụ thuộc
+                            mạnh vào mưa cùng địa hình.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT -->
+
+            <div class="hero-visual">
+
+                <img
+                    src="https://images2.thanhnien.vn/Uploaded/phamduc/2022_10_03/1-9873.jpg"
+                    alt="Khu vực miền núi bị ảnh hưởng bởi lũ"
+                >
+
+                <div class="hero-caption">
+
+                    <span class="hero-caption-tag">
+                        HÌNH ẢNH THỰC TẾ
+                    </span>
+
+                    <h3>
+                        Khi nước tập trung cực nhanh
+                        trong một thung lũng hẹp
+                    </h3>
+
+                    <p>
+                        Ảnh minh họa hậu quả mưa lũ tại
+                        khu vực miền núi Kỳ Sơn, Nghệ An.
+                        Học sinh cần quan sát đồng thời
+                        địa hình, dòng chảy và khu dân cư.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     01. DEFINITION
+======================================================= -->
+
+<section
+    class="section"
+    id="definition"
+>
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div class="section-label">
+                01 · KHÁI NIỆM
+            </div>
+
+            <h2 class="section-title">
+                Lũ quét thực chất là gì?
+            </h2>
+
+            <p class="section-description">
+                Muốn nhận biết đúng lũ quét,
+                cần phân biệt nó với lũ sông thông thường
+                và ngập úng ở vùng thấp.
+            </p>
+
+        </div>
+
+
+        <div class="definition-grid">
+
+
+            <article class="big-card">
+
+                <div class="big-icon">
+                    🌊
+                </div>
+
+                <h3>
+                    Khái niệm cốt lõi
+                </h3>
+
+                <p>
+                    Lũ quét là dạng lũ
+                    có tốc độ hình thành và truyền lũ nhanh,
+                    thường xuất hiện trên các sông,
+                    suối nhỏ hoặc lưu vực miền núi có độ dốc lớn.
+
+                    Khi mưa rất lớn xảy ra trong thời gian ngắn,
+                    nước không kịp thấm hoặc thoát đi,
+                    nhanh chóng tập trung xuống khe,
+                    suối và thung lũng.
+                </p>
+
+                <div class="highlight">
+
+                    <strong>Điểm cần nhớ:</strong>
+
+                    nguy hiểm của lũ quét
+                    không chỉ nằm ở lượng nước,
+                    mà còn ở
+
+                    <strong>
+                        tốc độ dòng chảy,
+                        năng lượng dòng lũ
+                        và lượng đất đá – cây gỗ
+                        mà nó có thể cuốn theo.
+                    </strong>
+
+                </div>
+
+            </article>
+
+
+            <article class="big-card">
+
+                <div class="big-icon">
+                    🧠
+                </div>
+
+                <h3>
+                    Đừng hiểu lũ quét = “lũ lớn”
+                </h3>
+
+                <p>
+                    Một trận lũ trên sông lớn
+                    có thể dâng trong nhiều giờ hoặc nhiều ngày.
+
+                    Ngược lại,
+                    ở một lưu vực nhỏ và dốc,
+                    mưa cực lớn có thể khiến nước
+                    tập trung rất nhanh.
+
+                    Vì vậy,
+                    một dòng suối bình thường nhìn rất nhỏ
+                    vẫn có khả năng trở thành
+                    một dòng lũ nguy hiểm.
+                </p>
+
+                <div class="highlight">
+
+                    <strong>Tư duy địa lí:</strong>
+
+                    mức độ nguy hiểm
+                    không thể đánh giá chỉ bằng
+                    “con sông lớn hay nhỏ”,
+
+                    mà phải xem
+                    <strong>
+                        lưu vực – độ dốc – mưa –
+                        lớp phủ bề mặt – nơi cư trú.
+                    </strong>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     02. MECHANISM
+======================================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div class="section-label">
+                02 · CƠ CHẾ HÌNH THÀNH
+            </div>
+
+            <h2 class="section-title">
+                Từ một trận mưa lớn
+                đến một dòng lũ quét
+            </h2>
+
+            <p class="section-description">
+                Hãy nhìn lũ quét như một chuỗi quá trình liên tiếp.
+                Khi nhiều điều kiện bất lợi xuất hiện cùng lúc,
+                rủi ro tăng rất nhanh.
+            </p>
+
+        </div>
+
+
+        <div class="mechanism">
+
+
+            <article class="step">
+
+                <div class="step-number">
+                    01
+                </div>
+
+                <h3>
+                    Mưa lớn tập trung
+                </h3>
+
+                <p>
+                    Mưa cường độ cao
+                    hoặc mưa kéo dài làm đất
+                    ngày càng bão hòa nước.
+                </p>
+
+                <div class="step-arrow">
+                    →
+                </div>
+
+            </article>
+
+
+            <article class="step">
+
+                <div class="step-number">
+                    02
+                </div>
+
+                <h3>
+                    Khả năng thấm giảm
+                </h3>
+
+                <p>
+                    Khi đất đã no nước,
+                    phần nước mới rơi xuống
+                    dễ biến thành dòng chảy mặt.
+                </p>
+
+                <div class="step-arrow">
+                    →
+                </div>
+
+            </article>
+
+
+            <article class="step">
+
+                <div class="step-number">
+                    03
+                </div>
+
+                <h3>
+                    Nước hội tụ
+                </h3>
+
+                <p>
+                    Địa hình dốc làm nước
+                    nhanh chóng đổ xuống
+                    khe núi, suối nhỏ và thung lũng.
+                </p>
+
+                <div class="step-arrow">
+                    →
+                </div>
+
+            </article>
+
+
+            <article class="step">
+
+                <div class="step-number">
+                    04
+                </div>
+
+                <h3>
+                    Cuốn vật liệu
+                </h3>
+
+                <p>
+                    Dòng chảy mạnh
+                    có thể cuốn đất,
+                    đá, gỗ và bùn,
+                    làm sức phá hủy tăng lên.
+                </p>
+
+                <div class="step-arrow">
+                    →
+                </div>
+
+            </article>
+
+
+            <article class="step">
+
+                <div class="step-number">
+                    05
+                </div>
+
+                <h3>
+                    Lũ tràn xuống hạ lưu
+                </h3>
+
+                <p>
+                    Khu dân cư,
+                    cầu đường và đất sản xuất
+                    ở cửa khe hoặc thung lũng
+                    có thể bị tác động đột ngột.
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     03. CONDITIONS
+======================================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div class="section-label">
+                03 · ĐIỀU KIỆN NGUY CƠ
+            </div>
+
+            <h2 class="section-title">
+                Vì sao nơi này có lũ quét,
+                nơi khác lại ít xảy ra?
+            </h2>
+
+        </div>
+
+
+        <div class="condition-grid">
+
+
+            <article class="condition-card">
+
+                <div class="condition-icon">
+                    🌧️
+                </div>
+
+                <h3>
+                    Mưa lớn
+                </h3>
+
+                <p>
+                    Mưa cường độ lớn trong thời gian ngắn
+                    hoặc nhiều đợt mưa liên tiếp
+                    làm lượng nước mặt tăng mạnh.
+                </p>
+
+            </article>
+
+
+            <article class="condition-card">
+
+                <div class="condition-icon">
+                    ⛰️
+                </div>
+
+                <h3>
+                    Địa hình dốc
+                </h3>
+
+                <p>
+                    Sườn núi dốc làm nước
+                    có xu hướng chảy nhanh,
+                    rút ngắn thời gian tập trung nước
+                    về khe suối.
+                </p>
+
+            </article>
+
+
+            <article class="condition-card">
+
+                <div class="condition-icon">
+                    🏞️
+                </div>
+
+                <h3>
+                    Lưu vực nhỏ
+                </h3>
+
+                <p>
+                    Lưu vực nhỏ phản ứng nhanh với mưa.
+                    Mực nước và lưu lượng
+                    có thể thay đổi trong thời gian ngắn.
+                </p>
+
+            </article>
+
+
+            <article class="condition-card">
+
+                <div class="condition-icon">
+                    🪨
+                </div>
+
+                <h3>
+                    Đất đá dễ mất ổn định
+                </h3>
+
+                <p>
+                    Đất phong hóa,
+                    vật liệu rời rạc
+                    và sườn dốc mất ổn định
+                    làm tăng lượng bùn đá
+                    đi vào dòng chảy.
+                </p>
+
+            </article>
+
+
+            <article class="condition-card">
+
+                <div class="condition-icon">
+                    🌲
+                </div>
+
+                <h3>
+                    Lớp phủ bề mặt
+                </h3>
+
+                <p>
+                    Thảm thực vật,
+                    đất và cách sử dụng đất
+                    ảnh hưởng đến khả năng giữ nước,
+                    thấm nước và xói mòn.
+                </p>
+
+            </article>
+
+
+            <article class="condition-card">
+
+                <div class="condition-icon">
+                    🏠
+                </div>
+
+                <h3>
+                    Con người ở vùng phơi lộ
+                </h3>
+
+                <p>
+                    Nhà ở, trường học hoặc đường sá
+                    nằm sát suối, cửa khe,
+                    chân dốc và thung lũng hẹp
+                    làm rủi ro đối với con người tăng lên.
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     04. DIFFERENCE
+======================================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div class="section-label">
+                04 · PHÂN BIỆT
+            </div>
+
+            <h2 class="section-title">
+                Lũ quét khác gì
+                lũ sông và ngập lụt?
+            </h2>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table class="compare-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Tiêu chí
+                        </th>
+
+                        <th>
+                            Lũ quét
+                        </th>
+
+                        <th>
+                            Lũ sông
+                        </th>
+
+                        <th>
+                            Ngập lụt
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr>
+
+                        <td>
+                            Không gian thường gặp
+                        </td>
+
+                        <td>
+                            Suối nhỏ,
+                            khe núi,
+                            lưu vực miền núi dốc
+                        </td>
+
+                        <td>
+                            Sông và lưu vực lớn hơn
+                        </td>
+
+                        <td>
+                            Đồng bằng,
+                            đô thị,
+                            vùng trũng thấp
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Tốc độ hình thành
+                        </td>
+
+                        <td>
+                            Rất nhanh
+                        </td>
+
+                        <td>
+                            Thường chậm hơn
+                        </td>
+
+                        <td>
+                            Phụ thuộc mưa,
+                            thoát nước
+                            và mực nước
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Vật liệu cuốn theo
+                        </td>
+
+                        <td>
+                            Có thể rất nhiều
+                            bùn, đá, cây gỗ
+                        </td>
+
+                        <td>
+                            Chủ yếu là nước,
+                            phù sa và vật nổi
+                        </td>
+
+                        <td>
+                            Chủ yếu nước ngập
+                            và chất bẩn
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Phạm vi
+                        </td>
+
+                        <td>
+                            Có thể hẹp,
+                            cục bộ nhưng rất dữ dội
+                        </td>
+
+                        <td>
+                            Có thể rộng
+                            theo hệ thống sông
+                        </td>
+
+                        <td>
+                            Vùng trũng,
+                            khu dân cư,
+                            đô thị
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Đặc điểm nguy hiểm
+                        </td>
+
+                        <td>
+                            Đến nhanh,
+                            lực dòng chảy lớn,
+                            ít thời gian phản ứng
+                        </td>
+
+                        <td>
+                            Mực nước cao,
+                            phạm vi ngập rộng
+                        </td>
+
+                        <td>
+                            Ngập sâu,
+                            kéo dài,
+                            gián đoạn hoạt động
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     05. WARNING SIGNS
+======================================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div class="section-label">
+                05 · NHẬN BIẾT NGUY CƠ
+            </div>
+
+            <h2 class="section-title">
+                Những dấu hiệu không nên bỏ qua
+            </h2>
+
+            <p class="section-description">
+                Dấu hiệu tại hiện trường
+                không thay thế cảnh báo chính thức,
+                nhưng có thể giúp nhận thức rằng
+                tình hình đang trở nên nguy hiểm.
+            </p>
+
+        </div>
+
+
+        <div class="sign-grid">
+
+
+            <article class="sign-card">
+
+                <div class="sign-icon">
+                    🌧️
+                </div>
+
+                <div>
+
+                    <h3>
+                        Mưa rất lớn hoặc mưa kéo dài
+                    </h3>
+
+                    <p>
+                        Đặc biệt khi khu vực thượng nguồn,
+                        sườn núi hoặc lưu vực phía trên
+                        đang có mưa lớn.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <article class="sign-card">
+
+                <div class="sign-icon">
+                    🌊
+                </div>
+
+                <div>
+
+                    <h3>
+                        Nước suối thay đổi đột ngột
+                    </h3>
+
+                    <p>
+                        Nước chuyển đục,
+                        dâng nhanh hoặc dòng chảy
+                        có thay đổi bất thường.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <article class="sign-card">
+
+                <div class="sign-icon">
+                    🪵
+                </div>
+
+                <div>
+
+                    <h3>
+                        Nhiều cây gỗ và vật liệu trôi xuống
+                    </h3>
+
+                    <p>
+                        Có thể cho thấy dòng chảy
+                        phía thượng nguồn đang tăng mạnh
+                        và cuốn vật liệu.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <article class="sign-card">
+
+                <div class="sign-icon">
+                    ⚠️
+                </div>
+
+                <div>
+
+                    <h3>
+                        Có cảnh báo chính thức
+                    </h3>
+
+                    <p>
+                        Luôn ưu tiên thông báo của
+                        cơ quan khí tượng,
+                        chính quyền và lực lượng
+                        phòng chống thiên tai địa phương.
+                    </p>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     06. VIETNAM
+======================================================= -->
+
+<section
+    class="section"
+    id="vietnam"
+>
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div class="section-label">
+                06 · VIỆT NAM
+            </div>
+
+            <h2 class="section-title">
+                Vì sao Việt Nam
+                có nhiều khu vực nhạy cảm với lũ quét?
+            </h2>
+
+            <p class="section-description">
+                Việt Nam có nhiều vùng núi,
+                lưu vực nhỏ và dốc,
+                đồng thời chịu tác động của
+                mưa lớn mùa gió mùa,
+                bão và hoàn lưu sau bão.
+            </p>
+
+        </div>
+
+
+        <div class="vietnam-layout">
+
+
+            <div class="map-card">
+
+                <h3>
+                    Sơ đồ tư duy không gian nguy cơ
+                </h3>
+
+                <p
+                    style="
+                        color:#9fc7cf;
+                        font-size:13px;
+                        line-height:1.6;
+                        margin-top:8px;
+                    "
+                >
+                    Đây là sơ đồ khái quát để học tập,
+                    không phải bản đồ cảnh báo nghiệp vụ.
+                </p>
+
+
+                <div class="fake-map">
+
+                    <span class="region north">
+                        MIỀN NÚI BẮC BỘ
+                    </span>
+
+                    <span class="region central">
+                        TRƯỜNG SƠN – MIỀN TRUNG
+                    </span>
+
+                    <span class="region highland">
+                        TÂY NGUYÊN
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="vietnam-list">
+
+
+                <article class="region-card">
+
+                    <h3>
+                        ⛰️ Miền núi và trung du Bắc Bộ
+                    </h3>
+
+                    <p>
+                        Địa hình chia cắt mạnh,
+                        nhiều thung lũng và lưu vực nhỏ;
+                        trong mùa mưa,
+                        các đợt mưa lớn có thể tạo
+                        nguy cơ lũ quét và sạt lở đất.
+                    </p>
+
+                </article>
+
+
+                <article class="region-card">
+
+                    <h3>
+                        🌧️ Khu vực miền Trung
+                    </h3>
+
+                    <p>
+                        Dãy núi nằm gần biển,
+                        nhiều sông ngắn và dốc.
+                        Mưa lớn do bão,
+                        áp thấp nhiệt đới
+                        và các hình thế thời tiết khác
+                        có thể tập trung lượng nước lớn
+                        trong thời gian ngắn.
+                    </p>
+
+                </article>
+
+
+                <article class="region-card">
+
+                    <h3>
+                        🌿 Tây Nguyên
+                    </h3>
+
+                    <p>
+                        Một số khu vực có địa hình dốc,
+                        mạng lưới sông suối nhỏ
+                        và mưa lớn theo mùa,
+                        vì vậy vẫn có thể xuất hiện
+                        lũ quét và sạt lở cục bộ.
+                    </p>
+
+                </article>
+
+
+                <article class="region-card">
+
+                    <h3>
+                        🛰️ Năm 2026: cảnh báo vẫn liên tục
+                    </h3>
+
+                    <p>
+                        Trong ngày 02/10/2026,
+                        Trung tâm Dự báo Khí tượng Thủy văn Quốc gia
+                        đăng cảnh báo nguy cơ lũ quét,
+                        sạt lở đất và sụt lún
+                        cho một số khu vực,
+                        trong đó có Đồng Nai,
+                        Lâm Đồng và Tuyên Quang.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     07. STATISTICS
+======================================================= -->
+
+<section
+    class="section"
+    id="statistics"
+>
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div class="section-label">
+                07 · DỮ LIỆU CẬP NHẬT 2026
+            </div>
+
+            <h2 class="section-title">
+                Con số cần đọc đúng
+                trước khi kết luận
+            </h2>
+
+            <p class="section-description">
+                Đây là điểm rất quan trọng trong học tập dữ liệu:
+                không lấy số liệu “tất cả thiên tai”
+                rồi gắn nhãn thành “lũ quét”.
+            </p>
+
+        </div>
+
+
+        <div class="stats-grid">
+
+
+            <article class="stat-card">
+
+                <div class="stat-year">
+                    VIỆT NAM · 2025
+                </div>
+
+                <div class="stat-number">
+                    18/22
+                </div>
+
+                <p>
+                    loại hình thiên tai
+                    được ghi nhận xảy ra
+                    trong năm 2025 tại Việt Nam.
+                </p>
+
+                <span class="stat-source">
+                    Nguồn: Cục Khí tượng Thủy văn,
+                    công bố 07/01/2026.
+                </span>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-year">
+                    VIỆT NAM · 2025
+                </div>
+
+                <div class="stat-number">
+                    1.740 mm
+                </div>
+
+                <p>
+                    lượng mưa ngày tại trạm Bạch Mã
+                    trong đợt mưa cực đoan năm 2025,
+                    được cơ quan khí tượng Việt Nam
+                    ghi nhận là mức kỷ lục.
+                </p>
+
+                <span class="stat-source">
+                    Nguồn: Cục Khí tượng Thủy văn,
+                    2026.
+                </span>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-year">
+                    VIỆT NAM · WMO 2026
+                </div>
+
+                <div class="stat-number">
+                    ≥ 200
+                </div>
+
+                <p>
+                    người chết do các đợt
+                    ngập lụt kéo dài liên quan
+                    nhiều hệ thống thời tiết tại Việt Nam
+                    trong năm 2025.
+                </p>
+
+                <span class="stat-source">
+                    Lưu ý: số liệu về flooding nói chung,
+                    KHÔNG phải riêng lũ quét.
+                </span>
+
+            </article>
+
+
+            <article class="stat-card">
+
+                <div class="stat-year">
+                    VIỆT NAM · WMO 2026
+                </div>
+
+                <div class="stat-number">
+                    US$1,9B
+                </div>
+
+                <p>
+                    thiệt hại kinh tế được WMO
+                    nêu đối với các đợt
+                    ngập lụt kéo dài ở Việt Nam
+                    trong năm 2025.
+                </p>
+
+                <span class="stat-source">
+                    Lưu ý:
+                    không phải số riêng của lũ quét.
+                </span>
+
+            </article>
+
+        </div>
+
+
+        <div class="data-warning">
+
+            <strong>
+                ⚠️ Tại sao trang này không ghi một con số
+                “tổng thiệt hại do lũ quét Việt Nam năm 2026”?
+            </strong>
+
+            <br><br>
+
+            Vì tại thời điểm cập nhật 02/10/2026,
+            năm 2026 chưa kết thúc,
+            và các báo cáo công khai thường tổng hợp
+            lũ, ngập, lũ quét, sạt lở hoặc nhiều loại hình thiên tai
+            theo các phạm vi khác nhau.
+
+            Nếu lấy một số liệu tổng hợp
+            rồi gọi là “thiệt hại do lũ quét”
+            thì sẽ sai về phương pháp.
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     08. IMPACT VIETNAM
+======================================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div class="section-label">
+                08 · HẬU QUẢ Ở VIỆT NAM
+            </div>
+
+            <h2 class="section-title">
+                Lũ quét để lại điều gì
+                sau khi dòng nước rút?
+            </h2>
+
+        </div>
+
+
+        <div class="impact-grid">
+
+
+            <article class="impact-card">
+
+                <div class="impact-number">
+                    01
+                </div>
+
+                <h3>
+                    Sinh mạng và sức khỏe
+                </h3>
+
+                <p>
+                    Dòng nước đến nhanh,
+                    kèm đất đá và vật liệu lớn
+                    có thể gây thương vong,
+                    khiến hoạt động cứu hộ
+                    trở nên đặc biệt khó khăn.
+                </p>
+
+            </article>
+
+
+            <article class="impact-card">
+
+                <div class="impact-number">
+                    02
+                </div>
+
+                <h3>
+                    Nhà ở và khu dân cư
+                </h3>
+
+                <p>
+                    Nhà nằm sát suối,
+                    cửa khe hoặc chân dốc
+                    có thể bị nước,
+                    bùn đá và vật liệu
+                    va đập hoặc vùi lấp.
+                </p>
+
+            </article>
+
+
+            <article class="impact-card">
+
+                <div class="impact-number">
+                    03
+                </div>
+
+                <h3>
+                    Giao thông
+                </h3>
+
+                <p>
+                    Đường miền núi,
+                    cầu, cống và taluy
+                    có thể bị phá hỏng,
+                    gây chia cắt khu dân cư
+                    và làm chậm cứu trợ.
+                </p>
+
+            </article>
+
+
+            <article class="impact-card">
+
+                <div class="impact-number">
+                    04
+                </div>
+
+                <h3>
+                    Đất sản xuất
+                </h3>
+
+                <p>
+                    Bùn đá,
+                    xói mòn và thay đổi dòng chảy
+                    có thể làm mất đất canh tác,
+                    hư hại cây trồng
+                    và ảnh hưởng sinh kế lâu dài.
+                </p>
+
+            </article>
+
+
+            <article class="impact-card">
+
+                <div class="impact-number">
+                    05
+                </div>
+
+                <h3>
+                    Nước và môi trường
+                </h3>
+
+                <p>
+                    Bùn, rác,
+                    nước thải và vật liệu
+                    bị cuốn vào nguồn nước,
+                    làm tăng nguy cơ ô nhiễm
+                    sau thiên tai.
+                </p>
+
+            </article>
+
+
+            <article class="impact-card">
+
+                <div class="impact-number">
+                    06
+                </div>
+
+                <h3>
+                    Tác động xã hội dài hạn
+                </h3>
+
+                <p>
+                    Gia đình có thể mất nhà,
+                    sinh kế,
+                    tài sản và phải di dời;
+                    trường học,
+                    dịch vụ y tế và giao thông
+                    cũng có thể bị gián đoạn.
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     09. REAL IMAGES
+======================================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div class="section-label">
+                09 · QUAN SÁT THỰC TẾ
+            </div>
+
+            <h2 class="section-title">
+                Đọc một bức ảnh thiên tai
+                bằng tư duy địa lí
+            </h2>
+
+            <p class="section-description">
+                Đừng chỉ hỏi “thiệt hại có lớn không?”.
+                Hãy tìm địa hình,
+                hướng dòng chảy,
+                vật liệu bị cuốn
+                và vị trí của khu dân cư.
+            </p>
+
+        </div>
+
+
+        <div class="gallery">
+
+
+            <div class="gallery-main">
+
+                <img
+                    src="https://images.baodantoc.vn/uploads/2024/Thang-9/Ngay-7/Thanh-Hai/Lao%20Cai.jpg"
+                    alt="Hậu quả lũ tại vùng núi"
+                >
+
+                <div class="photo-overlay">
+
+                    <h3>
+                        Dòng chảy có thể phá hỏng hạ tầng
+                    </h3>
+
+                    <p>
+                        Quan sát:
+                        lòng dòng chảy,
+                        vật liệu bị cuốn,
+                        phần đường bị phá hủy
+                        và địa hình hai bên.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="gallery-side">
+
+
+                <div class="gallery-side-item">
+
+                    <img
+                        src="https://suckhoedoisong.qltns.mediacdn.vn/324455921873985536/2024/8/6/de-phong-lu-quet-do-mua-lon-1722905143235887566563.jpg"
+                        alt="Khu dân cư bị lũ tác động"
+                    >
+
+                    <div class="photo-overlay">
+
+                        <h3>
+                            Khu dân cư miền núi
+                        </h3>
+
+                        <p>
+                            Hãy xác định:
+                            nhà nằm ở đâu
+                            so với dòng chảy?
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="gallery-side-item">
+
+                    <img
+                        src="https://images.baodantoc.vn/uploads/2024/Thang-9/Ngay-9/1709087131443/7_20240909095635.jpg"
+                        alt="Dòng bùn đá từ sườn núi"
+                    >
+
+                    <div class="photo-overlay">
+
+                        <h3>
+                            Đất đá làm tăng sức phá hủy
+                        </h3>
+
+                        <p>
+                            Lũ quét có thể liên hệ chặt chẽ
+                            với xói mòn,
+                            sạt lở và dòng bùn đá.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     10. VIDEO
+======================================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div class="section-label">
+                10 · VIDEO MINH HỌA
+            </div>
+
+            <h2 class="section-title">
+                Xem video nhưng phải biết quan sát gì
+            </h2>
+
+        </div>
+
+
+        <div class="video-layout">
+
+
+            <div class="video-frame">
+
+                <!-- =================================================
+                     CHỖ THAY VIDEO YOUTUBE CỦA BẠN
+
+                     Cách làm:
+                     YouTube > Chia sẻ > Nhúng
+                     rồi lấy đường link dạng:
+                     https://www.youtube.com/embed/VIDEO_ID
+
+                     Thay link bên dưới.
+                ================================================== -->
+
+                <iframe
+                    src="https://www.youtube.com/embed/"
+                    title="Video minh họa lũ quét"
+                    allowfullscreen
+                ></iframe>
+
+            </div>
+
+
+            <div class="video-note">
+
+                <h3>
+                    🎬 Nhiệm vụ khi xem
+                </h3>
+
+                <ol>
+
+                    <li>
+                        Xác định nơi nước bắt đầu
+                        tập trung.
+                    </li>
+
+                    <li>
+                        Quan sát độ dốc
+                        của sườn núi và thung lũng.
+                    </li>
+
+                    <li>
+                        Dòng nước có mang theo
+                        đất, đá hoặc cây gỗ không?
+                    </li>
+
+                    <li>
+                        Những công trình nào
+                        nằm trên đường đi của dòng lũ?
+                    </li>
+
+                    <li>
+                        Từ video,
+                        hãy giải thích vì sao
+                        lũ quét nguy hiểm hơn
+                        một dòng nước chảy thông thường.
+                    </li>
+
+                </ol>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     11. GLOBAL IMPACT
+======================================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div class="section-label">
+                11 · THẾ GIỚI
+            </div>
+
+            <h2 class="section-title">
+                Lũ quét không phải
+                vấn đề riêng của Việt Nam
+            </h2>
+
+            <p class="section-description">
+                Các khu vực miền núi,
+                đô thị hóa nhanh
+                hoặc nơi thường xuyên có mưa cực đoan
+                trên thế giới đều có thể chịu rủi ro.
+            </p>
+
+        </div>
+
+
+        <div class="world-grid">
+
+
+            <article class="world-card">
+
+                <div class="world-flag">
+                    🌏
+                </div>
+
+                <h3>
+                    Châu Á
+                </h3>
+
+                <p>
+                    WMO cho biết
+                    mưa lớn và lũ nghiêm trọng
+                    tiếp tục gây tác động nặng nề
+                    trên nhiều khu vực của châu Á
+                    trong năm 2025.
+                </p>
+
+            </article>
+
+
+            <article class="world-card">
+
+                <div class="world-flag">
+                    🌍
+                </div>
+
+                <h3>
+                    Châu Phi
+                </h3>
+
+                <p>
+                    Năm 2025,
+                    lũ là loại hiểm họa
+                    được báo cáo phổ biến nhất
+                    trong các sự kiện thời tiết
+                    và khí hậu cực đoan ở châu Phi.
+                </p>
+
+            </article>
+
+
+            <article class="world-card">
+
+                <div class="world-flag">
+                    💧
+                </div>
+
+                <h3>
+                    Một chu trình nước thất thường hơn
+                </h3>
+
+                <p>
+                    Báo cáo tài nguyên nước toàn cầu
+                    công bố năm 2026
+                    cho thấy nhiều lưu vực trên thế giới
+                    đang dao động mạnh giữa
+                    quá ít và quá nhiều nước.
+                </p>
+
+            </article>
+
+        </div>
+
+
+        <div
+            class="data-warning"
+            style="margin-top:25px;"
+        >
+
+            <strong>
+                Góc nhìn toàn cầu:
+            </strong>
+
+            Trong 5 năm gần đây,
+            theo WMO,
+            châu Á và châu Phi
+            chiếm ít nhất một nửa
+            số sự kiện cực đoan thủy văn được báo cáo
+            và hơn 80% số người tử vong liên quan.
+
+            Điều đó cho thấy
+            rủi ro liên quan đến nước
+            không chỉ là vấn đề khí tượng,
+            mà còn liên quan đến nơi con người sinh sống,
+            chất lượng hạ tầng,
+            cảnh báo sớm và khả năng ứng phó.
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     12. THINKING
+======================================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="think-box">
+
+            <div class="section-label">
+                CLIMASCORE THINKING
+            </div>
+
+            <h2>
+                Tư duy đúng:
+                Thiên tai không chỉ là “mưa quá lớn”
+            </h2>
+
+            <p>
+                Một trận mưa lớn là hiểm họa.
+                Nhưng thiệt hại xảy ra còn phụ thuộc
+                vào địa hình,
+                nơi con người sinh sống,
+                chất lượng công trình,
+                lớp phủ bề mặt,
+                khả năng dự báo,
+                cảnh báo và sơ tán.
+            </p>
+
+
+            <div class="think-questions">
+
+
+                <div class="think-item">
+
+                    <strong>
+                        Câu hỏi 1
+                    </strong>
+
+                    <br><br>
+
+                    Hai nơi nhận cùng lượng mưa,
+                    vì sao một nơi có thể xảy ra
+                    lũ quét nghiêm trọng hơn?
+
+                </div>
+
+
+                <div class="think-item">
+
+                    <strong>
+                        Câu hỏi 2
+                    </strong>
+
+                    <br><br>
+
+                    Nếu không thể ngăn mưa lớn,
+                    con người có thể giảm thiệt hại
+                    bằng những yếu tố nào?
+
+                </div>
+
+
+                <div class="think-item">
+
+                    <strong>
+                        Câu hỏi 3
+                    </strong>
+
+                    <br><br>
+
+                    Vì sao bản đồ nguy cơ
+                    và hệ thống cảnh báo sớm
+                    có giá trị đặc biệt
+                    đối với vùng miền núi?
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     13. SUMMARY
+======================================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="section-header">
+
+            <div class="section-label">
+                12 · GHI NHỚ NHANH
+            </div>
+
+            <h2 class="section-title">
+                5 từ khóa về lũ quét
+            </h2>
+
+        </div>
+
+
+        <div class="summary-grid">
+
+
+            <article class="summary-card">
+
+                <div class="summary-index">
+                    01
+                </div>
+
+                <h3>
+                    NHANH
+                </h3>
+
+                <p>
+                    Hình thành
+                    và truyền lũ
+                    trong thời gian ngắn.
+                </p>
+
+            </article>
+
+
+            <article class="summary-card">
+
+                <div class="summary-index">
+                    02
+                </div>
+
+                <h3>
+                    DỐC
+                </h3>
+
+                <p>
+                    Thường liên quan
+                    đến địa hình miền núi
+                    và lưu vực nhỏ.
+                </p>
+
+            </article>
+
+
+            <article class="summary-card">
+
+                <div class="summary-index">
+                    03
+                </div>
+
+                <h3>
+                    MƯA
+                </h3>
+
+                <p>
+                    Mưa lớn là
+                    một tác nhân quan trọng
+                    kích hoạt dòng chảy.
+                </p>
+
+            </article>
+
+
+            <article class="summary-card">
+
+                <div class="summary-index">
+                    04
+                </div>
+
+                <h3>
+                    BÙN ĐÁ
+                </h3>
+
+                <p>
+                    Vật liệu cuốn theo
+                    làm tăng mạnh
+                    sức phá hủy.
+                </p>
+
+            </article>
+
+
+            <article class="summary-card">
+
+                <div class="summary-index">
+                    05
+                </div>
+
+                <h3>
+                    CẢNH BÁO
+                </h3>
+
+                <p>
+                    Thông tin sớm
+                    và sơ tán kịp thời
+                    có ý nghĩa sống còn.
+                </p>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     14. SOURCES
+======================================================= -->
+
+<section class="section">
+
+    <div class="container">
+
+        <div class="sources">
+
+            <h3>
+                📚 Nguồn dữ liệu và học thuật
+            </h3>
+
+            <ul>
+
+                <li>
+                    Trung tâm Dự báo Khí tượng Thủy văn Quốc gia
+                    – cảnh báo lũ quét,
+                    sạt lở đất và sụt lún,
+                    cập nhật năm 2026.
+                </li>
+
+                <li>
+                    Cục Khí tượng Thủy văn,
+                    Bộ Nông nghiệp và Môi trường
+                    – tổng kết thiên tai năm 2025,
+                    công bố tháng 01/2026.
+                </li>
+
+                <li>
+                    World Meteorological Organization (WMO),
+                    State of the Climate in Asia 2025,
+                    công bố tháng 06/2026.
+                </li>
+
+                <li>
+                    World Meteorological Organization (WMO),
+                    State of Global Water Resources 2025,
+                    công bố tháng 09/2026.
+                </li>
+
+                <li>
+                    EM-DAT,
+                    2025 Disasters in Numbers / Annual Report.
+                </li>
+
+                <li>
+                    Hình ảnh minh họa:
+                    báo chí Việt Nam và các nguồn công khai;
+                    nên thay bằng ảnh bạn có quyền sử dụng
+                    khi xuất bản chính thức.
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     FOOTER
+======================================================= -->
+
+<footer>
+
+    <div class="container footer">
+
+        <span>
+            CLIMASCORE · Flash Flood Learning Module
+        </span>
+
+        <span>
+            Nhận biết · Phân tích · Hiểu rủi ro
+        </span>
+
+    </div>
+
+</footer>
+
+
+<!-- ======================================================
+     JAVASCRIPT
+======================================================= -->
+
+<script>
+
+/* =========================================================
+   SCROLL TO SECTION
+========================================================= */
+
+function scrollToSection(id) {
+
+    const section =
+        document.getElementById(id);
+
+    if (!section) {
+        return;
+    }
+
+    section.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+}
+
+
+/* =========================================================
+   IMAGE FALLBACK
+
+   Nếu ảnh online bị lỗi,
+   trang sẽ tự thay bằng nền đơn giản
+   thay vì hiện biểu tượng ảnh hỏng.
+========================================================= */
+
+document
+    .querySelectorAll("img")
+    .forEach(image => {
+
+        image.addEventListener(
+            "error",
+            function () {
+
+                this.style.display =
+                    "none";
+
+                if (this.parentElement) {
+
+                    this.parentElement.style.background =
+                        `
+                        linear-gradient(
+                            145deg,
+                            #0b5367,
+                            #031923
+                        )
+                        `;
+
+                }
+
+            }
+        );
+
+    });
+
+</script>
+
+</body>
+</html>

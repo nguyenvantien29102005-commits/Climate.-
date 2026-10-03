@@ -1,0 +1,2970 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Thử thách sau khám phá Bão mạnh | CLIMASCORE</title>
+
+<style>
+/* =========================================================
+   01. RESET + ROOT
+========================================================= */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --bg:#06111f;
+    --bg2:#0a1d31;
+    --panel:#102b45;
+    --panel2:#0c2238;
+
+    --cyan:#2ce4ff;
+    --blue:#238cff;
+    --green:#46e1a5;
+    --yellow:#ffd460;
+    --orange:#ff9d4a;
+    --red:#ff5b6c;
+    --purple:#9c7cff;
+
+    --white:#f7fcff;
+    --text:#d9eaf2;
+    --muted:#97b0bf;
+
+    --line:rgba(99,213,243,.18);
+
+    --radius:22px;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color:var(--white);
+
+    background:
+        radial-gradient(circle at 15% 8%,
+        rgba(26,139,255,.14),
+        transparent 25%),
+
+        radial-gradient(circle at 85% 22%,
+        rgba(40,225,255,.10),
+        transparent 28%),
+
+        linear-gradient(
+            180deg,
+            #05101c,
+            #081b2d 45%,
+            #06111f
+        );
+
+    min-height:100vh;
+}
+
+button,
+textarea,
+input{
+    font:inherit;
+}
+
+
+/* =========================================================
+   02. PROGRESS BAR
+========================================================= */
+#topProgress{
+    position:fixed;
+    top:0;
+    left:0;
+
+    width:0;
+    height:4px;
+
+    z-index:9999;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--cyan),
+            var(--purple),
+            var(--green)
+        );
+
+    box-shadow:
+        0 0 15px var(--cyan);
+}
+
+
+/* =========================================================
+   03. NAV
+========================================================= */
+.nav{
+    position:sticky;
+    top:0;
+    z-index:1000;
+
+    background:
+        rgba(5,16,28,.88);
+
+    backdrop-filter:
+        blur(16px);
+
+    border-bottom:
+        1px solid var(--line);
+}
+
+.nav-inner{
+    max-width:1200px;
+    margin:auto;
+
+    padding:13px 22px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:18px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    font-weight:950;
+}
+
+.brand-icon{
+    width:40px;
+    height:40px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--blue),
+            var(--cyan)
+        );
+
+    box-shadow:
+        0 0 22px rgba(44,228,255,.28);
+}
+
+.brand span{
+    color:var(--cyan);
+}
+
+.nav-status{
+    display:flex;
+    gap:8px;
+}
+
+.status-chip{
+    padding:8px 11px;
+
+    border-radius:11px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid var(--line);
+
+    font-size:11px;
+
+    color:#afc8d5;
+}
+
+.status-chip strong{
+    color:white;
+}
+
+
+/* =========================================================
+   04. COMMON
+========================================================= */
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:0 22px;
+}
+
+.section{
+    padding:70px 0;
+}
+
+.tag{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+
+    padding:7px 12px;
+
+    border-radius:999px;
+
+    color:#7cecff;
+
+    background:
+        rgba(44,228,255,.07);
+
+    border:
+        1px solid rgba(44,228,255,.22);
+
+    font-size:11px;
+    font-weight:900;
+
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+}
+
+.title{
+    margin-top:16px;
+
+    max-width:900px;
+
+    font-size:
+        clamp(30px,5vw,50px);
+
+    line-height:1.15;
+
+    letter-spacing:-1.5px;
+}
+
+.title span{
+    color:var(--cyan);
+}
+
+.desc{
+    max-width:820px;
+
+    margin-top:14px;
+
+    color:var(--muted);
+}
+
+.card{
+    position:relative;
+    overflow:hidden;
+
+    padding:24px;
+
+    border-radius:var(--radius);
+
+    border:
+        1px solid var(--line);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(13,46,73,.86),
+            rgba(6,28,46,.76)
+        );
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.16);
+}
+
+.top-line{
+    position:absolute;
+    top:0;
+    left:0;
+
+    width:100%;
+    height:2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--cyan),
+            transparent
+        );
+}
+
+
+/* =========================================================
+   05. HERO
+========================================================= */
+.hero{
+    padding:75px 0 55px;
+}
+
+.hero-grid{
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:28px;
+    align-items:center;
+}
+
+.hero-badge{
+    display:inline-flex;
+
+    padding:7px 12px;
+
+    border-radius:999px;
+
+    background:
+        rgba(255,125,75,.08);
+
+    border:
+        1px solid rgba(255,143,92,.24);
+
+    color:#ffc7a2;
+
+    font-size:11px;
+    font-weight:900;
+}
+
+.hero h1{
+    margin:18px 0 16px;
+
+    font-size:
+        clamp(44px,7vw,78px);
+
+    line-height:.98;
+
+    letter-spacing:-3px;
+}
+
+.hero h1 span{
+    display:block;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #55e6ff
+        );
+
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.hero p{
+    max-width:660px;
+
+    color:#afc8d4;
+}
+
+.hero-info{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+
+    margin-top:25px;
+}
+
+.hero-info .mini{
+    padding:13px;
+
+    border-radius:15px;
+
+    background:
+        rgba(255,255,255,.04);
+
+    border:
+        1px solid var(--line);
+}
+
+.mini small{
+    color:#7d9aac;
+
+    font-size:9px;
+
+    text-transform:uppercase;
+}
+
+.mini strong{
+    display:block;
+
+    margin-top:4px;
+
+    font-size:17px;
+}
+
+
+/* =========================================================
+   06. VISUAL STORM
+========================================================= */
+.storm-card{
+    position:relative;
+
+    height:420px;
+
+    overflow:hidden;
+
+    border-radius:30px;
+
+    border:
+        1px solid rgba(84,220,255,.17);
+
+    background:
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(77,213,255,.15),
+            transparent 30%
+        ),
+        linear-gradient(
+            180deg,
+            #0b3653,
+            #081d31
+        );
+}
+
+.storm-ring{
+    position:absolute;
+
+    width:280px;
+    height:280px;
+
+    left:50%;
+    top:50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    border-radius:50%;
+
+    background:
+        conic-gradient(
+            transparent 0 10%,
+            rgba(233,250,255,.85) 13% 24%,
+            transparent 29% 39%,
+            rgba(226,248,255,.72) 43% 58%,
+            transparent 63% 73%,
+            rgba(242,253,255,.90) 78% 89%,
+            transparent 94%
+        );
+
+    filter:
+        blur(6px);
+
+    animation:
+        spin 8s linear infinite;
+}
+
+.storm-ring.two{
+    width:190px;
+    height:190px;
+
+    animation-duration:5s;
+    animation-direction:reverse;
+
+    opacity:.9;
+}
+
+.eye{
+    position:absolute;
+
+    width:62px;
+    height:62px;
+
+    left:50%;
+    top:50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    border-radius:50%;
+
+    background:#04111e;
+
+    border:12px solid rgba(235,251,255,.9);
+
+    box-shadow:
+        0 0 30px rgba(255,255,255,.35);
+}
+
+@keyframes spin{
+    to{transform:translate(-50%,-50%) rotate(360deg);}
+}
+
+.storm-note{
+    position:absolute;
+
+    left:18px;
+    right:18px;
+    bottom:18px;
+
+    padding:14px;
+
+    border-radius:16px;
+
+    background:
+        rgba(3,17,28,.78);
+
+    border:
+        1px solid var(--line);
+
+    backdrop-filter:
+        blur(12px);
+
+    color:#b9d2dd;
+
+    font-size:12px;
+}
+
+
+/* =========================================================
+   07. QUIZ NAV
+========================================================= */
+.quiz-overview{
+    margin-top:30px;
+
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:8px;
+}
+
+.quiz-step{
+    padding:12px 8px;
+
+    text-align:center;
+
+    border-radius:12px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid var(--line);
+
+    color:#9ab5c4;
+
+    font-size:10px;
+
+    transition:.2s;
+}
+
+.quiz-step.active{
+    color:#05202b;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2be6ff,
+            #51e1b0
+        );
+
+    border-color:transparent;
+
+    font-weight:900;
+}
+
+
+/* =========================================================
+   08. QUIZ CARD
+========================================================= */
+.quiz-card{
+    margin-top:28px;
+
+    padding:28px;
+
+    border-radius:25px;
+
+    border:
+        1px solid var(--line);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10,40,65,.90),
+            rgba(6,25,42,.83)
+        );
+
+    min-height:390px;
+}
+
+.question-number{
+    color:#5de9ff;
+
+    font-size:11px;
+    font-weight:900;
+
+    letter-spacing:1.2px;
+
+    text-transform:uppercase;
+}
+
+.question-title{
+    margin-top:10px;
+
+    font-size:
+        clamp(20px,3vw,29px);
+
+    line-height:1.35;
+}
+
+.question-context{
+    margin-top:12px;
+
+    padding:14px;
+
+    border-left:
+        3px solid var(--cyan);
+
+    border-radius:
+        0 13px 13px 0;
+
+    background:
+        rgba(42,216,255,.05);
+
+    color:#a8c2d0;
+
+    font-size:13px;
+}
+
+
+/* =========================================================
+   09. ANSWERS
+========================================================= */
+.answers{
+    margin-top:22px;
+
+    display:grid;
+    gap:10px;
+}
+
+.answer-btn{
+    width:100%;
+
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+
+    padding:15px 16px;
+
+    border-radius:15px;
+
+    border:
+        1px solid rgba(99,213,243,.15);
+
+    background:
+        rgba(255,255,255,.035);
+
+    color:#d6e7ee;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.answer-btn:hover{
+    border-color:
+        rgba(58,225,255,.40);
+
+    transform:
+        translateX(3px);
+
+    background:
+        rgba(45,216,255,.06);
+}
+
+.answer-letter{
+    width:30px;
+    height:30px;
+
+    flex:0 0 30px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:9px;
+
+    background:
+        rgba(42,225,255,.08);
+
+    color:#6cecff;
+
+    font-weight:900;
+}
+
+.answer-btn.correct{
+    border-color:
+        rgba(75,225,168,.55);
+
+    background:
+        rgba(51,221,158,.10);
+}
+
+.answer-btn.correct .answer-letter{
+    background:
+        var(--green);
+
+    color:#07261c;
+}
+
+.answer-btn.wrong{
+    border-color:
+        rgba(255,91,108,.55);
+
+    background:
+        rgba(255,91,108,.10);
+}
+
+.answer-btn.wrong .answer-letter{
+    background:
+        var(--red);
+
+    color:white;
+}
+
+.answer-btn.disabled{
+    pointer-events:none;
+}
+
+
+/* =========================================================
+   10. FEEDBACK
+========================================================= */
+.feedback{
+    display:none;
+
+    margin-top:18px;
+
+    padding:16px;
+
+    border-radius:15px;
+
+    background:
+        rgba(4,20,33,.70);
+
+    border:
+        1px solid var(--line);
+}
+
+.feedback.show{
+    display:block;
+}
+
+.feedback.good{
+    border-left:
+        4px solid var(--green);
+}
+
+.feedback.bad{
+    border-left:
+        4px solid var(--orange);
+}
+
+.feedback strong{
+    display:block;
+
+    margin-bottom:5px;
+}
+
+.feedback p{
+    color:#9fb9c7;
+
+    font-size:13px;
+}
+
+
+/* =========================================================
+   11. NEXT BUTTON
+========================================================= */
+.quiz-actions{
+    margin-top:20px;
+
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.btn{
+    border:none;
+
+    padding:12px 17px;
+
+    border-radius:13px;
+
+    font-weight:850;
+
+    cursor:pointer;
+}
+
+.btn-secondary{
+    color:white;
+
+    background:
+        rgba(255,255,255,.05);
+
+    border:
+        1px solid var(--line);
+}
+
+.btn-primary{
+    color:#05212a;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2ce2ff,
+            #4ce0ab
+        );
+}
+
+.btn:disabled{
+    opacity:.35;
+    cursor:not-allowed;
+}
+
+
+/* =========================================================
+   12. TRUE FALSE
+========================================================= */
+.tf-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:11px;
+
+    margin-top:22px;
+}
+
+.tf-btn{
+    padding:18px;
+
+    border-radius:15px;
+
+    border:
+        1px solid var(--line);
+
+    background:
+        rgba(255,255,255,.035);
+
+    color:white;
+
+    font-weight:900;
+
+    cursor:pointer;
+}
+
+.tf-btn:hover{
+    background:
+        rgba(43,221,255,.07);
+}
+
+
+/* =========================================================
+   13. DECISION GRID
+========================================================= */
+.decision-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+
+    margin-top:20px;
+}
+
+.decision-card{
+    padding:17px;
+
+    border-radius:16px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid var(--line);
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.decision-card:hover{
+    transform:translateY(-3px);
+
+    border-color:
+        rgba(50,224,255,.40);
+}
+
+.decision-card.selected{
+    background:
+        rgba(48,225,255,.10);
+
+    border-color:
+        rgba(50,224,255,.50);
+}
+
+.decision-card h4{
+    margin-bottom:6px;
+}
+
+.decision-card p{
+    color:#9fb9c7;
+
+    font-size:12px;
+}
+
+
+/* =========================================================
+   14. ORDER TASK
+========================================================= */
+.order-list{
+    margin-top:20px;
+
+    display:grid;
+    gap:9px;
+}
+
+.order-item{
+    display:flex;
+    align-items:center;
+    gap:11px;
+
+    padding:13px;
+
+    border-radius:13px;
+
+    background:
+        rgba(255,255,255,.04);
+
+    border:
+        1px solid var(--line);
+}
+
+.order-control{
+    margin-left:auto;
+
+    display:flex;
+    gap:5px;
+}
+
+.order-control button{
+    width:29px;
+    height:29px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:
+        rgba(43,218,255,.08);
+
+    color:#72eaff;
+
+    cursor:pointer;
+}
+
+
+/* =========================================================
+   15. RESULT
+========================================================= */
+.result-box{
+    display:none;
+
+    margin-top:30px;
+
+    padding:35px;
+
+    text-align:center;
+
+    border-radius:28px;
+
+    border:
+        1px solid var(--line);
+
+    background:
+        radial-gradient(
+            circle at 50% 20%,
+            rgba(44,226,255,.13),
+            transparent 30%
+        ),
+        rgba(9,38,61,.80);
+}
+
+.result-box.show{
+    display:block;
+}
+
+.result-score{
+    font-size:
+        clamp(60px,10vw,105px);
+
+    font-weight:950;
+
+    line-height:.9;
+
+    color:#65eaff;
+}
+
+.result-badge{
+    display:inline-flex;
+
+    margin-top:20px;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    background:
+        rgba(81,226,178,.11);
+
+    border:
+        1px solid rgba(81,226,178,.25);
+
+    color:#78edc1;
+
+    font-size:12px;
+
+    font-weight:900;
+}
+
+
+/* =========================================================
+   16. REFLECTION
+========================================================= */
+.reflection-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+
+    margin-top:30px;
+}
+
+.reflection-card{
+    padding:22px;
+
+    border-radius:20px;
+
+    border:
+        1px solid var(--line);
+
+    background:
+        rgba(8,35,57,.72);
+}
+
+.reflection-card h3{
+    margin-bottom:8px;
+}
+
+.reflection-card p{
+    color:#9eb8c6;
+
+    font-size:13px;
+
+    margin-bottom:12px;
+}
+
+textarea{
+    width:100%;
+    min-height:130px;
+
+    resize:vertical;
+
+    padding:13px;
+
+    border-radius:13px;
+
+    border:
+        1px solid rgba(106,214,243,.15);
+
+    background:
+        rgba(2,15,25,.65);
+
+    color:white;
+
+    outline:none;
+
+    line-height:1.55;
+}
+
+textarea:focus{
+    border-color:
+        rgba(51,224,255,.45);
+
+    box-shadow:
+        0 0 0 3px rgba(51,224,255,.05);
+}
+
+
+/* =========================================================
+   17. ACTION CHECKLIST
+========================================================= */
+.action-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+
+    margin-top:12px;
+}
+
+.action-item{
+    display:flex;
+    align-items:flex-start;
+    gap:9px;
+
+    padding:12px;
+
+    border-radius:13px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid var(--line);
+
+    cursor:pointer;
+}
+
+.action-item input{
+    margin-top:3px;
+}
+
+
+/* =========================================================
+   18. SUBMIT REFLECTION
+========================================================= */
+.reflection-result{
+    display:none;
+
+    margin-top:20px;
+
+    padding:18px;
+
+    border-radius:16px;
+
+    background:
+        rgba(60,223,171,.07);
+
+    border:
+        1px solid rgba(75,225,168,.20);
+
+    color:#bcead8;
+}
+
+.reflection-result.show{
+    display:block;
+}
+
+
+/* =========================================================
+   19. FOOTER
+========================================================= */
+footer{
+    margin-top:70px;
+
+    padding:30px;
+
+    text-align:center;
+
+    border-top:
+        1px solid var(--line);
+
+    color:#708ea0;
+
+    font-size:11px;
+}
+
+
+/* =========================================================
+   20. RESPONSIVE
+========================================================= */
+@media(max-width:950px){
+
+    .hero-grid,
+    .reflection-grid{
+        grid-template-columns:1fr;
+    }
+
+    .quiz-overview{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+}
+
+@media(max-width:650px){
+
+    .container{
+        padding:0 15px;
+    }
+
+    .section{
+        padding:55px 0;
+    }
+
+    .nav-status{
+        display:none;
+    }
+
+    .hero-info{
+        grid-template-columns:1fr;
+    }
+
+    .decision-grid,
+    .action-grid,
+    .tf-grid{
+        grid-template-columns:1fr;
+    }
+
+    .quiz-overview{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+</style>
+</head>
+
+
+<body>
+
+<div id="topProgress"></div>
+
+
+
+<!-- =========================================================
+     NAV
+========================================================= -->
+<nav class="nav">
+
+<div class="nav-inner">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🌀
+        </div>
+
+        CLIMA<span>CHALLENGE</span>
+
+    </div>
+
+
+    <div class="nav-status">
+
+        <div class="status-chip">
+            Điểm:
+            <strong id="navScore">
+                0
+            </strong>
+        </div>
+
+        <div class="status-chip">
+            Câu:
+            <strong id="navQuestion">
+                1/8
+            </strong>
+        </div>
+
+    </div>
+
+</div>
+
+</nav>
+
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+<header class="hero">
+
+<div class="container hero-grid">
+
+    <div>
+
+        <div class="hero-badge">
+            AFTER LEARNING CHALLENGE
+        </div>
+
+        <h1>
+            THỬ THÁCH
+            <span>BÃO MẠNH</span>
+        </h1>
+
+        <p>
+            Sau khi tìm hiểu lý thuyết và quan sát mô hình 3D,
+            em hãy vận dụng kiến thức để phân tích tình huống,
+            nhận diện rủi ro và đưa ra quyết định phù hợp.
+            Mục tiêu không phải chỉ “nhớ đúng” mà là
+            <strong style="color:white;">
+                hiểu – giải thích – lựa chọn – hành động.
+            </strong>
+        </p>
+
+
+        <div class="hero-info">
+
+            <div class="mini">
+                <small>Câu hỏi</small>
+                <strong>8 nhiệm vụ</strong>
+            </div>
+
+            <div class="mini">
+                <small>Năng lực</small>
+                <strong>Phân tích</strong>
+            </div>
+
+            <div class="mini">
+                <small>Sản phẩm cuối</small>
+                <strong>Phản tư cá nhân</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="storm-card">
+
+        <div class="storm-ring"></div>
+
+        <div class="storm-ring two"></div>
+
+        <div class="eye"></div>
+
+        <div class="storm-note">
+
+            <strong style="color:#65eaff;">
+                NHIỆM VỤ CỦA EM
+            </strong>
+
+            <br><br>
+
+            Đừng chỉ hỏi:
+            “Bão mạnh cấp mấy?”
+
+            <br>
+
+            Hãy hỏi:
+            <strong style="color:white;">
+                “Nếu bão mạnh xảy ra ở một khu dân cư ven biển,
+                điều gì sẽ xảy ra trước – sau và con người nên làm gì?”
+            </strong>
+
+        </div>
+
+    </div>
+
+</div>
+
+</header>
+
+
+
+<!-- =========================================================
+     QUIZ
+========================================================= -->
+<section class="section">
+
+<div class="container">
+
+    <div class="tag">
+        01 • Interactive Challenge
+    </div>
+
+    <h2 class="title">
+        Kiểm tra <span>tư duy sau khám phá</span>
+    </h2>
+
+    <p class="desc">
+        Mỗi câu được thiết kế theo một cấp độ khác nhau:
+        nhận diện → giải thích → phân tích → ra quyết định.
+    </p>
+
+
+    <div class="quiz-overview">
+
+        <div class="quiz-step active">
+            01<br>Nhận diện
+        </div>
+
+        <div class="quiz-step">
+            02<br>Giải thích
+        </div>
+
+        <div class="quiz-step">
+            03<br>Tình huống
+        </div>
+
+        <div class="quiz-step">
+            04<br>Dữ liệu
+        </div>
+
+        <div class="quiz-step">
+            05<br>Quyết định
+        </div>
+
+        <div class="quiz-step">
+            06–08<br>Vận dụng
+        </div>
+
+    </div>
+
+
+
+    <div id="quizCard"
+         class="quiz-card">
+
+        <!-- JS sẽ render câu hỏi vào đây -->
+
+    </div>
+
+
+
+    <div id="resultBox"
+         class="result-box">
+
+        <div class="result-score"
+             id="finalScore">
+            0/8
+        </div>
+
+        <div class="result-badge"
+             id="resultBadge">
+            Hoàn thành
+        </div>
+
+        <h3 style="
+            margin-top:20px;
+            font-size:25px;
+        ">
+            Em đã hoàn thành thử thách!
+        </h3>
+
+        <p id="resultText"
+           style="
+               max-width:650px;
+               margin:12px auto 0;
+               color:#9fb9c7;
+           ">
+        </p>
+
+        <button
+            class="btn btn-primary"
+            style="margin-top:20px;"
+            onclick="restartQuiz()">
+            ↻ Làm lại thử thách
+        </button>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<!-- =========================================================
+     REFLECTION
+========================================================= -->
+<section class="section"
+         id="reflection">
+
+<div class="container">
+
+    <div class="tag">
+        02 • Reflection
+    </div>
+
+    <h2 class="title">
+        Sau khi quan sát mô hình,
+        <span>em nghĩ gì?</span>
+    </h2>
+
+    <p class="desc">
+        Đây không phải câu hỏi “đúng – sai”.
+        Điều quan trọng là em biết liên hệ kiến thức
+        với thực tế và nhận ra trách nhiệm của bản thân.
+    </p>
+
+
+    <div class="reflection-grid">
+
+
+        <div class="reflection-card">
+
+            <h3>
+                1. Điều làm em ấn tượng nhất
+            </h3>
+
+            <p>
+                Sau khi xem mô hình 3D,
+                hiện tượng hoặc hậu quả nào khiến em chú ý nhất?
+                Vì sao?
+            </p>
+
+            <textarea
+                id="reflection1"
+                placeholder="Ví dụ: Em ấn tượng nhất với... vì...">
+            </textarea>
+
+        </div>
+
+
+        <div class="reflection-card">
+
+            <h3>
+                2. Điều em hiểu rõ hơn
+            </h3>
+
+            <p>
+                Có kiến thức nào trước đây em chỉ biết
+                nhưng sau mô hình em mới thực sự hiểu?
+            </p>
+
+            <textarea
+                id="reflection2"
+                placeholder="Em hiểu rõ hơn rằng...">
+            </textarea>
+
+        </div>
+
+
+        <div class="reflection-card">
+
+            <h3>
+                3. Nếu sống ở vùng có nguy cơ bão
+            </h3>
+
+            <p>
+                Em sẽ ưu tiên làm điều gì trước khi bão đến?
+                Giải thích lý do.
+            </p>
+
+            <textarea
+                id="reflection3"
+                placeholder="Việc em ưu tiên là... bởi vì...">
+            </textarea>
+
+        </div>
+
+
+        <div class="reflection-card">
+
+            <h3>
+                4. Thông điệp em muốn gửi
+            </h3>
+
+            <p>
+                Viết một thông điệp ngắn giúp cộng đồng
+                nâng cao ý thức phòng tránh bão.
+            </p>
+
+            <textarea
+                id="reflection4"
+                placeholder="Thông điệp của em...">
+            </textarea>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="reflection-card"
+         style="margin-top:18px;">
+
+        <h3>
+            5. Cam kết hành động của em
+        </h3>
+
+        <p>
+            Chọn những hành động em cho rằng
+            bản thân có thể thực hiện.
+        </p>
+
+
+        <div class="action-grid">
+
+            <label class="action-item">
+                <input type="checkbox">
+                <span>
+                    Theo dõi cảnh báo thời tiết
+                    từ nguồn chính thống.
+                </span>
+            </label>
+
+            <label class="action-item">
+                <input type="checkbox">
+                <span>
+                    Không chủ quan khi thấy bão
+                    tạm giảm gió hoặc đi qua mắt bão.
+                </span>
+            </label>
+
+            <label class="action-item">
+                <input type="checkbox">
+                <span>
+                    Hỗ trợ người già,
+                    trẻ nhỏ và người dễ bị tổn thương.
+                </span>
+            </label>
+
+            <label class="action-item">
+                <input type="checkbox">
+                <span>
+                    Không đi qua vùng nước ngập
+                    hoặc dòng nước chảy xiết.
+                </span>
+            </label>
+
+            <label class="action-item">
+                <input type="checkbox">
+                <span>
+                    Chuẩn bị vật dụng cần thiết
+                    trước mùa mưa bão.
+                </span>
+            </label>
+
+            <label class="action-item">
+                <input type="checkbox">
+                <span>
+                    Chia sẻ kiến thức phòng tránh bão
+                    với gia đình và bạn bè.
+                </span>
+            </label>
+
+        </div>
+
+
+        <button
+            class="btn btn-primary"
+            style="margin-top:18px;"
+            onclick="submitReflection()">
+            Hoàn thành phản tư
+        </button>
+
+
+        <div
+            id="reflectionResult"
+            class="reflection-result">
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+
+<footer>
+
+    <strong style="color:#d8f8ff;">
+        CLIMASCORE
+    </strong>
+
+    <br>
+
+    BÃO MẠNH • HỌC – MÔ PHỎNG – PHÂN TÍCH – HÀNH ĐỘNG
+
+</footer>
+
+
+
+<script>
+/* =========================================================
+   01. DATA
+========================================================= */
+const quizData = [
+
+{
+    type:"mcq",
+
+    title:
+    "Điều nào dưới đây mô tả đúng nhất về hậu quả của một cơn bão mạnh?",
+
+    context:
+    "Hãy dựa vào cả phần lý thuyết và mô hình 3D. Đừng chỉ nghĩ đến tốc độ gió.",
+
+    options:[
+
+        "Bão mạnh chủ yếu chỉ làm cây bị gãy.",
+
+        "Bão mạnh có thể đồng thời gây gió mạnh, mưa lớn, nước dâng, ngập lụt và hư hại hạ tầng.",
+
+        "Bão chỉ nguy hiểm ở khu vực ngay tại tâm bão.",
+
+        "Khi bão đi vào đất liền thì mọi nguy hiểm chấm dứt ngay."
+
+    ],
+
+    answer:1,
+
+    feedback:
+    "Một cơn bão có thể tạo ra chuỗi tác động đồng thời: gió mạnh, mưa lớn, sóng, nước dâng, ngập, sạt lở và hư hại hạ tầng."
+},
+
+
+{
+    type:"mcq",
+
+    title:
+    "Vì sao sau khi tâm bão đi qua, người dân vẫn phải tiếp tục cảnh giác?",
+
+    context:
+    "Trong mô hình, mưa và nước ngập có thể tiếp tục ngay cả khi tâm bão đã di chuyển khỏi khu dân cư.",
+
+    options:[
+
+        "Vì bão chắc chắn sẽ quay lại.",
+
+        "Vì mưa, lũ, ngập và sạt lở vẫn có thể tiếp tục xảy ra sau khi tâm bão rời đi.",
+
+        "Vì gió luôn mạnh hơn sau khi bão tan.",
+
+        "Vì nước biển chắc chắn tiếp tục dâng mãi."
+
+    ],
+
+    answer:1,
+
+    feedback:
+    "Đúng. Tác động thứ cấp như lũ, ngập và sạt lở có thể tiếp diễn sau khi bão suy yếu hoặc di chuyển xa."
+},
+
+
+{
+    type:"tf",
+
+    title:
+    "Đúng hay sai?",
+
+    context:
+    "“Nếu khu vực đang ở trong mắt bão và gió tạm giảm, người dân có thể ra ngoài vì bão đã kết thúc.”",
+
+    answer:false,
+
+    feedback:
+    "Sai. Mắt bão có thể tạo ra khoảng thời gian tạm yên, nhưng thành mắt bão phía sau vẫn có thể mang gió rất mạnh và mưa dữ dội."
+},
+
+
+{
+    type:"mcq",
+
+    title:
+    "Một khu vực ghi nhận gió 170 km/h, mưa rất lớn và nước dâng 2 m. Yếu tố nào cần được đánh giá cùng nhau để hiểu mức độ nguy hiểm?",
+
+    context:
+    "Đây là câu hỏi đọc dữ liệu tổng hợp, không chọn một yếu tố duy nhất.",
+
+    options:[
+
+        "Chỉ tốc độ gió.",
+
+        "Chỉ lượng mưa.",
+
+        "Chỉ nước dâng.",
+
+        "Gió, mưa, nước dâng, địa hình và mức độ phơi bày của dân cư."
+
+    ],
+
+    answer:3,
+
+    feedback:
+    "Rủi ro thiên tai phụ thuộc không chỉ vào cường độ bão mà còn vào địa hình, dân cư, công trình và khả năng ứng phó."
+},
+
+
+{
+    type:"decision",
+
+    title:
+    "Em là người phụ trách an toàn của một trường học ven biển. Bão mạnh dự kiến ảnh hưởng trong 12 giờ tới. Em ưu tiên phương án nào?",
+
+    context:
+    "Hãy chọn phương án thể hiện tư duy phòng ngừa, không chờ đến lúc bão đến mới hành động.",
+
+    options:[
+
+        {
+            title:"A. Chờ thêm",
+            text:
+            "Tiếp tục học bình thường và chờ khi gió mạnh mới quyết định."
+        },
+
+        {
+            title:"B. Chủ động chuẩn bị",
+            text:
+            "Theo dõi cảnh báo chính thức, gia cố khu vực nguy hiểm, chuẩn bị phương án sơ tán và liên hệ phụ huynh."
+        },
+
+        {
+            title:"C. Chỉ đóng cửa sổ",
+            text:
+            "Chỉ cần đóng cửa lớp học, không cần chuẩn bị thêm."
+        },
+
+        {
+            title:"D. Tự dự đoán",
+            text:
+            "Không cần theo dõi cơ quan khí tượng vì có thể quan sát trời để đoán."
+        }
+
+    ],
+
+    answer:1,
+
+    feedback:
+    "Phòng tránh hiệu quả cần hành động trước khi điều kiện trở nên nguy hiểm, dựa vào cảnh báo chính thức và kế hoạch đã chuẩn bị."
+},
+
+
+{
+    type:"mcq",
+
+    title:
+    "Trong mô hình, khi tăng tốc độ gió nhưng giữ lượng mưa thấp, điều gì có khả năng tăng rõ nhất trước tiên?",
+
+    context:
+    "Hãy liên hệ trực tiếp với mô hình 3D đã quan sát.",
+
+    options:[
+
+        "Mái nhà và cây xanh chịu tác động cơ học mạnh hơn.",
+
+        "Nước lũ chắc chắn tăng ngay lập tức.",
+
+        "Mưa tự động tăng gấp đôi.",
+
+        "Bão lập tức biến mất."
+
+    ],
+
+    answer:0,
+
+    feedback:
+    "Gió mạnh trước hết làm tăng tải trọng lên cây, mái nhà, cột điện và các vật thể ngoài trời."
+},
+
+
+{
+    type:"order",
+
+    title:
+    "Sắp xếp chuỗi hậu quả hợp lí sau một trận mưa bão lớn ở vùng núi.",
+
+    context:
+    "Dùng nút ↑ ↓ để sắp xếp từ nguyên nhân gần nhất đến hậu quả cuối.",
+
+    items:[
+
+        "Mưa lớn kéo dài",
+
+        "Đất bão hòa nước",
+
+        "Sạt lở đất",
+
+        "Đường giao thông bị chia cắt",
+
+        "Một số khu dân cư bị cô lập"
+
+    ],
+
+    answer:[
+
+        "Mưa lớn kéo dài",
+
+        "Đất bão hòa nước",
+
+        "Sạt lở đất",
+
+        "Đường giao thông bị chia cắt",
+
+        "Một số khu dân cư bị cô lập"
+
+    ],
+
+    feedback:
+    "Đây là ví dụ điển hình của hiệu ứng domino: một tác động ban đầu có thể kéo theo nhiều hậu quả thứ cấp."
+},
+
+
+{
+    type:"mcq",
+
+    title:
+    "Kết luận nào thể hiện tư duy đúng nhất sau khi học về bão mạnh?",
+
+    context:
+    "Đây là câu tổng hợp cuối cùng.",
+
+    options:[
+
+        "Bão mạnh chỉ là hiện tượng tự nhiên nên con người không thể làm gì.",
+
+        "Không thể ngăn bão hình thành, nhưng có thể giảm thiệt hại bằng dự báo, cảnh báo, quy hoạch và chuẩn bị tốt.",
+
+        "Chỉ cần xây nhà thật chắc là đủ.",
+
+        "Thiệt hại hoàn toàn do tốc độ gió quyết định."
+
+    ],
+
+    answer:1,
+
+    feedback:
+    "Con người không thể ngăn bão, nhưng có thể giảm rủi ro bằng hiểu biết, cảnh báo sớm, quy hoạch, công trình phù hợp và chuẩn bị cộng đồng."
+}
+
+];
+
+
+
+/* =========================================================
+   02. STATE
+========================================================= */
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+
+
+/* =========================================================
+   03. RENDER QUESTION
+========================================================= */
+function renderQuestion(){
+
+    answered = false;
+
+    const q = quizData[currentQuestion];
+
+    const card =
+        document.getElementById(
+            "quizCard"
+        );
+
+    document
+    .getElementById(
+        "navQuestion"
+    )
+    .textContent =
+        `${currentQuestion + 1}/${quizData.length}`;
+
+
+    let html = `
+
+        <div class="question-number">
+            Câu ${currentQuestion + 1}
+            / ${quizData.length}
+        </div>
+
+        <h3 class="question-title">
+            ${q.title}
+        </h3>
+
+        <div class="question-context">
+            ${q.context}
+        </div>
+
+    `;
+
+
+    if(q.type === "mcq"){
+
+        html +=
+        `<div class="answers">`;
+
+
+        q.options.forEach(
+            (option,index) => {
+
+                html += `
+
+                    <button
+                        class="answer-btn"
+                        onclick="selectMCQ(${index})">
+
+                        <span class="answer-letter">
+                            ${String.fromCharCode(65 + index)}
+                        </span>
+
+                        <span>
+                            ${option}
+                        </span>
+
+                    </button>
+
+                `;
+
+            }
+        );
+
+
+        html +=
+        `</div>`;
+
+    }
+
+
+    if(q.type === "tf"){
+
+        html += `
+
+            <div class="tf-grid">
+
+                <button
+                    class="tf-btn"
+                    onclick="selectTF(true)">
+                    ĐÚNG
+                </button>
+
+                <button
+                    class="tf-btn"
+                    onclick="selectTF(false)">
+                    SAI
+                </button>
+
+            </div>
+
+        `;
+
+    }
+
+
+    if(q.type === "decision"){
+
+        html +=
+        `<div class="decision-grid">`;
+
+
+        q.options.forEach(
+            (option,index) => {
+
+                html += `
+
+                    <div
+                        class="decision-card"
+                        onclick="selectDecision(${index}, this)">
+
+                        <h4>
+                            ${option.title}
+                        </h4>
+
+                        <p>
+                            ${option.text}
+                        </p>
+
+                    </div>
+
+                `;
+
+            }
+        );
+
+
+        html +=
+        `</div>`;
+
+    }
+
+
+    if(q.type === "order"){
+
+        html +=
+        `<div
+            id="orderList"
+            class="order-list">`;
+
+
+        const shuffled =
+            [...q.items]
+            .sort(
+                () =>
+                Math.random() - .5
+            );
+
+
+        shuffled.forEach(
+            item => {
+
+                html += `
+
+                    <div
+                        class="order-item"
+                        data-value="${item}">
+
+                        <span>
+                            ${item}
+                        </span>
+
+                        <div class="order-control">
+
+                            <button
+                                onclick="moveItem(this,-1)">
+                                ↑
+                            </button>
+
+                            <button
+                                onclick="moveItem(this,1)">
+                                ↓
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }
+        );
+
+
+        html += `
+
+            </div>
+
+            <button
+                class="btn btn-primary"
+                style="margin-top:18px;"
+                onclick="checkOrder()">
+
+                Kiểm tra thứ tự
+
+            </button>
+
+        `;
+
+    }
+
+
+
+    html += `
+
+        <div
+            id="feedback"
+            class="feedback">
+        </div>
+
+        <div class="quiz-actions">
+
+            <button
+                class="btn btn-secondary"
+                onclick="previousQuestion()"
+                ${currentQuestion === 0 ? "disabled" : ""}>
+                ← Câu trước
+            </button>
+
+            <button
+                id="nextBtn"
+                class="btn btn-primary"
+                onclick="nextQuestion()"
+                disabled>
+
+                ${
+                    currentQuestion ===
+                    quizData.length - 1
+                    ? "Xem kết quả"
+                    : "Câu tiếp →"
+                }
+
+            </button>
+
+        </div>
+
+    `;
+
+
+    card.innerHTML =
+        html;
+
+
+    updateStepIndicator();
+
+}
+
+
+
+/* =========================================================
+   04. MCQ
+========================================================= */
+function selectMCQ(index){
+
+    if(answered){
+        return;
+    }
+
+    answered = true;
+
+    const q =
+        quizData[currentQuestion];
+
+    const buttons =
+        document.querySelectorAll(
+            ".answer-btn"
+        );
+
+
+    buttons.forEach(
+        (
+            btn,
+            i
+        ) => {
+
+            btn.classList.add(
+                "disabled"
+            );
+
+
+            if(
+                i === q.answer
+            ){
+
+                btn.classList.add(
+                    "correct"
+                );
+
+            }
+
+            if(
+                i === index &&
+                i !== q.answer
+            ){
+
+                btn.classList.add(
+                    "wrong"
+                );
+
+            }
+
+        }
+    );
+
+
+    if(
+        index === q.answer
+    ){
+
+        score++;
+
+        showFeedback(
+            true,
+            q.feedback
+        );
+
+    }
+
+    else{
+
+        showFeedback(
+            false,
+            q.feedback
+        );
+
+    }
+
+
+    updateScore();
+
+    enableNext();
+
+}
+
+
+
+/* =========================================================
+   05. TRUE FALSE
+========================================================= */
+function selectTF(value){
+
+    if(answered){
+        return;
+    }
+
+    answered = true;
+
+    const q =
+        quizData[currentQuestion];
+
+    const correct =
+        value === q.answer;
+
+
+    if(correct){
+        score++;
+    }
+
+
+    showFeedback(
+        correct,
+        q.feedback
+    );
+
+
+    updateScore();
+
+    enableNext();
+
+}
+
+
+
+/* =========================================================
+   06. DECISION
+========================================================= */
+function selectDecision(
+    index,
+    element
+){
+
+    if(answered){
+        return;
+    }
+
+    answered = true;
+
+    const q =
+        quizData[currentQuestion];
+
+
+    document
+    .querySelectorAll(
+        ".decision-card"
+    )
+    .forEach(
+        item =>
+            item.classList
+            .remove(
+                "selected"
+            )
+    );
+
+
+    element
+    .classList
+    .add(
+        "selected"
+    );
+
+
+    const correct =
+        index === q.answer;
+
+
+    if(correct){
+        score++;
+    }
+
+
+    showFeedback(
+        correct,
+        q.feedback
+    );
+
+
+    updateScore();
+
+    enableNext();
+
+}
+
+
+
+/* =========================================================
+   07. ORDER
+========================================================= */
+function moveItem(
+    button,
+    direction
+){
+
+    const item =
+        button.closest(
+            ".order-item"
+        );
+
+    const list =
+        document.getElementById(
+            "orderList"
+        );
+
+
+    if(direction === -1){
+
+        const previous =
+            item.previousElementSibling;
+
+        if(previous){
+
+            list.insertBefore(
+                item,
+                previous
+            );
+
+        }
+
+    }
+
+    else{
+
+        const next =
+            item.nextElementSibling;
+
+        if(next){
+
+            list.insertBefore(
+                next,
+                item
+            );
+
+        }
+
+    }
+
+}
+
+
+
+function checkOrder(){
+
+    if(answered){
+        return;
+    }
+
+    answered = true;
+
+    const q =
+        quizData[currentQuestion];
+
+
+    const currentOrder =
+        [
+            ...document.querySelectorAll(
+                ".order-item"
+            )
+        ]
+        .map(
+            item =>
+                item.dataset.value
+        );
+
+
+    const correct =
+        currentOrder.every(
+            (
+                item,
+                index
+            ) =>
+                item ===
+                q.answer[index]
+        );
+
+
+    if(correct){
+        score++;
+    }
+
+
+    showFeedback(
+        correct,
+        q.feedback
+    );
+
+
+    updateScore();
+
+    enableNext();
+
+}
+
+
+
+/* =========================================================
+   08. FEEDBACK
+========================================================= */
+function showFeedback(
+    correct,
+    text
+){
+
+    const box =
+        document.getElementById(
+            "feedback"
+        );
+
+
+    box.className =
+        "feedback show " +
+        (
+            correct
+            ? "good"
+            : "bad"
+        );
+
+
+    box.innerHTML = `
+
+        <strong>
+            ${
+                correct
+                ? "✓ Lập luận phù hợp"
+                : "↻ Hãy xem lại logic"
+            }
+        </strong>
+
+        <p>
+            ${text}
+        </p>
+
+    `;
+
+}
+
+
+
+/* =========================================================
+   09. NEXT / PREVIOUS
+========================================================= */
+function enableNext(){
+
+    document
+    .getElementById(
+        "nextBtn"
+    )
+    .disabled =
+        false;
+
+}
+
+
+
+function nextQuestion(){
+
+    if(
+        currentQuestion <
+        quizData.length - 1
+    ){
+
+        currentQuestion++;
+
+        renderQuestion();
+
+        window.scrollTo({
+            top:
+                document
+                .getElementById(
+                    "quizCard"
+                )
+                .offsetTop - 100,
+
+            behavior:"smooth"
+        });
+
+    }
+
+    else{
+
+        finishQuiz();
+
+    }
+
+}
+
+
+
+function previousQuestion(){
+
+    if(
+        currentQuestion > 0
+    ){
+
+        currentQuestion--;
+
+        renderQuestion();
+
+    }
+
+}
+
+
+
+/* =========================================================
+   10. RESULT
+========================================================= */
+function finishQuiz(){
+
+    document
+    .getElementById(
+        "quizCard"
+    )
+    .style.display =
+        "none";
+
+
+    const box =
+        document.getElementById(
+            "resultBox"
+        );
+
+
+    box.classList.add(
+        "show"
+    );
+
+
+    document
+    .getElementById(
+        "finalScore"
+    )
+    .textContent =
+        `${score}/${quizData.length}`;
+
+
+    const percent =
+        score /
+        quizData.length *
+        100;
+
+
+    let badge = "";
+    let text = "";
+
+
+    if(percent >= 90){
+
+        badge =
+            "🌟 Storm Resilience Expert";
+
+        text =
+            "Em không chỉ nắm kiến thức mà còn biết phân tích chuỗi tác động và lựa chọn phương án ứng phó hợp lí.";
+
+    }
+
+    else if(percent >= 70){
+
+        badge =
+            "🌀 Risk Analyst";
+
+        text =
+            "Em đã hiểu khá tốt mối quan hệ giữa bão, hậu quả và các biện pháp giảm thiểu rủi ro.";
+
+    }
+
+    else if(percent >= 50){
+
+        badge =
+            "🌧 Climate Explorer";
+
+        text =
+            "Em đã có nền tảng tốt. Hãy xem lại các câu liên quan đến tác động thứ cấp và ra quyết định.";
+
+    }
+
+    else{
+
+        badge =
+            "🔎 Keep Exploring";
+
+        text =
+            "Hãy quay lại phần lý thuyết và mô hình 3D, đặc biệt chú ý chuỗi nguyên nhân – hậu quả của thiên tai.";
+
+    }
+
+
+    document
+    .getElementById(
+        "resultBadge"
+    )
+    .textContent =
+        badge;
+
+
+    document
+    .getElementById(
+        "resultText"
+    )
+    .textContent =
+        text;
+
+
+    document
+    .getElementById(
+        "reflection"
+    )
+    .scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+
+/* =========================================================
+   11. RESTART
+========================================================= */
+function restartQuiz(){
+
+    currentQuestion = 0;
+
+    score = 0;
+
+    document
+    .getElementById(
+        "quizCard"
+    )
+    .style.display =
+        "block";
+
+
+    document
+    .getElementById(
+        "resultBox"
+    )
+    .classList
+    .remove(
+        "show"
+    );
+
+
+    updateScore();
+
+    renderQuestion();
+
+}
+
+
+
+/* =========================================================
+   12. SCORE
+========================================================= */
+function updateScore(){
+
+    document
+    .getElementById(
+        "navScore"
+    )
+    .textContent =
+        score;
+
+}
+
+
+
+/* =========================================================
+   13. STEP INDICATOR
+========================================================= */
+function updateStepIndicator(){
+
+    const steps =
+        document.querySelectorAll(
+            ".quiz-step"
+        );
+
+
+    steps.forEach(
+        step =>
+            step.classList
+            .remove(
+                "active"
+            )
+    );
+
+
+    let index = 0;
+
+
+    if(currentQuestion === 0){
+        index = 0;
+    }
+
+    else if(currentQuestion === 1){
+        index = 1;
+    }
+
+    else if(currentQuestion === 2){
+        index = 2;
+    }
+
+    else if(currentQuestion === 3){
+        index = 3;
+    }
+
+    else if(currentQuestion === 4){
+        index = 4;
+    }
+
+    else{
+        index = 5;
+    }
+
+
+    steps[index]
+    .classList
+    .add(
+        "active"
+    );
+
+}
+
+
+
+/* =========================================================
+   14. REFLECTION
+========================================================= */
+function submitReflection(){
+
+    const values = [
+
+        document
+        .getElementById(
+            "reflection1"
+        )
+        .value
+        .trim(),
+
+        document
+        .getElementById(
+            "reflection2"
+        )
+        .value
+        .trim(),
+
+        document
+        .getElementById(
+            "reflection3"
+        )
+        .value
+        .trim(),
+
+        document
+        .getElementById(
+            "reflection4"
+        )
+        .value
+        .trim()
+
+    ];
+
+
+    const checked =
+        document.querySelectorAll(
+            ".action-item input:checked"
+        )
+        .length;
+
+
+    const completed =
+        values.filter(
+            text =>
+                text.length >= 15
+        )
+        .length;
+
+
+    const result =
+        document
+        .getElementById(
+            "reflectionResult"
+        );
+
+
+    result.classList.add(
+        "show"
+    );
+
+
+    if(completed === 4){
+
+        result.innerHTML = `
+
+            <strong>
+                ✓ Phản tư đã hoàn thành
+            </strong>
+
+            <br><br>
+
+            Em đã trả lời đủ 4 nội dung phản tư
+            và lựa chọn
+            <strong>${checked}</strong>
+            hành động thực tế.
+
+            <br><br>
+
+            <span style="color:white;">
+                Thông điệp quan trọng:
+                hiểu thiên tai không phải để sợ hãi,
+                mà để biết cách chuẩn bị và giảm thiểu rủi ro.
+            </span>
+
+        `;
+
+    }
+
+    else{
+
+        result.innerHTML = `
+
+            <strong>
+                Hãy bổ sung thêm suy nghĩ của em.
+            </strong>
+
+            <br><br>
+
+            Hiện em đã hoàn thành
+            <strong>${completed}/4</strong>
+            nội dung phản tư.
+
+            Hãy cố gắng giải thích bằng
+            “vì sao” thay vì chỉ viết một câu ngắn.
+
+        `;
+
+    }
+
+}
+
+
+
+/* =========================================================
+   15. TOP SCROLL PROGRESS
+========================================================= */
+window.addEventListener(
+    "scroll",
+    () => {
+
+        const top =
+            document.documentElement
+            .scrollTop;
+
+        const height =
+            document.documentElement
+            .scrollHeight -
+            document.documentElement
+            .clientHeight;
+
+
+        document
+        .getElementById(
+            "topProgress"
+        )
+        .style
+        .width =
+            (
+                top /
+                height *
+                100
+            ) +
+            "%";
+
+    }
+);
+
+
+
+/* =========================================================
+   16. INIT
+========================================================= */
+renderQuestion();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,3921 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Thử thách Ô nhiễm nước | Học liệu số</title>
+
+<style>
+/* =========================================================
+   01. ROOT
+========================================================= */
+:root{
+    --bg:#041521;
+    --bg-2:#072331;
+
+    --panel:rgba(8,34,48,.88);
+    --panel-2:rgba(8,43,58,.75);
+
+    --cyan:#31ddff;
+    --cyan-2:#00aee8;
+
+    --green:#38e2ae;
+    --green-2:#1dbd86;
+
+    --yellow:#ffd668;
+    --orange:#ff9a52;
+
+    --red:#ff6472;
+
+    --text:#edfaff;
+    --muted:#9dbbc6;
+
+    --border:rgba(121,220,243,.18);
+
+    --shadow:
+        0 28px 80px rgba(0,0,0,.34);
+}
+
+/* =========================================================
+   02. RESET
+========================================================= */
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color:var(--text);
+
+    background:
+        radial-gradient(
+            circle at 18% 10%,
+            rgba(0,193,255,.18),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 82% 22%,
+            rgba(39,225,175,.12),
+            transparent 27%
+        ),
+        linear-gradient(
+            145deg,
+            #03111b,
+            #072231 55%,
+            #03141f
+        );
+
+    overflow-x:hidden;
+}
+
+/* =========================================================
+   03. BACKGROUND EFFECTS
+========================================================= */
+.background{
+    position:fixed;
+    inset:0;
+
+    pointer-events:none;
+    z-index:-5;
+
+    overflow:hidden;
+}
+
+.wave{
+    position:absolute;
+
+    width:620px;
+    height:620px;
+
+    border-radius:43% 57% 58% 42%;
+
+    border:1px solid rgba(62,224,255,.08);
+
+    animation:
+        rotateWave 24s linear infinite;
+}
+
+.wave.one{
+    left:-220px;
+    top:120px;
+}
+
+.wave.two{
+    right:-250px;
+    top:-100px;
+
+    width:760px;
+    height:760px;
+
+    animation-direction:reverse;
+}
+
+.wave.three{
+    left:35%;
+    bottom:-420px;
+
+    width:850px;
+    height:850px;
+}
+
+@keyframes rotateWave{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+.bubble{
+    position:absolute;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle at 30% 30%,
+            rgba(255,255,255,.35),
+            rgba(41,211,242,.08)
+        );
+
+    border:
+        1px solid rgba(96,224,247,.17);
+
+    animation:
+        bubbleMove linear infinite;
+}
+
+@keyframes bubbleMove{
+    from{
+        transform:
+            translateY(110vh)
+            scale(.7);
+
+        opacity:0;
+    }
+
+    10%{
+        opacity:1;
+    }
+
+    to{
+        transform:
+            translateY(-20vh)
+            scale(1.15);
+
+        opacity:0;
+    }
+}
+
+/* =========================================================
+   04. MAIN
+========================================================= */
+main{
+    width:min(1380px,calc(100% - 40px));
+
+    margin:auto;
+
+    padding:
+        28px
+        0
+        70px;
+}
+
+/* =========================================================
+   05. HERO
+========================================================= */
+.hero{
+    position:relative;
+
+    display:grid;
+
+    grid-template-columns:
+        minmax(0,1.4fr)
+        minmax(280px,.6fr);
+
+    gap:20px;
+
+    padding:28px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:28px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(7,43,60,.91),
+            rgba(5,27,40,.83)
+        );
+
+    box-shadow:
+        var(--shadow);
+
+    overflow:hidden;
+}
+
+.hero::before{
+    content:"";
+
+    position:absolute;
+
+    width:440px;
+    height:440px;
+
+    right:-170px;
+    top:-240px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(49,221,255,.17),
+            transparent 68%
+        );
+}
+
+.hero-badge{
+    display:inline-flex;
+
+    align-items:center;
+    gap:8px;
+
+    width:max-content;
+
+    padding:
+        7px
+        12px;
+
+    margin-bottom:14px;
+
+    border-radius:999px;
+
+    border:
+        1px solid rgba(74,224,255,.26);
+
+    background:
+        rgba(13,73,92,.54);
+
+    color:#72edff;
+
+    font-size:11px;
+    font-weight:900;
+
+    letter-spacing:1.4px;
+}
+
+.hero-badge-dot{
+    width:8px;
+    height:8px;
+
+    border-radius:50%;
+
+    background:
+        var(--cyan);
+
+    box-shadow:
+        0 0 15px var(--cyan);
+}
+
+.hero h1{
+    max-width:850px;
+
+    font-size:
+        clamp(
+            31px,
+            5vw,
+            64px
+        );
+
+    font-weight:950;
+
+    line-height:.98;
+
+    letter-spacing:-2.8px;
+}
+
+.hero h1 span{
+    color:var(--cyan);
+}
+
+.hero-desc{
+    max-width:770px;
+
+    margin-top:16px;
+
+    color:#bed4dc;
+
+    font-size:14px;
+
+    line-height:1.75;
+}
+
+.hero-note{
+    margin-top:18px;
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+}
+
+.mini-pill{
+    padding:
+        7px
+        10px;
+
+    border-radius:9px;
+
+    background:
+        rgba(9,42,55,.65);
+
+    border:
+        1px solid rgba(127,220,241,.12);
+
+    color:#a9c8d3;
+
+    font-size:10px;
+    font-weight:750;
+}
+
+/* =========================================================
+   06. SCORE CARD
+========================================================= */
+.score-card{
+    position:relative;
+
+    padding:18px;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            150deg,
+            rgba(12,63,80,.7),
+            rgba(8,36,50,.55)
+        );
+
+    border:
+        1px solid rgba(88,225,253,.18);
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+}
+
+.score-label{
+    color:#80a7b3;
+
+    font-size:10px;
+    font-weight:850;
+
+    letter-spacing:1.4px;
+}
+
+.score-number{
+    margin-top:5px;
+
+    font-size:54px;
+    font-weight:950;
+
+    color:var(--cyan);
+
+    line-height:1;
+}
+
+.score-number small{
+    font-size:15px;
+
+    color:#7493a0;
+
+    font-weight:700;
+}
+
+.score-progress{
+    height:7px;
+
+    margin-top:14px;
+
+    border-radius:99px;
+
+    background:
+        #123541;
+
+    overflow:hidden;
+}
+
+.score-progress > div{
+    width:0%;
+    height:100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--cyan-2),
+            var(--cyan),
+            var(--green)
+        );
+
+    border-radius:99px;
+
+    transition:
+        width .5s ease;
+}
+
+.score-status{
+    margin-top:9px;
+
+    color:#a8c4ce;
+
+    font-size:10px;
+}
+
+/* =========================================================
+   07. NAV
+========================================================= */
+.challenge-nav{
+    margin-top:20px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:10px;
+}
+
+.stage-tab{
+    position:relative;
+
+    padding:14px;
+
+    border-radius:15px;
+
+    border:
+        1px solid rgba(124,215,239,.12);
+
+    background:
+        rgba(5,29,41,.67);
+
+    color:#9cb7c1;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+}
+
+.stage-tab:hover{
+    transform:
+        translateY(-2px);
+
+    border-color:
+        rgba(50,221,255,.35);
+}
+
+.stage-tab.active{
+    border-color:
+        var(--cyan);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15,94,117,.51),
+            rgba(9,49,66,.81)
+        );
+
+    color:#fff;
+}
+
+.stage-num{
+    font-size:9px;
+    font-weight:900;
+
+    color:#57ddfa;
+
+    letter-spacing:1px;
+}
+
+.stage-name{
+    margin-top:4px;
+
+    display:block;
+
+    font-size:12px;
+
+    font-weight:850;
+}
+
+/* =========================================================
+   08. SECTION
+========================================================= */
+.stage{
+    display:none;
+
+    margin-top:20px;
+}
+
+.stage.active{
+    display:block;
+
+    animation:
+        fadeUp .4s ease;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(12px);
+    }
+
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+.stage-header{
+    margin-bottom:16px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:end;
+
+    gap:20px;
+}
+
+.stage-kicker{
+    color:#52def8;
+
+    font-size:10px;
+
+    font-weight:900;
+
+    letter-spacing:1.5px;
+}
+
+.stage-title{
+    margin-top:4px;
+
+    font-size:
+        clamp(
+            22px,
+            3vw,
+            34px
+        );
+
+    font-weight:900;
+}
+
+.stage-subtitle{
+    color:#8eadb8;
+
+    font-size:11px;
+
+    line-height:1.6;
+
+    max-width:580px;
+}
+
+/* =========================================================
+   09. QUESTION
+========================================================= */
+.question-grid{
+    display:grid;
+
+    gap:14px;
+}
+
+.question-card{
+    position:relative;
+
+    padding:18px;
+
+    border-radius:20px;
+
+    border:
+        1px solid rgba(125,216,240,.13);
+
+    background:
+        linear-gradient(
+            150deg,
+            rgba(8,38,52,.91),
+            rgba(6,27,39,.80)
+        );
+
+    box-shadow:
+        0 15px 50px rgba(0,0,0,.14);
+
+    overflow:hidden;
+}
+
+.question-card.correct{
+    border-color:
+        rgba(66,235,176,.48);
+}
+
+.question-card.wrong{
+    border-color:
+        rgba(255,100,114,.45);
+}
+
+.question-top{
+    display:flex;
+
+    align-items:start;
+
+    gap:12px;
+}
+
+.question-number{
+    width:34px;
+    height:34px;
+
+    flex:0 0 34px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:10px;
+
+    background:
+        rgba(36,189,223,.13);
+
+    border:
+        1px solid rgba(65,222,250,.18);
+
+    color:#58e7ff;
+
+    font-size:11px;
+    font-weight:900;
+}
+
+.question-content{
+    flex:1;
+}
+
+.question-level{
+    color:#6e9dac;
+
+    font-size:8px;
+
+    font-weight:900;
+
+    letter-spacing:1px;
+
+    margin-bottom:5px;
+}
+
+.question-text{
+    font-size:14px;
+
+    line-height:1.55;
+
+    font-weight:800;
+}
+
+/* =========================================================
+   10. OPTIONS
+========================================================= */
+.options{
+    margin-top:14px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr));
+
+    gap:9px;
+}
+
+.option{
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:9px;
+
+    min-height:58px;
+
+    padding:11px;
+
+    border-radius:12px;
+
+    border:
+        1px solid rgba(125,213,237,.12);
+
+    background:
+        rgba(6,27,38,.72);
+
+    color:#bed3da;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    transition:.18s ease;
+}
+
+.option:hover{
+    border-color:
+        rgba(52,221,255,.35);
+
+    background:
+        rgba(8,53,67,.72);
+}
+
+.option.selected{
+    border-color:
+        var(--cyan);
+
+    background:
+        rgba(13,99,123,.28);
+
+    color:#fff;
+}
+
+.option.correct{
+    border-color:
+        var(--green);
+
+    background:
+        rgba(34,190,139,.18);
+}
+
+.option.wrong{
+    border-color:
+        var(--red);
+
+    background:
+        rgba(255,91,110,.14);
+}
+
+.option-letter{
+    width:25px;
+    height:25px;
+
+    flex:0 0 25px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:7px;
+
+    background:
+        rgba(73,219,245,.11);
+
+    color:#57dff7;
+
+    font-size:9px;
+
+    font-weight:900;
+}
+
+.option-text{
+    font-size:10px;
+
+    line-height:1.45;
+
+    font-weight:700;
+}
+
+/* =========================================================
+   11. FEEDBACK
+========================================================= */
+.feedback{
+    display:none;
+
+    margin-top:13px;
+
+    padding:11px 13px;
+
+    border-radius:12px;
+
+    font-size:10px;
+
+    line-height:1.55;
+}
+
+.feedback.show{
+    display:block;
+}
+
+.feedback.good{
+    background:
+        rgba(28,174,126,.12);
+
+    border:
+        1px solid rgba(56,226,174,.18);
+
+    color:#bff9e5;
+}
+
+.feedback.bad{
+    background:
+        rgba(227,87,101,.10);
+
+    border:
+        1px solid rgba(255,100,114,.17);
+
+    color:#ffd1d5;
+}
+
+.feedback strong{
+    color:#fff;
+}
+
+/* =========================================================
+   12. CASE STUDY
+========================================================= */
+.case-card{
+    padding:20px;
+
+    border-radius:22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(8,43,58,.92),
+            rgba(4,26,38,.88)
+        );
+
+    border:
+        1px solid var(--border);
+}
+
+.case-head{
+    display:grid;
+
+    grid-template-columns:
+        auto
+        1fr;
+
+    gap:13px;
+
+    align-items:start;
+}
+
+.case-icon{
+    width:47px;
+    height:47px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:14px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,166,73,.17),
+            rgba(255,102,112,.08)
+        );
+
+    border:
+        1px solid rgba(255,179,93,.18);
+
+    font-size:23px;
+}
+
+.case-title{
+    font-size:17px;
+
+    font-weight:900;
+}
+
+.case-desc{
+    margin-top:5px;
+
+    color:#a7c0c9;
+
+    font-size:11px;
+
+    line-height:1.65;
+}
+
+.evidence-grid{
+    margin-top:16px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:8px;
+}
+
+.evidence{
+    padding:11px;
+
+    border-radius:12px;
+
+    background:
+        rgba(5,24,35,.58);
+
+    border:
+        1px solid rgba(134,218,240,.1);
+}
+
+.evidence-label{
+    color:#7699a6;
+
+    font-size:8px;
+
+    font-weight:800;
+}
+
+.evidence-value{
+    margin-top:4px;
+
+    font-size:16px;
+
+    font-weight:900;
+}
+
+.evidence-value.danger{
+    color:#ff846f;
+}
+
+/* =========================================================
+   13. REASONING BOX
+========================================================= */
+.reason-box{
+    margin-top:15px;
+}
+
+.reason-label{
+    margin-bottom:7px;
+
+    display:block;
+
+    color:#95b2bd;
+
+    font-size:9px;
+
+    font-weight:800;
+}
+
+textarea{
+    width:100%;
+
+    resize:vertical;
+
+    min-height:115px;
+
+    padding:13px;
+
+    outline:none;
+
+    border-radius:13px;
+
+    border:
+        1px solid rgba(117,214,238,.14);
+
+    background:
+        rgba(4,22,33,.72);
+
+    color:#e9faff;
+
+    line-height:1.6;
+
+    font-family:inherit;
+
+    font-size:11px;
+}
+
+textarea:focus{
+    border-color:
+        rgba(49,221,255,.48);
+
+    box-shadow:
+        0 0 0 3px rgba(49,221,255,.06);
+}
+
+/* =========================================================
+   14. ACTION CARDS
+========================================================= */
+.action-grid{
+    margin-top:16px;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:10px;
+}
+
+.action-card{
+    position:relative;
+
+    padding:15px;
+
+    min-height:130px;
+
+    border-radius:15px;
+
+    border:
+        1px solid rgba(120,215,238,.13);
+
+    background:
+        rgba(7,31,43,.7);
+
+    cursor:pointer;
+
+    transition:.2s ease;
+}
+
+.action-card:hover{
+    transform:translateY(-2px);
+}
+
+.action-card.selected{
+    border-color:
+        var(--green);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(26,142,110,.2),
+            rgba(8,48,53,.8)
+        );
+}
+
+.action-icon{
+    font-size:25px;
+}
+
+.action-card h4{
+    margin-top:9px;
+
+    font-size:11px;
+}
+
+.action-card p{
+    margin-top:5px;
+
+    color:#91adb7;
+
+    font-size:9px;
+
+    line-height:1.5;
+}
+
+/* =========================================================
+   15. REFLECTION
+========================================================= */
+.reflection-layout{
+    display:grid;
+
+    grid-template-columns:
+        1fr
+        360px;
+
+    gap:16px;
+}
+
+.reflection-card{
+    padding:20px;
+
+    border-radius:21px;
+
+    border:
+        1px solid rgba(124,217,240,.14);
+
+    background:
+        linear-gradient(
+            150deg,
+            rgba(7,38,52,.91),
+            rgba(5,25,36,.82)
+        );
+}
+
+.reflection-card h3{
+    font-size:17px;
+
+    margin-bottom:6px;
+}
+
+.reflection-card > p{
+    color:#91aeb8;
+
+    font-size:10px;
+
+    line-height:1.6;
+}
+
+.prompt{
+    margin-top:15px;
+}
+
+.prompt-label{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:8px;
+
+    margin-bottom:7px;
+}
+
+.prompt-label strong{
+    color:#d8f8ff;
+
+    font-size:10px;
+}
+
+.prompt-label span{
+    color:#718f9a;
+
+    font-size:8px;
+}
+
+.counter{
+    margin-top:5px;
+
+    text-align:right;
+
+    color:#6c919f;
+
+    font-size:8px;
+}
+
+/* =========================================================
+   16. COMMITMENT CARD
+========================================================= */
+.commitment-card{
+    position:sticky;
+
+    top:18px;
+
+    height:max-content;
+
+    padding:20px;
+
+    border-radius:21px;
+
+    border:
+        1px solid rgba(64,229,179,.17);
+
+    background:
+        linear-gradient(
+            155deg,
+            rgba(14,76,70,.8),
+            rgba(6,36,44,.87)
+        );
+}
+
+.commitment-icon{
+    width:50px;
+    height:50px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:15px;
+
+    background:
+        rgba(56,226,174,.12);
+
+    border:
+        1px solid rgba(56,226,174,.2);
+
+    font-size:25px;
+}
+
+.commitment-card h3{
+    margin-top:11px;
+
+    font-size:17px;
+}
+
+.commitment-card p{
+    margin-top:6px;
+
+    color:#9cc9c2;
+
+    font-size:10px;
+
+    line-height:1.6;
+}
+
+.check-list{
+    margin-top:15px;
+
+    display:grid;
+
+    gap:8px;
+}
+
+.check-item{
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    padding:9px;
+
+    border-radius:10px;
+
+    background:
+        rgba(3,24,31,.32);
+
+    cursor:pointer;
+
+    font-size:9px;
+
+    color:#b3d5d2;
+}
+
+.check-item input{
+    accent-color:
+        var(--green);
+}
+
+/* =========================================================
+   17. BUTTONS
+========================================================= */
+.button-row{
+    margin-top:18px;
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:9px;
+}
+
+.primary-btn,
+.secondary-btn{
+    min-height:42px;
+
+    padding:0 16px;
+
+    border-radius:11px;
+
+    font-size:10px;
+
+    font-weight:900;
+
+    border:0;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+}
+
+.primary-btn{
+    color:#04191c;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4de9ff,
+            #3ce4ad
+        );
+
+    box-shadow:
+        0 10px 30px rgba(47,218,227,.17);
+}
+
+.primary-btn:hover{
+    transform:translateY(-2px);
+}
+
+.secondary-btn{
+    color:#b7d4dd;
+
+    background:
+        rgba(7,34,46,.72);
+
+    border:
+        1px solid rgba(123,219,241,.14);
+}
+
+/* =========================================================
+   18. RESULT
+========================================================= */
+.result-section{
+    display:none;
+
+    margin-top:22px;
+
+    padding:25px;
+
+    border-radius:24px;
+
+    border:
+        1px solid rgba(56,226,174,.2);
+
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(46,220,181,.11),
+            transparent 34%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(7,52,61,.9),
+            rgba(5,27,38,.9)
+        );
+
+    text-align:center;
+}
+
+.result-section.show{
+    display:block;
+
+    animation:
+        fadeUp .5s ease;
+}
+
+.result-emoji{
+    font-size:52px;
+}
+
+.result-section h2{
+    margin-top:6px;
+
+    font-size:
+        clamp(
+            24px,
+            4vw,
+            42px
+        );
+}
+
+.result-score{
+    margin-top:7px;
+
+    color:var(--cyan);
+
+    font-size:42px;
+
+    font-weight:950;
+}
+
+.result-message{
+    max-width:680px;
+
+    margin:
+        10px auto
+        0;
+
+    color:#a8c5ce;
+
+    font-size:11px;
+
+    line-height:1.65;
+}
+
+.badges{
+    margin-top:16px;
+
+    display:flex;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+}
+
+.badge{
+    padding:
+        7px
+        11px;
+
+    border-radius:999px;
+
+    border:
+        1px solid rgba(69,225,187,.19);
+
+    background:
+        rgba(36,172,140,.11);
+
+    color:#9df1d5;
+
+    font-size:9px;
+
+    font-weight:850;
+}
+
+/* =========================================================
+   19. TOAST
+========================================================= */
+.toast{
+    position:fixed;
+
+    left:50%;
+    bottom:25px;
+
+    z-index:100;
+
+    transform:
+        translate(
+            -50%,
+            30px
+        );
+
+    opacity:0;
+
+    pointer-events:none;
+
+    padding:
+        10px
+        15px;
+
+    border-radius:10px;
+
+    background:
+        rgba(4,23,32,.94);
+
+    border:
+        1px solid rgba(78,226,250,.24);
+
+    color:#dffaff;
+
+    font-size:10px;
+
+    font-weight:750;
+
+    transition:.3s ease;
+}
+
+.toast.show{
+    opacity:1;
+
+    transform:
+        translate(
+            -50%,
+            0
+        );
+}
+
+/* =========================================================
+   20. RESPONSIVE
+========================================================= */
+@media(max-width:960px){
+
+    .hero{
+        grid-template-columns:1fr;
+    }
+
+    .challenge-nav{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .evidence-grid{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .reflection-layout{
+        grid-template-columns:1fr;
+    }
+
+    .commitment-card{
+        position:static;
+    }
+}
+
+@media(max-width:650px){
+
+    main{
+        width:min(
+            100% - 22px,
+            1380px
+        );
+    }
+
+    .hero{
+        padding:20px;
+    }
+
+    .options,
+    .action-grid{
+        grid-template-columns:1fr;
+    }
+
+    .challenge-nav{
+        grid-template-columns:1fr;
+    }
+
+    .stage-header{
+        align-items:start;
+
+        flex-direction:column;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =======================================================
+     BACKGROUND
+======================================================== -->
+<div class="background">
+
+    <div class="wave one"></div>
+    <div class="wave two"></div>
+    <div class="wave three"></div>
+
+</div>
+
+<main>
+
+<!-- =======================================================
+     HERO
+======================================================== -->
+<section class="hero">
+
+    <div>
+
+        <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            THỬ THÁCH SAU KHÁM PHÁ
+        </div>
+
+        <h1>
+            DÒNG NƯỚC
+            <span>LÊN TIẾNG</span>
+        </h1>
+
+        <p class="hero-desc">
+            Em đã tìm hiểu lý thuyết và quan sát mô hình 3D về ô nhiễm nước.
+            Bây giờ hãy sử dụng những gì em quan sát được để giải thích nguyên nhân,
+            phân tích hậu quả và lựa chọn giải pháp phù hợp.
+        </p>
+
+        <div class="hero-note">
+
+            <span class="mini-pill">
+                🧠 Không chỉ ghi nhớ
+            </span>
+
+            <span class="mini-pill">
+                🔎 Phân tích bằng chứng
+            </span>
+
+            <span class="mini-pill">
+                🌱 Đề xuất giải pháp
+            </span>
+
+            <span class="mini-pill">
+                💙 Cảm nghĩ & hành động
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="score-card">
+
+        <div class="score-label">
+            TIẾN TRÌNH THỬ THÁCH
+        </div>
+
+        <div class="score-number">
+            <span id="scoreDisplay">0</span>
+            <small>điểm</small>
+        </div>
+
+        <div class="score-progress">
+            <div id="scoreProgress"></div>
+        </div>
+
+        <div class="score-status" id="scoreStatus">
+            Hãy bắt đầu từ thử thách số 1.
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =======================================================
+     NAVIGATION
+======================================================== -->
+<nav class="challenge-nav">
+
+    <button
+        class="stage-tab active"
+        data-stage="stage1"
+    >
+        <span class="stage-num">
+            CHẶNG 01
+        </span>
+
+        <span class="stage-name">
+            Nhận diện vấn đề
+        </span>
+    </button>
+
+    <button
+        class="stage-tab"
+        data-stage="stage2"
+    >
+        <span class="stage-num">
+            CHẶNG 02
+        </span>
+
+        <span class="stage-name">
+            Giải thích nguyên nhân
+        </span>
+    </button>
+
+    <button
+        class="stage-tab"
+        data-stage="stage3"
+    >
+        <span class="stage-num">
+            CHẶNG 03
+        </span>
+
+        <span class="stage-name">
+            Ra quyết định
+        </span>
+    </button>
+
+    <button
+        class="stage-tab"
+        data-stage="stage4"
+    >
+        <span class="stage-num">
+            CHẶNG 04
+        </span>
+
+        <span class="stage-name">
+            Cảm nghĩ & hành động
+        </span>
+    </button>
+
+</nav>
+
+<!-- =======================================================
+     STAGE 1
+======================================================== -->
+<section class="stage active" id="stage1">
+
+    <div class="stage-header">
+
+        <div>
+            <div class="stage-kicker">
+                CHẶNG 01 · QUAN SÁT
+            </div>
+
+            <div class="stage-title">
+                Em đã nhìn thấy điều gì?
+            </div>
+        </div>
+
+        <p class="stage-subtitle">
+            Xác định những dấu hiệu và hậu quả cơ bản của ô nhiễm nước
+            dựa trên nội dung lý thuyết và mô hình 3D.
+        </p>
+
+    </div>
+
+    <div class="question-grid">
+
+        <!-- Q1 -->
+        <article
+            class="question-card quiz-question"
+            data-answer="2"
+            data-points="10"
+        >
+
+            <div class="question-top">
+
+                <div class="question-number">
+                    01
+                </div>
+
+                <div class="question-content">
+
+                    <div class="question-level">
+                        NHẬN BIẾT – ĐỌC DẤU HIỆU
+                    </div>
+
+                    <div class="question-text">
+                        Trong mô hình, dấu hiệu nào cho thấy chất lượng nước
+                        đang suy giảm rõ rệt nhất?
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="options">
+
+                <button class="option" data-index="0">
+                    <span class="option-letter">A</span>
+                    <span class="option-text">
+                        Nước chảy nhanh hơn nhưng vẫn trong và có nhiều cá.
+                    </span>
+                </button>
+
+                <button class="option" data-index="1">
+                    <span class="option-letter">B</span>
+                    <span class="option-text">
+                        Có nhiều cây xanh hơn ở hai bên bờ sông.
+                    </span>
+                </button>
+
+                <button class="option" data-index="2">
+                    <span class="option-letter">C</span>
+                    <span class="option-text">
+                        Nước đổi màu, tăng độ đục, rác và chất bẩn xuất hiện,
+                        số lượng cá giảm.
+                    </span>
+                </button>
+
+                <button class="option" data-index="3">
+                    <span class="option-letter">D</span>
+                    <span class="option-text">
+                        Mặt nước phản chiếu ánh sáng mạnh hơn vào ban ngày.
+                    </span>
+                </button>
+
+            </div>
+
+            <div class="feedback good">
+                <strong>Chính xác.</strong>
+                Đây là nhóm dấu hiệu có quan hệ trực tiếp với suy giảm chất lượng nước.
+            </div>
+
+            <div class="feedback bad">
+                <strong>Hãy quan sát lại.</strong>
+                Ô nhiễm nước thường được nhận diện qua sự biến đổi về màu,
+                mùi, độ đục, chất thải và phản ứng của sinh vật.
+            </div>
+
+        </article>
+
+        <!-- Q2 -->
+        <article
+            class="question-card quiz-question"
+            data-answer="1"
+            data-points="10"
+        >
+
+            <div class="question-top">
+
+                <div class="question-number">
+                    02
+                </div>
+
+                <div class="question-content">
+
+                    <div class="question-level">
+                        HIỂU – LIÊN HỆ CHỈ SỐ
+                    </div>
+
+                    <div class="question-text">
+                        Khi lượng chất hữu cơ và nước thải tăng mạnh,
+                        chỉ số nào có xu hướng giảm và có thể khiến cá thiếu oxy?
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="options">
+
+                <button class="option" data-index="0">
+                    <span class="option-letter">A</span>
+                    <span class="option-text">
+                        Độ đục.
+                    </span>
+                </button>
+
+                <button class="option" data-index="1">
+                    <span class="option-letter">B</span>
+                    <span class="option-text">
+                        Oxy hòa tan trong nước – DO.
+                    </span>
+                </button>
+
+                <button class="option" data-index="2">
+                    <span class="option-letter">C</span>
+                    <span class="option-text">
+                        Lượng rác nhựa trên bờ.
+                    </span>
+                </button>
+
+                <button class="option" data-index="3">
+                    <span class="option-letter">D</span>
+                    <span class="option-text">
+                        Chiều dài của dòng sông.
+                    </span>
+                </button>
+
+            </div>
+
+            <div class="feedback good">
+                <strong>Đúng.</strong>
+                Khi quá trình phân hủy chất hữu cơ tiêu thụ nhiều oxy,
+                DO có thể giảm và gây áp lực lên sinh vật thủy sinh.
+            </div>
+
+            <div class="feedback bad">
+                <strong>Chưa chính xác.</strong>
+                Hãy nhớ chỉ số liên quan trực tiếp đến lượng oxy mà sinh vật
+                dưới nước có thể sử dụng.
+            </div>
+
+        </article>
+
+        <!-- Q3 -->
+        <article
+            class="question-card quiz-question"
+            data-answer="3"
+            data-points="10"
+        >
+
+            <div class="question-top">
+
+                <div class="question-number">
+                    03
+                </div>
+
+                <div class="question-content">
+
+                    <div class="question-level">
+                        HIỂU – HỆ QUẢ
+                    </div>
+
+                    <div class="question-text">
+                        Hệ quả nào thể hiện đầy đủ nhất tác động của ô nhiễm nước?
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="options">
+
+                <button class="option" data-index="0">
+                    <span class="option-letter">A</span>
+                    <span class="option-text">
+                        Chỉ làm nước kém đẹp về mặt cảnh quan.
+                    </span>
+                </button>
+
+                <button class="option" data-index="1">
+                    <span class="option-letter">B</span>
+                    <span class="option-text">
+                        Chỉ ảnh hưởng đến các loài cá.
+                    </span>
+                </button>
+
+                <button class="option" data-index="2">
+                    <span class="option-letter">C</span>
+                    <span class="option-text">
+                        Chỉ gây khó khăn cho sản xuất nông nghiệp.
+                    </span>
+                </button>
+
+                <button class="option" data-index="3">
+                    <span class="option-letter">D</span>
+                    <span class="option-text">
+                        Làm suy giảm hệ sinh thái, ảnh hưởng sức khỏe con người
+                        và gây thiệt hại kinh tế – xã hội.
+                    </span>
+                </button>
+
+            </div>
+
+            <div class="feedback good">
+                <strong>Rất tốt.</strong>
+                Ô nhiễm nước là vấn đề môi trường có tác động đồng thời
+                tới tự nhiên và đời sống xã hội.
+            </div>
+
+            <div class="feedback bad">
+                <strong>Chưa đầy đủ.</strong>
+                Một vấn đề môi trường thường tạo ra chuỗi tác động liên hệ với nhau,
+                không chỉ một hậu quả riêng lẻ.
+            </div>
+
+        </article>
+
+    </div>
+
+    <div class="button-row">
+
+        <button
+            class="primary-btn"
+            data-next="stage2"
+        >
+            Tiếp tục →
+        </button>
+
+    </div>
+
+</section>
+
+<!-- =======================================================
+     STAGE 2
+======================================================== -->
+<section class="stage" id="stage2">
+
+    <div class="stage-header">
+
+        <div>
+
+            <div class="stage-kicker">
+                CHẶNG 02 · SUY LUẬN
+            </div>
+
+            <div class="stage-title">
+                Vì sao dòng nước thay đổi?
+            </div>
+
+        </div>
+
+        <p class="stage-subtitle">
+            Không chỉ chọn đáp án đúng, em cần hiểu mối quan hệ
+            nguyên nhân – quá trình – hậu quả.
+        </p>
+
+    </div>
+
+    <div class="question-grid">
+
+        <!-- Q4 -->
+        <article
+            class="question-card quiz-question"
+            data-answer="0"
+            data-points="10"
+        >
+
+            <div class="question-top">
+
+                <div class="question-number">
+                    04
+                </div>
+
+                <div class="question-content">
+
+                    <div class="question-level">
+                        PHÂN TÍCH – CHUỖI NGUYÊN NHÂN
+                    </div>
+
+                    <div class="question-text">
+                        Chuỗi tác động nào hợp lí nhất khi nước thải giàu chất hữu cơ
+                        chưa qua xử lí được xả vào sông?
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="options">
+
+                <button class="option" data-index="0">
+                    <span class="option-letter">A</span>
+                    <span class="option-text">
+                        Chất hữu cơ tăng → vi sinh vật phân hủy mạnh →
+                        oxy hòa tan giảm → sinh vật thủy sinh bị ảnh hưởng.
+                    </span>
+                </button>
+
+                <button class="option" data-index="1">
+                    <span class="option-letter">B</span>
+                    <span class="option-text">
+                        Nước thải tăng → oxy tăng → cá sinh sản nhanh →
+                        hệ sinh thái ổn định hơn.
+                    </span>
+                </button>
+
+                <button class="option" data-index="2">
+                    <span class="option-letter">C</span>
+                    <span class="option-text">
+                        Nước đổi màu → dòng sông ngắn lại →
+                        giảm khả năng thoát nước.
+                    </span>
+                </button>
+
+                <button class="option" data-index="3">
+                    <span class="option-letter">D</span>
+                    <span class="option-text">
+                        Nước thải tăng → nước bốc hơi hoàn toàn →
+                        chất ô nhiễm biến mất.
+                    </span>
+                </button>
+
+            </div>
+
+            <div class="feedback good">
+                <strong>Đúng chuỗi nhân – quả.</strong>
+                Đây là cách giải thích khoa học thay vì chỉ mô tả hiện tượng.
+            </div>
+
+            <div class="feedback bad">
+                <strong>Hãy chú ý mối quan hệ nhân – quả.</strong>
+                Chất hữu cơ không tự biến mất ngay; quá trình phân hủy của chúng
+                có thể tiêu thụ oxy hòa tan.
+            </div>
+
+        </article>
+
+        <!-- Q5 -->
+        <article
+            class="question-card quiz-question"
+            data-answer="2"
+            data-points="10"
+        >
+
+            <div class="question-top">
+
+                <div class="question-number">
+                    05
+                </div>
+
+                <div class="question-content">
+
+                    <div class="question-level">
+                        VẬN DỤNG – THIÊN TAI
+                    </div>
+
+                    <div class="question-text">
+                        Vì sao sau một trận ngập lụt lớn,
+                        nguồn nước mặt có thể trở nên ô nhiễm hơn?
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="options">
+
+                <button class="option" data-index="0">
+                    <span class="option-letter">A</span>
+                    <span class="option-text">
+                        Vì mọi loại nước lũ đều chứa hóa chất độc.
+                    </span>
+                </button>
+
+                <button class="option" data-index="1">
+                    <span class="option-letter">B</span>
+                    <span class="option-text">
+                        Vì nước lũ làm cho tất cả vi sinh vật trong tự nhiên biến mất.
+                    </span>
+                </button>
+
+                <button class="option" data-index="2">
+                    <span class="option-letter">C</span>
+                    <span class="option-text">
+                        Vì nước có thể cuốn theo rác, bùn, nước thải,
+                        chất thải chăn nuôi và nhiều nguồn ô nhiễm vào sông hồ.
+                    </span>
+                </button>
+
+                <button class="option" data-index="3">
+                    <span class="option-letter">D</span>
+                    <span class="option-text">
+                        Vì nước lũ làm sông đổi hướng hoàn toàn.
+                    </span>
+                </button>
+
+            </div>
+
+            <div class="feedback good">
+                <strong>Chính xác.</strong>
+                Thiên tai có thể làm chất ô nhiễm vốn nằm ở nhiều nơi
+                bị cuốn vào nguồn nước trong thời gian ngắn.
+            </div>
+
+            <div class="feedback bad">
+                <strong>Hãy liên hệ mô hình ngập lụt.</strong>
+                Điểm quan trọng là khả năng vận chuyển và phát tán chất bẩn
+                trên phạm vi rộng.
+            </div>
+
+        </article>
+
+        <!-- Q6 -->
+        <article
+            class="question-card quiz-question"
+            data-answer="1"
+            data-points="10"
+        >
+
+            <div class="question-top">
+
+                <div class="question-number">
+                    06
+                </div>
+
+                <div class="question-content">
+
+                    <div class="question-level">
+                        TƯ DUY HỆ THỐNG
+                    </div>
+
+                    <div class="question-text">
+                        Nếu chỉ vớt rác nổi trên mặt sông nhưng vẫn để nước thải
+                        chưa xử lí tiếp tục xả vào sông, điều gì có khả năng xảy ra?
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="options">
+
+                <button class="option" data-index="0">
+                    <span class="option-letter">A</span>
+                    <span class="option-text">
+                        Vấn đề được giải quyết hoàn toàn.
+                    </span>
+                </button>
+
+                <button class="option" data-index="1">
+                    <span class="option-letter">B</span>
+                    <span class="option-text">
+                        Cảnh quan có thể sạch hơn nhưng nguyên nhân ô nhiễm chính
+                        vẫn tồn tại.
+                    </span>
+                </button>
+
+                <button class="option" data-index="2">
+                    <span class="option-letter">C</span>
+                    <span class="option-text">
+                        Nước sẽ tự động trở thành nước uống được.
+                    </span>
+                </button>
+
+                <button class="option" data-index="3">
+                    <span class="option-letter">D</span>
+                    <span class="option-text">
+                        Oxy hòa tan chắc chắn tăng lên mức tối đa.
+                    </span>
+                </button>
+
+            </div>
+
+            <div class="feedback good">
+                <strong>Tư duy rất đúng.</strong>
+                Xử lí hậu quả mà không kiểm soát nguồn phát sinh
+                chỉ giải quyết một phần của vấn đề.
+            </div>
+
+            <div class="feedback bad">
+                <strong>Hãy phân biệt biểu hiện và nguyên nhân.</strong>
+                Rác nổi chỉ là một phần của ô nhiễm nước.
+            </div>
+
+        </article>
+
+    </div>
+
+    <div class="button-row">
+
+        <button
+            class="secondary-btn"
+            data-next="stage1"
+        >
+            ← Quay lại
+        </button>
+
+        <button
+            class="primary-btn"
+            data-next="stage3"
+        >
+            Đến tình huống thực tiễn →
+        </button>
+
+    </div>
+
+</section>
+
+<!-- =======================================================
+     STAGE 3
+======================================================== -->
+<section class="stage" id="stage3">
+
+    <div class="stage-header">
+
+        <div>
+
+            <div class="stage-kicker">
+                CHẶNG 03 · RA QUYẾT ĐỊNH
+            </div>
+
+            <div class="stage-title">
+                Em sẽ làm gì?
+            </div>
+
+        </div>
+
+        <p class="stage-subtitle">
+            Hãy đóng vai thành viên của nhóm bảo vệ môi trường
+            và đưa ra quyết định dựa trên các bằng chứng quan sát được.
+        </p>
+
+    </div>
+
+    <article class="case-card">
+
+        <div class="case-head">
+
+            <div class="case-icon">
+                🌊
+            </div>
+
+            <div>
+
+                <div class="case-title">
+                    Tình huống: Dòng sông sau trận mưa lớn
+                </div>
+
+                <div class="case-desc">
+                    Sau một trận mưa lớn kéo dài, nước sông gần khu dân cư chuyển sang
+                    màu nâu đục. Một số rác nổi xuất hiện, cá nổi gần mặt nước và người dân
+                    phản ánh nước có mùi bất thường. Nhà máy ở thượng lưu vẫn đang hoạt động.
+                    Em được yêu cầu đề xuất phương án xử lí ban đầu.
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="evidence-grid">
+
+            <div class="evidence">
+                <div class="evidence-label">
+                    OXY HÒA TAN
+                </div>
+                <div class="evidence-value danger">
+                    2,8 mg/L
+                </div>
+            </div>
+
+            <div class="evidence">
+                <div class="evidence-label">
+                    ĐỘ ĐỤC
+                </div>
+                <div class="evidence-value danger">
+                    Cao
+                </div>
+            </div>
+
+            <div class="evidence">
+                <div class="evidence-label">
+                    RÁC NỔI
+                </div>
+                <div class="evidence-value">
+                    Nhiều
+                </div>
+            </div>
+
+            <div class="evidence">
+                <div class="evidence-label">
+                    CÁ
+                </div>
+                <div class="evidence-value danger">
+                    Có dấu hiệu bất thường
+                </div>
+            </div>
+
+        </div>
+
+        <div class="reason-box">
+
+            <label class="reason-label">
+                1. Theo em, cần ưu tiên làm gì trước?
+            </label>
+
+            <div
+                class="action-grid"
+                id="actionGrid"
+            >
+
+                <div
+                    class="action-card"
+                    data-action="clean"
+                >
+                    <div class="action-icon">
+                        🧹
+                    </div>
+
+                    <h4>
+                        Chỉ tổ chức vớt rác
+                    </h4>
+
+                    <p>
+                        Làm sạch rác nổi nhưng chưa kiểm tra nguồn phát sinh
+                        và chất lượng nước.
+                    </p>
+                </div>
+
+                <div
+                    class="action-card"
+                    data-action="monitor"
+                >
+                    <div class="action-icon">
+                        🔬
+                    </div>
+
+                    <h4>
+                        Khoanh vùng – kiểm tra – kiểm soát nguồn thải
+                    </h4>
+
+                    <p>
+                        Cảnh báo người dân, lấy mẫu nước,
+                        xác định nguồn ô nhiễm và hạn chế tiếp tục xả thải.
+                    </p>
+                </div>
+
+                <div
+                    class="action-card"
+                    data-action="ignore"
+                >
+                    <div class="action-icon">
+                        ⏳
+                    </div>
+
+                    <h4>
+                        Chờ nước tự sạch
+                    </h4>
+
+                    <p>
+                        Không can thiệp vì cho rằng dòng chảy
+                        sẽ tự cuốn mọi chất ô nhiễm đi.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="reason-box">
+
+            <label
+                class="reason-label"
+                for="reasoningText"
+            >
+                2. Hãy giải thích quyết định của em bằng 2–4 câu.
+            </label>
+
+            <textarea
+                id="reasoningText"
+                placeholder="Ví dụ: Em chọn phương án... bởi vì các chỉ số cho thấy..."
+            ></textarea>
+
+            <div
+                class="counter"
+                id="reasonCounter"
+            >
+                0 từ
+            </div>
+
+        </div>
+
+        <div class="button-row">
+
+            <button
+                class="primary-btn"
+                id="checkDecisionBtn"
+            >
+                Phân tích quyết định
+            </button>
+
+        </div>
+
+        <div
+            class="feedback"
+            id="decisionFeedback"
+        ></div>
+
+    </article>
+
+    <div class="button-row">
+
+        <button
+            class="secondary-btn"
+            data-next="stage2"
+        >
+            ← Quay lại
+        </button>
+
+        <button
+            class="primary-btn"
+            data-next="stage4"
+        >
+            Viết cảm nghĩ →
+        </button>
+
+    </div>
+
+</section>
+
+<!-- =======================================================
+     STAGE 4
+======================================================== -->
+<section class="stage" id="stage4">
+
+    <div class="stage-header">
+
+        <div>
+
+            <div class="stage-kicker">
+                CHẶNG 04 · PHẢN TƯ
+            </div>
+
+            <div class="stage-title">
+                Từ hiểu biết đến hành động
+            </div>
+
+        </div>
+
+        <p class="stage-subtitle">
+            Đây không phải phần “viết cho có”.
+            Em hãy thể hiện điều mình thật sự nhận ra sau khi học.
+        </p>
+
+    </div>
+
+    <div class="reflection-layout">
+
+        <div class="reflection-card">
+
+            <h3>
+                💭 Nhật ký sau hành trình
+            </h3>
+
+            <p>
+                Hãy viết ngắn gọn, rõ ý và thể hiện suy nghĩ của chính em.
+            </p>
+
+            <div class="prompt">
+
+                <div class="prompt-label">
+
+                    <strong>
+                        1. Điều khiến em ấn tượng nhất sau khi xem mô hình là gì?
+                    </strong>
+
+                    <span>
+                        Gợi ý: hiện tượng, hậu quả hoặc chỉ số
+                    </span>
+
+                </div>
+
+                <textarea
+                    id="reflection1"
+                    placeholder="Điều làm em ấn tượng nhất là..."
+                ></textarea>
+
+                <div
+                    class="counter"
+                    id="count1"
+                >
+                    0 từ
+                </div>
+
+            </div>
+
+            <div class="prompt">
+
+                <div class="prompt-label">
+
+                    <strong>
+                        2. Theo em, vì sao bảo vệ nguồn nước không chỉ là trách nhiệm của cơ quan quản lí?
+                    </strong>
+
+                    <span>
+                        Gợi ý: cộng đồng – cá nhân – doanh nghiệp
+                    </span>
+
+                </div>
+
+                <textarea
+                    id="reflection2"
+                    placeholder="Bảo vệ nguồn nước cần sự tham gia của..."
+                ></textarea>
+
+                <div
+                    class="counter"
+                    id="count2"
+                >
+                    0 từ
+                </div>
+
+            </div>
+
+            <div class="prompt">
+
+                <div class="prompt-label">
+
+                    <strong>
+                        3. Một hành động cụ thể em có thể thực hiện từ hôm nay là gì?
+                    </strong>
+
+                    <span>
+                        Hãy chọn hành động thực tế
+                    </span>
+
+                </div>
+
+                <textarea
+                    id="reflection3"
+                    placeholder="Từ hôm nay, em sẽ..."
+                ></textarea>
+
+                <div
+                    class="counter"
+                    id="count3"
+                >
+                    0 từ
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Commitment -->
+        <aside class="commitment-card">
+
+            <div class="commitment-icon">
+                🌱
+            </div>
+
+            <h3>
+                Cam kết Dòng nước xanh
+            </h3>
+
+            <p>
+                Chọn những hành động em sẵn sàng thực hiện
+                trong đời sống hằng ngày.
+            </p>
+
+            <div
+                class="check-list"
+                id="commitmentList"
+            >
+
+                <label class="check-item">
+                    <input type="checkbox">
+                    Không xả rác xuống kênh, sông, ao hồ.
+                </label>
+
+                <label class="check-item">
+                    <input type="checkbox">
+                    Hạn chế sản phẩm nhựa dùng một lần.
+                </label>
+
+                <label class="check-item">
+                    <input type="checkbox">
+                    Tiết kiệm nước khi sinh hoạt.
+                </label>
+
+                <label class="check-item">
+                    <input type="checkbox">
+                    Nhắc nhở và tuyên truyền bảo vệ nguồn nước.
+                </label>
+
+                <label class="check-item">
+                    <input type="checkbox">
+                    Tham gia hoạt động làm sạch môi trường khi có điều kiện.
+                </label>
+
+            </div>
+
+            <div class="button-row">
+
+                <button
+                    class="primary-btn"
+                    id="finishBtn"
+                >
+                    Hoàn thành hành trình
+                </button>
+
+                <button
+                    class="secondary-btn"
+                    id="saveBtn"
+                >
+                    Lưu cảm nghĩ
+                </button>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</section>
+
+<!-- =======================================================
+     RESULT
+======================================================== -->
+<section
+    class="result-section"
+    id="resultSection"
+>
+
+    <div
+        class="result-emoji"
+        id="resultEmoji"
+    >
+        🌊
+    </div>
+
+    <h2 id="resultTitle">
+        Hành trình đã hoàn thành!
+    </h2>
+
+    <div class="result-score">
+        <span id="finalScore">
+            0
+        </span>
+        /100
+    </div>
+
+    <p
+        class="result-message"
+        id="resultMessage"
+    >
+    </p>
+
+    <div
+        class="badges"
+        id="badgeContainer"
+    ></div>
+
+    <div
+        class="button-row"
+        style="justify-content:center;"
+    >
+
+        <button
+            class="primary-btn"
+            id="restartBtn"
+        >
+            Làm lại thử thách
+        </button>
+
+        <button
+            class="secondary-btn"
+            id="downloadBtn"
+        >
+            Xuất phiếu cảm nghĩ
+        </button>
+
+    </div>
+
+</section>
+
+</main>
+
+<div
+    class="toast"
+    id="toast"
+>
+    Đã lưu!
+</div>
+
+<script>
+/* =========================================================
+   01. STATE
+========================================================= */
+const state = {
+
+    score:0,
+
+    answered:new Set(),
+
+    decisionChecked:false,
+
+    selectedAction:null
+};
+
+/* =========================================================
+   02. BACKGROUND BUBBLES
+========================================================= */
+function createBubbles(){
+
+    const background =
+        document.querySelector(
+            ".background"
+        );
+
+    for(
+        let i=0;
+        i<24;
+        i++
+    ){
+
+        const bubble =
+            document.createElement(
+                "div"
+            );
+
+        bubble.className =
+            "bubble";
+
+        const size =
+            8 +
+            Math.random()*34;
+
+        bubble.style.width =
+            size+"px";
+
+        bubble.style.height =
+            size+"px";
+
+        bubble.style.left =
+            Math.random()*100+"%";
+
+        bubble.style.animationDuration =
+            (
+                9 +
+                Math.random()*16
+            )+"s";
+
+        bubble.style.animationDelay =
+            (
+                -Math.random()*20
+            )+"s";
+
+        background.appendChild(
+            bubble
+        );
+    }
+}
+
+createBubbles();
+
+/* =========================================================
+   03. STAGE NAVIGATION
+========================================================= */
+const stageTabs =
+    document.querySelectorAll(
+        ".stage-tab"
+    );
+
+const stages =
+    document.querySelectorAll(
+        ".stage"
+    );
+
+
+function openStage(id){
+
+    stages.forEach(
+        stage=>{
+            stage.classList.toggle(
+                "active",
+                stage.id === id
+            );
+        }
+    );
+
+    stageTabs.forEach(
+        tab=>{
+            tab.classList.toggle(
+                "active",
+                tab.dataset.stage === id
+            );
+        }
+    );
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+
+stageTabs.forEach(
+    tab=>{
+
+        tab.addEventListener(
+            "click",
+            ()=>{
+
+                openStage(
+                    tab.dataset.stage
+                );
+
+            }
+        );
+
+    }
+);
+
+
+document
+    .querySelectorAll(
+        "[data-next]"
+    )
+    .forEach(
+        button=>{
+
+            button.addEventListener(
+                "click",
+                ()=>{
+
+                    openStage(
+                        button.dataset.next
+                    );
+
+                }
+            );
+
+        }
+    );
+
+/* =========================================================
+   04. QUIZ QUESTIONS
+========================================================= */
+const questions =
+    document.querySelectorAll(
+        ".quiz-question"
+    );
+
+
+questions.forEach(
+    (
+        question,
+        questionIndex
+    )=>{
+
+        const answer =
+            Number(
+                question.dataset.answer
+            );
+
+        const points =
+            Number(
+                question.dataset.points
+            );
+
+        const options =
+            question.querySelectorAll(
+                ".option"
+            );
+
+        const goodFeedback =
+            question.querySelector(
+                ".feedback.good"
+            );
+
+        const badFeedback =
+            question.querySelector(
+                ".feedback.bad"
+            );
+
+
+        options.forEach(
+            option=>{
+
+                option.addEventListener(
+                    "click",
+                    ()=>{
+
+                        const id =
+                            "q"+
+                            questionIndex;
+
+
+                        if(
+                            state.answered
+                                .has(id)
+                        ){
+                            return;
+                        }
+
+
+                        state.answered.add(
+                            id
+                        );
+
+
+                        const selected =
+                            Number(
+                                option.dataset.index
+                            );
+
+
+                        options.forEach(
+                            btn=>{
+                                btn.disabled=true;
+                            }
+                        );
+
+
+                        if(
+                            selected === answer
+                        ){
+
+                            option.classList.add(
+                                "correct"
+                            );
+
+                            question.classList.add(
+                                "correct"
+                            );
+
+                            goodFeedback.classList.add(
+                                "show"
+                            );
+
+                            state.score +=
+                                points;
+
+                            showToast(
+                                `+${points} điểm · Chính xác!`
+                            );
+
+                        }else{
+
+                            option.classList.add(
+                                "wrong"
+                            );
+
+                            options[
+                                answer
+                            ].classList.add(
+                                "correct"
+                            );
+
+                            question.classList.add(
+                                "wrong"
+                            );
+
+                            badFeedback.classList.add(
+                                "show"
+                            );
+                        }
+
+
+                        updateScore();
+
+                    }
+                );
+
+            }
+        );
+
+    }
+);
+
+/* =========================================================
+   05. SCORE
+========================================================= */
+function updateScore(){
+
+    const display =
+        document.getElementById(
+            "scoreDisplay"
+        );
+
+    const progress =
+        document.getElementById(
+            "scoreProgress"
+        );
+
+    const status =
+        document.getElementById(
+            "scoreStatus"
+        );
+
+
+    display.textContent =
+        state.score;
+
+
+    progress.style.width =
+        Math.min(
+            state.score,
+            100
+        )+"%";
+
+
+    if(
+        state.score >= 80
+    ){
+
+        status.textContent =
+            "Tư duy rất tốt – hãy hoàn thành phần phản tư.";
+
+    }else if(
+        state.score >= 50
+    ){
+
+        status.textContent =
+            "Em đang phân tích vấn đề khá tốt.";
+
+    }else if(
+        state.score > 0
+    ){
+
+        status.textContent =
+            "Tiếp tục quan sát và suy luận nhé.";
+
+    }else{
+
+        status.textContent =
+            "Hãy bắt đầu từ thử thách số 1.";
+    }
+}
+
+/* =========================================================
+   06. ACTION SELECTION
+========================================================= */
+const actionCards =
+    document.querySelectorAll(
+        ".action-card"
+    );
+
+
+actionCards.forEach(
+    card=>{
+
+        card.addEventListener(
+            "click",
+            ()=>{
+
+                actionCards.forEach(
+                    item=>
+                        item.classList.remove(
+                            "selected"
+                        )
+                );
+
+                card.classList.add(
+                    "selected"
+                );
+
+                state.selectedAction =
+                    card.dataset.action;
+
+            }
+        );
+
+    }
+);
+
+/* =========================================================
+   07. WORD COUNT
+========================================================= */
+function countWords(text){
+
+    return text
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean)
+        .length;
+}
+
+
+function attachCounter(
+    inputId,
+    counterId
+){
+
+    const input =
+        document.getElementById(
+            inputId
+        );
+
+    const counter =
+        document.getElementById(
+            counterId
+        );
+
+
+    input.addEventListener(
+        "input",
+        ()=>{
+
+            counter.textContent =
+                countWords(
+                    input.value
+                )+" từ";
+
+        }
+    );
+}
+
+
+attachCounter(
+    "reasoningText",
+    "reasonCounter"
+);
+
+attachCounter(
+    "reflection1",
+    "count1"
+);
+
+attachCounter(
+    "reflection2",
+    "count2"
+);
+
+attachCounter(
+    "reflection3",
+    "count3"
+);
+
+/* =========================================================
+   08. DECISION ANALYSIS
+========================================================= */
+document
+    .getElementById(
+        "checkDecisionBtn"
+    )
+    .addEventListener(
+        "click",
+        ()=>{
+
+            const feedback =
+                document.getElementById(
+                    "decisionFeedback"
+                );
+
+            const reasoning =
+                document.getElementById(
+                    "reasoningText"
+                ).value;
+
+            const words =
+                countWords(
+                    reasoning
+                );
+
+
+            if(
+                !state.selectedAction
+            ){
+
+                feedback.className =
+                    "feedback bad show";
+
+                feedback.innerHTML =
+                    "<strong>Chưa thể phân tích.</strong> Hãy chọn một phương án xử lí.";
+
+                return;
+            }
+
+
+            if(
+                words < 10
+            ){
+
+                feedback.className =
+                    "feedback bad show";
+
+                feedback.innerHTML =
+                    "<strong>Hãy giải thích rõ hơn.</strong> Em nên viết ít nhất khoảng 10 từ để thể hiện lí do lựa chọn.";
+
+                return;
+            }
+
+
+            if(
+                state.decisionChecked
+            ){
+                return;
+            }
+
+
+            state.decisionChecked =
+                true;
+
+
+            if(
+                state.selectedAction ===
+                "monitor"
+            ){
+
+                state.score +=
+                    20;
+
+
+                feedback.className =
+                    "feedback good show";
+
+
+                feedback.innerHTML =
+                    `
+                    <strong>Lựa chọn hợp lí.</strong>
+                    Khi xuất hiện đồng thời nước đục, DO thấp, cá có biểu hiện bất thường
+                    và nguy cơ có nguồn thải ở thượng lưu, cần cảnh báo cộng đồng,
+                    kiểm tra chất lượng nước và xác định nguồn ô nhiễm.
+                    Việc chỉ dọn rác nổi chưa giải quyết được nguyên nhân.
+                    `;
+
+
+                showToast(
+                    "+20 điểm · Ra quyết định hợp lí!"
+                );
+
+            }else{
+
+                feedback.className =
+                    "feedback bad show";
+
+
+                feedback.innerHTML =
+                    `
+                    <strong>Cần cân nhắc lại.</strong>
+                    Tình huống đã có nhiều dấu hiệu bất thường.
+                    Giải pháp hiệu quả cần vừa giảm nguy cơ trước mắt,
+                    vừa xác định và kiểm soát nguồn gây ô nhiễm.
+                    `;
+
+            }
+
+
+            updateScore();
+
+        }
+    );
+
+/* =========================================================
+   09. LOCAL STORAGE
+========================================================= */
+function saveReflection(){
+
+    const data = {
+
+        r1:
+            document.getElementById(
+                "reflection1"
+            ).value,
+
+        r2:
+            document.getElementById(
+                "reflection2"
+            ).value,
+
+        r3:
+            document.getElementById(
+                "reflection3"
+            ).value,
+
+        score:
+            state.score
+    };
+
+
+    localStorage.setItem(
+        "waterPollutionReflection",
+        JSON.stringify(data)
+    );
+
+
+    showToast(
+        "Đã lưu cảm nghĩ trên thiết bị."
+    );
+}
+
+
+document
+    .getElementById(
+        "saveBtn"
+    )
+    .addEventListener(
+        "click",
+        saveReflection
+    );
+
+
+function loadSavedReflection(){
+
+    const saved =
+        localStorage.getItem(
+            "waterPollutionReflection"
+        );
+
+
+    if(!saved){
+        return;
+    }
+
+
+    try{
+
+        const data =
+            JSON.parse(saved);
+
+
+        document.getElementById(
+            "reflection1"
+        ).value =
+            data.r1 || "";
+
+
+        document.getElementById(
+            "reflection2"
+        ).value =
+            data.r2 || "";
+
+
+        document.getElementById(
+            "reflection3"
+        ).value =
+            data.r3 || "";
+
+
+        ["reflection1","reflection2","reflection3"]
+            .forEach(
+                (
+                    id,
+                    index
+                )=>{
+
+                    const value =
+                        document.getElementById(
+                            id
+                        ).value;
+
+                    document.getElementById(
+                        "count"+(index+1)
+                    ).textContent =
+                        countWords(value)+" từ";
+
+                }
+            );
+
+    }catch(error){
+
+        console.warn(
+            "Không thể đọc dữ liệu đã lưu.",
+            error
+        );
+    }
+}
+
+
+loadSavedReflection();
+
+/* =========================================================
+   10. FINISH
+========================================================= */
+document
+    .getElementById(
+        "finishBtn"
+    )
+    .addEventListener(
+        "click",
+        ()=>{
+
+            const r1 =
+                document.getElementById(
+                    "reflection1"
+                ).value;
+
+            const r2 =
+                document.getElementById(
+                    "reflection2"
+                ).value;
+
+            const r3 =
+                document.getElementById(
+                    "reflection3"
+                ).value;
+
+
+            const totalReflectionWords =
+                countWords(r1)+
+                countWords(r2)+
+                countWords(r3);
+
+
+            const checked =
+                document.querySelectorAll(
+                    "#commitmentList input:checked"
+                ).length;
+
+
+            if(
+                totalReflectionWords < 25
+            ){
+
+                showToast(
+                    "Hãy hoàn thiện phần cảm nghĩ trước."
+                );
+
+                return;
+            }
+
+
+            if(
+                checked === 0
+            ){
+
+                showToast(
+                    "Hãy chọn ít nhất một cam kết xanh."
+                );
+
+                return;
+            }
+
+
+            /*
+                Reflection score:
+                max 20 points.
+            */
+
+            if(
+                totalReflectionWords >= 50
+            ){
+
+                state.score +=20;
+
+            }else{
+
+                state.score +=10;
+            }
+
+
+            /*
+                Cap final score.
+            */
+
+            state.score =
+                Math.min(
+                    100,
+                    state.score
+                );
+
+
+            updateScore();
+
+            showResult(
+                checked,
+                totalReflectionWords
+            );
+
+            saveReflection();
+
+        }
+    );
+
+/* =========================================================
+   11. SHOW RESULT
+========================================================= */
+function showResult(
+    commitments,
+    words
+){
+
+    const result =
+        document.getElementById(
+            "resultSection"
+        );
+
+    const title =
+        document.getElementById(
+            "resultTitle"
+        );
+
+    const emoji =
+        document.getElementById(
+            "resultEmoji"
+        );
+
+    const message =
+        document.getElementById(
+            "resultMessage"
+        );
+
+    const finalScore =
+        document.getElementById(
+            "finalScore"
+        );
+
+    const badges =
+        document.getElementById(
+            "badgeContainer"
+        );
+
+
+    finalScore.textContent =
+        state.score;
+
+
+    badges.innerHTML="";
+
+
+    if(
+        state.score >= 90
+    ){
+
+        emoji.textContent="🌍";
+
+        title.textContent=
+            "Nhà bảo vệ nguồn nước";
+
+        message.textContent=
+            "Em không chỉ nhận diện được vấn đề mà còn hiểu mối quan hệ nguyên nhân – hậu quả, biết sử dụng bằng chứng để đưa ra quyết định và chuyển kiến thức thành hành động.";
+
+    }else if(
+        state.score >= 70
+    ){
+
+        emoji.textContent="🌊";
+
+        title.textContent=
+            "Nhà quan sát môi trường";
+
+        message.textContent=
+            "Em đã hiểu khá tốt các biểu hiện và hậu quả của ô nhiễm nước. Hãy tiếp tục luyện tập cách giải thích hiện tượng bằng các mối quan hệ nhân – quả.";
+
+    }else{
+
+        emoji.textContent="💧";
+
+        title.textContent=
+            "Hành trình xanh đang tiếp tục";
+
+        message.textContent=
+            "Em đã hoàn thành hành trình. Hãy thử xem lại mô hình 3D, chú ý các chỉ số chất lượng nước và thực hiện thử thách một lần nữa để hiểu sâu hơn.";
+    }
+
+
+    addBadge(
+        "🧠 Tư duy môi trường"
+    );
+
+
+    if(
+        state.decisionChecked
+    ){
+
+        addBadge(
+            "🔎 Phân tích bằng chứng"
+        );
+    }
+
+
+    if(
+        words >= 50
+    ){
+
+        addBadge(
+            "💭 Phản tư sâu"
+        );
+    }
+
+
+    if(
+        commitments >= 3
+    ){
+
+        addBadge(
+            "🌱 Cam kết xanh"
+        );
+    }
+
+
+    result.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        ()=>{
+
+            result.scrollIntoView({
+                behavior:"smooth",
+                block:"center"
+            });
+
+        },
+        200
+    );
+
+
+    createConfetti();
+}
+
+
+function addBadge(text){
+
+    const badge =
+        document.createElement(
+            "span"
+        );
+
+    badge.className =
+        "badge";
+
+    badge.textContent =
+        text;
+
+    document.getElementById(
+        "badgeContainer"
+    ).appendChild(
+        badge
+    );
+}
+
+/* =========================================================
+   12. SIMPLE CONFETTI
+========================================================= */
+function createConfetti(){
+
+    for(
+        let i=0;
+        i<35;
+        i++
+    ){
+
+        const confetti =
+            document.createElement(
+                "div"
+            );
+
+        confetti.style.position=
+            "fixed";
+
+        confetti.style.zIndex=
+            "999";
+
+        confetti.style.left=
+            (
+                45+
+                Math.random()*10
+            )+"%";
+
+        confetti.style.top=
+            "45%";
+
+        confetti.style.width=
+            (
+                5+
+                Math.random()*6
+            )+"px";
+
+        confetti.style.height=
+            (
+                5+
+                Math.random()*10
+            )+"px";
+
+        confetti.style.borderRadius=
+            "2px";
+
+        confetti.style.background=
+            [
+                "#32ddff",
+                "#42e2ad",
+                "#ffd968",
+                "#ffffff"
+            ][
+                Math.floor(
+                    Math.random()*4
+                )
+            ];
+
+
+        document.body.appendChild(
+            confetti
+        );
+
+
+        const x =
+            (
+                Math.random()-.5
+            )*700;
+
+        const y =
+            -150+
+            Math.random()*500;
+
+
+        confetti.animate(
+            [
+                {
+                    transform:
+                        "translate(0,0) rotate(0deg)",
+                    opacity:1
+                },
+
+                {
+                    transform:
+                        `translate(${x}px,${y}px) rotate(${Math.random()*700}deg)`,
+                    opacity:0
+                }
+            ],
+            {
+                duration:
+                    900+
+                    Math.random()*1200,
+
+                easing:
+                    "cubic-bezier(.14,.74,.48,1)"
+            }
+        );
+
+
+        setTimeout(
+            ()=>confetti.remove(),
+            2300
+        );
+
+    }
+}
+
+/* =========================================================
+   13. DOWNLOAD REFLECTION
+========================================================= */
+document
+    .getElementById(
+        "downloadBtn"
+    )
+    .addEventListener(
+        "click",
+        ()=>{
+
+            const r1 =
+                document.getElementById(
+                    "reflection1"
+                ).value;
+
+            const r2 =
+                document.getElementById(
+                    "reflection2"
+                ).value;
+
+            const r3 =
+                document.getElementById(
+                    "reflection3"
+                ).value;
+
+
+            const commitments =
+                Array.from(
+                    document.querySelectorAll(
+                        "#commitmentList input:checked"
+                    )
+                )
+                .map(
+                    item=>
+                        item.parentElement
+                            .textContent
+                            .trim()
+                );
+
+
+            const content =
+`PHIẾU PHẢN TƯ – Ô NHIỄM NƯỚC
+================================
+
+Kết quả thử thách:
+${state.score}/100 điểm
+
+1. Điều khiến em ấn tượng nhất:
+${r1}
+
+2. Vì sao cần cùng nhau bảo vệ nguồn nước:
+${r2}
+
+3. Hành động em sẽ thực hiện:
+${r3}
+
+CAM KẾT XANH:
+${commitments
+    .map(
+        item=>"• "+item
+    )
+    .join("\n")}
+
+================================
+Học liệu số – Môi trường & Khí hậu
+`;
+
+
+            const blob =
+                new Blob(
+                    [content],
+                    {
+                        type:
+                            "text/plain;charset=utf-8"
+                    }
+                );
+
+
+            const url =
+                URL.createObjectURL(
+                    blob
+                );
+
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+            link.href=url;
+
+            link.download=
+                "phieu-cam-nghi-o-nhiem-nuoc.txt";
+
+            link.click();
+
+
+            URL.revokeObjectURL(
+                url
+            );
+
+        }
+    );
+
+/* =========================================================
+   14. RESTART
+========================================================= */
+document
+    .getElementById(
+        "restartBtn"
+    )
+    .addEventListener(
+        "click",
+        ()=>{
+
+            localStorage.removeItem(
+                "waterPollutionReflection"
+            );
+
+            location.reload();
+
+        }
+    );
+
+/* =========================================================
+   15. TOAST
+========================================================= */
+let toastTimer=null;
+
+function showToast(message){
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+    toast.textContent=
+        message;
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer=
+        setTimeout(
+            ()=>{
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            2200
+        );
+}
+
+</script>
+
+</body>
+</html>

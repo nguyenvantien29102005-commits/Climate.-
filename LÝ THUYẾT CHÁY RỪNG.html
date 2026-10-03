@@ -1,0 +1,3978 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CLIMASCORE | Cháy rừng – Wildfire Intelligence</title>
+
+<style>
+/* =========================================================
+   CLIMASCORE - WILDFIRE INTELLIGENCE
+   Single-file educational website
+   ========================================================= */
+
+:root{
+    --bg:#07131a;
+    --bg2:#0b1d24;
+    --panel:#102630;
+    --panel2:#152f39;
+
+    --orange:#ff7b22;
+    --orange2:#ffad3d;
+    --red:#ff493d;
+    --yellow:#ffd45c;
+
+    --green:#55dfa5;
+    --cyan:#40d7e5;
+
+    --text:#f5fbfc;
+    --muted:#a8bec5;
+
+    --line:rgba(255,255,255,.09);
+    --shadow:0 25px 70px rgba(0,0,0,.30);
+
+    --radius:25px;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:
+    Inter,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+    background:
+        radial-gradient(circle at 85% 0%,
+        rgba(255,95,25,.13),
+        transparent 25%),
+
+        radial-gradient(circle at 15% 20%,
+        rgba(40,200,200,.08),
+        transparent 25%),
+
+        var(--bg);
+
+    color:var(--text);
+    line-height:1.65;
+}
+
+button{
+    font:inherit;
+}
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+nav{
+    position:sticky;
+    top:0;
+    z-index:1000;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:14px 6%;
+
+    background:rgba(7,19,26,.84);
+    backdrop-filter:blur(18px);
+
+    border-bottom:1px solid var(--line);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    font-weight:900;
+    letter-spacing:.8px;
+}
+
+.brand-icon{
+    width:42px;
+    height:42px;
+    border-radius:14px;
+
+    display:grid;
+    place-items:center;
+
+    background:
+        linear-gradient(135deg,#ffb72f,#ff542b);
+
+    box-shadow:
+        0 8px 30px rgba(255,100,30,.30);
+
+    font-size:22px;
+}
+
+.navlinks{
+    display:flex;
+    gap:25px;
+}
+
+.navlinks a{
+    color:#c8d7dc;
+    text-decoration:none;
+    font-size:14px;
+    transition:.25s;
+}
+
+.navlinks a:hover{
+    color:#fff;
+}
+
+.home-btn{
+    border:1px solid rgba(255,255,255,.12);
+
+    background:rgba(255,255,255,.05);
+
+    color:#fff;
+
+    border-radius:14px;
+    padding:9px 14px;
+
+    cursor:pointer;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero{
+    min-height:89vh;
+
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:45px;
+    align-items:center;
+
+    padding:65px 7% 50px;
+}
+
+.eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+
+    padding:7px 13px;
+
+    border-radius:999px;
+
+    background:rgba(255,110,32,.10);
+    border:1px solid rgba(255,133,52,.25);
+
+    color:#ffc77d;
+
+    font-size:13px;
+    font-weight:700;
+
+    margin-bottom:20px;
+}
+
+.hero h1{
+    font-size:clamp(48px,7vw,90px);
+    line-height:.95;
+
+    letter-spacing:-3px;
+
+    margin-bottom:20px;
+}
+
+.hero h1 span{
+    color:transparent;
+
+    background:
+        linear-gradient(
+            100deg,
+            #ffd068,
+            #ff7e35,
+            #ff453d
+        );
+
+    background-clip:text;
+    -webkit-background-clip:text;
+}
+
+.hero-desc{
+    max-width:760px;
+
+    color:#b9cbd1;
+
+    font-size:18px;
+
+    margin-bottom:28px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    border:none;
+    border-radius:15px;
+
+    padding:13px 20px;
+
+    font-weight:800;
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.btn-primary{
+    color:#171008;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffc14d,
+            #ff6b2c
+        );
+}
+
+.btn-primary:hover{
+    transform:translateY(-3px);
+    box-shadow:
+        0 12px 35px rgba(255,100,30,.25);
+}
+
+.btn-secondary{
+    color:#fff;
+
+    background:rgba(255,255,255,.06);
+
+    border:1px solid rgba(255,255,255,.12);
+}
+
+/* =========================================================
+   HERO FIRE SIMULATION
+   ========================================================= */
+
+.hero-visual{
+    position:relative;
+
+    min-height:550px;
+
+    border-radius:35px;
+
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #203640 0%,
+            #13282f 44%,
+            #172c25 45%,
+            #071511 100%
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:var(--shadow);
+}
+
+.sun{
+    position:absolute;
+
+    width:95px;
+    height:95px;
+
+    top:65px;
+    right:65px;
+
+    border-radius:50%;
+
+    background:#ffc95b;
+
+    box-shadow:
+        0 0 70px rgba(255,175,60,.38);
+}
+
+.mountain{
+    position:absolute;
+    bottom:170px;
+
+    width:0;
+    height:0;
+
+    border-left:250px solid transparent;
+    border-right:250px solid transparent;
+    border-bottom:270px solid #233a35;
+}
+
+.mountain.one{
+    left:-150px;
+}
+
+.mountain.two{
+    right:-150px;
+
+    border-left-width:300px;
+    border-right-width:300px;
+    border-bottom-color:#1b332e;
+}
+
+.ground{
+    position:absolute;
+    bottom:0;
+
+    width:100%;
+    height:180px;
+
+    background:
+        linear-gradient(
+            #233a20,
+            #122716
+        );
+}
+
+.tree{
+    position:absolute;
+    bottom:110px;
+    width:28px;
+    height:145px;
+}
+
+.tree::before{
+    content:"";
+
+    position:absolute;
+    bottom:0;
+    left:11px;
+
+    width:8px;
+    height:60px;
+
+    background:#593a25;
+}
+
+.tree::after{
+    content:"";
+
+    position:absolute;
+
+    left:-24px;
+    top:0;
+
+    width:0;
+    height:0;
+
+    border-left:38px solid transparent;
+    border-right:38px solid transparent;
+    border-bottom:105px solid #1c5b3d;
+}
+
+.tree.t1{left:55px;}
+.tree.t2{left:135px;transform:scale(.82);}
+.tree.t3{right:80px;transform:scale(1.2);}
+.tree.t4{right:185px;transform:scale(.9);}
+.tree.t5{left:235px;transform:scale(.7);}
+
+.fire-zone{
+    position:absolute;
+
+    left:44%;
+    bottom:65px;
+
+    width:140px;
+    height:170px;
+
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;
+}
+
+.flame{
+    position:absolute;
+    bottom:0;
+
+    width:80px;
+    height:130px;
+
+    border-radius:
+        80% 20% 55% 45% /
+        75% 30% 70% 25%;
+
+    transform:rotate(45deg);
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffeb58,
+            #ff781f 48%,
+            #f43027
+        );
+
+    filter:
+        drop-shadow(
+        0 0 20px rgba(255,90,20,.75)
+        );
+
+    animation:
+        fire .65s infinite alternate ease-in-out;
+}
+
+.flame.small{
+    width:45px;
+    height:72px;
+
+    left:8px;
+
+    opacity:.9;
+}
+
+.flame.small2{
+    width:54px;
+    height:88px;
+
+    right:5px;
+
+    animation-delay:.2s;
+}
+
+@keyframes fire{
+    from{
+        transform:
+            rotate(43deg)
+            scale(.95,1);
+    }
+
+    to{
+        transform:
+            rotate(48deg)
+            scale(1.08,.93);
+    }
+}
+
+.smoke{
+    position:absolute;
+
+    width:120px;
+    height:120px;
+
+    left:46%;
+    bottom:190px;
+
+    border-radius:50%;
+
+    background:
+        rgba(90,91,88,.40);
+
+    filter:blur(8px);
+
+    animation:
+        smoke 5s infinite linear;
+}
+
+.smoke.s2{
+    animation-delay:1.6s;
+}
+
+.smoke.s3{
+    animation-delay:3.2s;
+}
+
+@keyframes smoke{
+
+    0%{
+        transform:
+            translate(0,0)
+            scale(.5);
+
+        opacity:.25;
+    }
+
+    70%{
+        opacity:.4;
+    }
+
+    100%{
+        transform:
+            translate(120px,-300px)
+            scale(2.2);
+
+        opacity:0;
+    }
+}
+
+.visual-label{
+    position:absolute;
+
+    left:25px;
+    top:25px;
+
+    padding:10px 14px;
+
+    border-radius:14px;
+
+    background:rgba(7,18,22,.64);
+    backdrop-filter:blur(10px);
+
+    border:1px solid rgba(255,255,255,.10);
+
+    font-size:13px;
+}
+
+.visual-footer{
+    position:absolute;
+
+    left:25px;
+    right:25px;
+    bottom:20px;
+
+    padding:15px 17px;
+
+    border-radius:18px;
+
+    background:rgba(0,0,0,.45);
+    backdrop-filter:blur(14px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    font-size:14px;
+    color:#d0dddd;
+}
+
+/* =========================================================
+   GENERAL SECTION
+   ========================================================= */
+
+section{
+    padding:85px 7%;
+}
+
+.section-head{
+    max-width:850px;
+    margin-bottom:38px;
+}
+
+.section-tag{
+    color:#ffb55b;
+
+    font-size:13px;
+    font-weight:900;
+
+    letter-spacing:1.6px;
+
+    text-transform:uppercase;
+
+    margin-bottom:8px;
+}
+
+.section-head h2{
+    font-size:
+        clamp(33px,4vw,53px);
+
+    line-height:1.08;
+
+    letter-spacing:-1.7px;
+
+    margin-bottom:14px;
+}
+
+.section-head p{
+    color:var(--muted);
+    font-size:17px;
+}
+
+/* =========================================================
+   INFO GRID
+   ========================================================= */
+
+.grid{
+    display:grid;
+    gap:20px;
+}
+
+.grid-2{
+    grid-template-columns:
+        repeat(2,1fr);
+}
+
+.grid-3{
+    grid-template-columns:
+        repeat(3,1fr);
+}
+
+.grid-4{
+    grid-template-columns:
+        repeat(4,1fr);
+}
+
+.card{
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.06),
+            rgba(255,255,255,.025)
+        );
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    border-radius:var(--radius);
+
+    padding:25px;
+
+    box-shadow:
+        0 15px 50px rgba(0,0,0,.13);
+}
+
+.card-icon{
+    width:50px;
+    height:50px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:15px;
+
+    background:
+        rgba(255,119,40,.12);
+
+    font-size:25px;
+
+    margin-bottom:16px;
+}
+
+.card h3{
+    margin-bottom:8px;
+    font-size:19px;
+}
+
+.card p{
+    color:#aebfc5;
+    font-size:14.5px;
+}
+
+/* =========================================================
+   FIRE TRIANGLE
+   ========================================================= */
+
+.triangle-area{
+    display:grid;
+    grid-template-columns:.9fr 1.1fr;
+    gap:30px;
+    align-items:center;
+}
+
+.fire-triangle{
+    position:relative;
+
+    width:min(100%,500px);
+    aspect-ratio:1;
+
+    margin:auto;
+}
+
+.triangle{
+    position:absolute;
+
+    left:50%;
+    top:50%;
+
+    transform:
+        translate(-50%,-50%)
+        rotate(0deg);
+
+    width:0;
+    height:0;
+
+    border-left:190px solid transparent;
+    border-right:190px solid transparent;
+    border-bottom:330px solid rgba(255,91,45,.12);
+
+    filter:
+        drop-shadow(
+        0 10px 40px rgba(255,70,30,.15)
+        );
+}
+
+.tri-node{
+    position:absolute;
+
+    width:130px;
+    height:130px;
+
+    border-radius:50%;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    padding:15px;
+
+    background:#152d35;
+
+    border:1px solid rgba(255,255,255,.11);
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.tri-node:hover{
+    transform:scale(1.08);
+    border-color:#ff9f50;
+}
+
+.tri-node b{
+    font-size:28px;
+}
+
+.tri-node span{
+    font-weight:800;
+    font-size:13px;
+}
+
+.oxygen{
+    top:15px;
+    left:50%;
+
+    transform:translateX(-50%);
+}
+
+.oxygen:hover{
+    transform:
+        translateX(-50%)
+        scale(1.08);
+}
+
+.fuel{
+    left:15px;
+    bottom:15px;
+}
+
+.heat{
+    right:15px;
+    bottom:15px;
+}
+
+.center-fire{
+    position:absolute;
+
+    left:50%;
+    top:55%;
+
+    transform:
+        translate(-50%,-50%);
+
+    font-size:70px;
+}
+
+.fact-list{
+    display:grid;
+    gap:13px;
+}
+
+.fact-item{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:14px;
+
+    padding:17px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid var(--line);
+
+    border-radius:17px;
+}
+
+.fact-number{
+    width:36px;
+    height:36px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:10px;
+
+    background:
+        rgba(255,128,50,.14);
+
+    color:#ffb568;
+
+    font-weight:900;
+}
+
+/* =========================================================
+   CAUSE CHAIN
+   ========================================================= */
+
+.chain{
+    display:grid;
+
+    grid-template-columns:
+        repeat(5,1fr);
+
+    gap:11px;
+
+    align-items:stretch;
+}
+
+.chain-item{
+    min-height:170px;
+
+    display:flex;
+    flex-direction:column;
+
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    padding:18px;
+
+    border-radius:22px;
+
+    background:
+        rgba(255,255,255,.04);
+
+    border:
+        1px solid var(--line);
+
+    position:relative;
+}
+
+.chain-item:not(:last-child)::after{
+    content:"→";
+
+    position:absolute;
+
+    right:-18px;
+    top:44%;
+
+    z-index:5;
+
+    color:#ff9844;
+    font-size:28px;
+    font-weight:900;
+}
+
+.chain-icon{
+    font-size:38px;
+    margin-bottom:10px;
+}
+
+.chain-item b{
+    margin-bottom:7px;
+}
+
+.chain-item small{
+    color:#a8b9bf;
+}
+
+/* =========================================================
+   STATS DASHBOARD
+   ========================================================= */
+
+.stats-section{
+    background:
+        linear-gradient(
+            180deg,
+            rgba(255,85,25,.04),
+            rgba(255,255,255,0)
+        );
+}
+
+.big-stat{
+    min-height:220px;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+
+.stat-label{
+    color:#9db1b7;
+    font-size:13px;
+
+    text-transform:uppercase;
+    letter-spacing:.9px;
+}
+
+.stat-value{
+    font-size:
+        clamp(36px,5vw,64px);
+
+    font-weight:950;
+    letter-spacing:-3px;
+
+    color:#ffb14f;
+}
+
+.stat-sub{
+    color:#b7c7cc;
+    font-size:13px;
+}
+
+.vn-card .stat-value{
+    color:#64e2a5;
+}
+
+.world-card .stat-value{
+    color:#ff8b45;
+}
+
+.data-note{
+    margin-top:20px;
+
+    padding:18px;
+
+    border-radius:17px;
+
+    background:
+        rgba(74,201,218,.06);
+
+    border:
+        1px solid rgba(74,201,218,.17);
+
+    color:#bddce0;
+
+    font-size:14px;
+}
+
+/* =========================================================
+   BAR CHART
+   ========================================================= */
+
+.chart{
+    margin-top:30px;
+}
+
+.chart-row{
+    display:grid;
+
+    grid-template-columns:
+        130px 1fr 65px;
+
+    gap:13px;
+
+    align-items:center;
+
+    margin:16px 0;
+}
+
+.chart-name{
+    color:#c1d0d4;
+    font-size:13px;
+}
+
+.bar{
+    height:14px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    border-radius:999px;
+
+    overflow:hidden;
+}
+
+.bar-fill{
+    height:100%;
+
+    border-radius:999px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffca58,
+            #ff6139
+        );
+
+    animation:
+        grow 1.5s ease;
+}
+
+@keyframes grow{
+    from{
+        width:0!important;
+    }
+}
+
+.chart-value{
+    text-align:right;
+
+    font-weight:900;
+    color:#ffd18d;
+}
+
+/* =========================================================
+   TYPES
+   ========================================================= */
+
+.type-card{
+    position:relative;
+    overflow:hidden;
+
+    min-height:270px;
+}
+
+.type-card::before{
+    content:"";
+
+    position:absolute;
+
+    width:130px;
+    height:130px;
+
+    right:-35px;
+    top:-35px;
+
+    border-radius:50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(255,100,20,.24),
+            transparent 70%
+        );
+}
+
+.type-card h3{
+    font-size:22px;
+}
+
+.type-label{
+    color:#ffb361;
+
+    font-size:12px;
+    font-weight:900;
+
+    text-transform:uppercase;
+
+    margin-bottom:12px;
+}
+
+/* =========================================================
+   IMPACT
+   ========================================================= */
+
+.impact-wrapper{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.impact-column{
+    display:grid;
+    gap:15px;
+}
+
+.impact{
+    display:flex;
+    gap:16px;
+
+    padding:19px;
+
+    border-radius:20px;
+
+    border:
+        1px solid var(--line);
+
+    background:
+        rgba(255,255,255,.035);
+}
+
+.impact-icon{
+    flex:none;
+
+    width:50px;
+    height:50px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:15px;
+
+    background:
+        rgba(255,98,45,.12);
+
+    font-size:25px;
+}
+
+.impact h4{
+    margin-bottom:4px;
+}
+
+.impact p{
+    color:#a8bbc0;
+    font-size:14px;
+}
+
+/* =========================================================
+   SMOKE VISUALIZATION
+   ========================================================= */
+
+.smoke-demo{
+    position:relative;
+
+    overflow:hidden;
+
+    min-height:410px;
+
+    border-radius:30px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #284652,
+            #15282f
+        );
+
+    border:
+        1px solid var(--line);
+}
+
+.fire-source{
+    position:absolute;
+
+    left:8%;
+    bottom:55px;
+
+    font-size:80px;
+
+    filter:
+        drop-shadow(
+            0 0 25px #ff662d
+        );
+}
+
+.smoke-cloud{
+    position:absolute;
+
+    left:18%;
+    bottom:135px;
+
+    width:48%;
+    height:140px;
+
+    border-radius:60% 50% 55% 40%;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(96,97,95,.8),
+            rgba(140,145,144,.40),
+            rgba(180,190,190,.05)
+        );
+
+    filter:blur(5px);
+
+    animation:
+        drift 5s infinite alternate ease-in-out;
+}
+
+@keyframes drift{
+    to{
+        transform:
+            translateX(90px)
+            scaleX(1.2);
+    }
+}
+
+.city{
+    position:absolute;
+
+    right:5%;
+    bottom:45px;
+
+    font-size:80px;
+}
+
+.arrow-wind{
+    position:absolute;
+
+    top:80px;
+    left:31%;
+
+    font-size:50px;
+
+    color:#7ee4ed;
+
+    animation:
+        wind 1.7s infinite alternate;
+}
+
+@keyframes wind{
+    to{
+        transform:translateX(30px);
+    }
+}
+
+.pm-label{
+    position:absolute;
+
+    left:42%;
+    top:155px;
+
+    padding:9px 13px;
+
+    border-radius:12px;
+
+    background:
+        rgba(20,27,30,.7);
+
+    border:
+        1px solid rgba(255,255,255,.10);
+
+    font-weight:900;
+}
+
+.smoke-text{
+    position:absolute;
+
+    left:5%;
+    right:5%;
+    bottom:15px;
+
+    padding:13px;
+
+    border-radius:14px;
+
+    background:
+        rgba(0,0,0,.38);
+
+    font-size:13px;
+    color:#cedbdd;
+}
+
+/* =========================================================
+   CLIMATE FEEDBACK
+   ========================================================= */
+
+.feedback{
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:10px;
+
+    margin-top:30px;
+}
+
+.feedback-item{
+    text-align:center;
+
+    min-height:145px;
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:18px;
+
+    border-radius:22px;
+
+    border:
+        1px solid var(--line);
+
+    background:
+        rgba(255,255,255,.035);
+
+    position:relative;
+}
+
+.feedback-item:not(:last-child)::after{
+    content:"→";
+
+    position:absolute;
+
+    right:-17px;
+
+    font-size:26px;
+    color:#ff9153;
+
+    z-index:10;
+}
+
+.feedback-item b{
+    margin-top:8px;
+}
+
+/* =========================================================
+   VIETNAM
+   ========================================================= */
+
+.vn-map{
+    min-height:410px;
+
+    border-radius:30px;
+
+    padding:28px;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(72,221,160,.10),
+            transparent 47%
+        ),
+        #10252d;
+
+    border:
+        1px solid var(--line);
+
+    display:grid;
+    grid-template-columns:.7fr 1.3fr;
+    gap:25px;
+}
+
+.map-shape{
+    position:relative;
+    min-height:350px;
+}
+
+.vietnam-shape{
+    position:absolute;
+
+    left:40%;
+    top:5%;
+
+    width:72px;
+    height:325px;
+
+    border-radius:
+        80% 35% 75% 35% /
+        25% 55% 45% 80%;
+
+    transform:rotate(-8deg);
+
+    background:
+        linear-gradient(
+            #55dca2,
+            #268f69
+        );
+
+    box-shadow:
+        0 0 50px rgba(80,220,160,.15);
+}
+
+.hotspot{
+    position:absolute;
+
+    width:16px;
+    height:16px;
+
+    background:#ff753c;
+
+    border:3px solid #ffd585;
+
+    border-radius:50%;
+
+    animation:
+        pulse 1.4s infinite;
+}
+
+@keyframes pulse{
+    50%{
+        box-shadow:
+            0 0 0 15px
+            rgba(255,100,50,0);
+    }
+}
+
+.h1{top:100px;left:49%;}
+.h2{top:165px;left:42%;}
+.h3{top:215px;left:48%;}
+
+.vn-info h3{
+    font-size:28px;
+    margin-bottom:15px;
+}
+
+.vn-info ul{
+    padding-left:20px;
+    color:#b5c6ca;
+}
+
+.vn-info li{
+    margin-bottom:10px;
+}
+
+/* =========================================================
+   INTERACTIVE SCENARIO
+   ========================================================= */
+
+.lab{
+    padding:28px;
+
+    border-radius:30px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #142c34,
+            #0e2229
+        );
+
+    border:
+        1px solid var(--line);
+}
+
+.controls{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+
+    margin:25px 0;
+}
+
+.control-box{
+    padding:17px;
+
+    border-radius:18px;
+
+    background:
+        rgba(255,255,255,.04);
+}
+
+.control-box label{
+    display:block;
+
+    font-size:13px;
+    color:#b2c5ca;
+
+    margin-bottom:12px;
+}
+
+input[type="range"]{
+    width:100%;
+}
+
+.control-val{
+    font-size:25px;
+    font-weight:900;
+
+    margin-top:7px;
+
+    color:#ffc164;
+}
+
+.risk-result{
+    padding:23px;
+
+    border-radius:22px;
+
+    background:
+        rgba(255,255,255,.045);
+
+    border:
+        1px solid var(--line);
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-between;
+
+    gap:20px;
+}
+
+.risk-label{
+    font-size:13px;
+    color:#a9bbc0;
+}
+
+.risk-score{
+    font-size:36px;
+    font-weight:950;
+
+    color:#fbd05a;
+}
+
+.disclaimer{
+    margin-top:15px;
+
+    color:#8fa7ad;
+    font-size:12px;
+}
+
+/* =========================================================
+   ACCORDION
+   ========================================================= */
+
+.accordion{
+    display:grid;
+    gap:13px;
+}
+
+.ac-item{
+    border:
+        1px solid var(--line);
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    background:
+        rgba(255,255,255,.035);
+}
+
+.ac-title{
+    width:100%;
+
+    display:flex;
+    justify-content:space-between;
+
+    padding:18px 20px;
+
+    border:none;
+
+    background:none;
+
+    color:#fff;
+
+    cursor:pointer;
+
+    text-align:left;
+
+    font-size:16px;
+    font-weight:800;
+}
+
+.ac-body{
+    max-height:0;
+
+    overflow:hidden;
+
+    transition:.35s;
+}
+
+.ac-body-inner{
+    padding:
+        0 20px 20px;
+
+    color:#afc0c5;
+
+    font-size:14px;
+}
+
+.ac-item.active .ac-body{
+    max-height:400px;
+}
+
+/* =========================================================
+   RESPONSE
+   ========================================================= */
+
+.response-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:15px;
+}
+
+.step{
+    position:relative;
+
+    padding:22px;
+
+    border-radius:22px;
+
+    border:
+        1px solid var(--line);
+
+    background:
+        rgba(255,255,255,.035);
+}
+
+.step-no{
+    font-size:45px;
+
+    color:
+        rgba(255,160,80,.18);
+
+    font-weight:950;
+
+    line-height:1;
+}
+
+.step h4{
+    margin:
+        5px 0 7px;
+}
+
+.step p{
+    color:#a7b9bf;
+    font-size:13px;
+}
+
+/* =========================================================
+   SOURCES
+   ========================================================= */
+
+.sources{
+    background:#09191f;
+}
+
+.source-list{
+    display:grid;
+    gap:12px;
+}
+
+.source{
+    display:grid;
+    grid-template-columns:55px 1fr;
+
+    gap:15px;
+
+    padding:18px;
+
+    border-radius:18px;
+
+    border:
+        1px solid var(--line);
+
+    background:
+        rgba(255,255,255,.03);
+}
+
+.source-logo{
+    width:50px;
+    height:50px;
+
+    border-radius:14px;
+
+    display:grid;
+    place-items:center;
+
+    background:
+        rgba(255,255,255,.06);
+
+    font-weight:900;
+    color:#ffc26a;
+}
+
+.source p{
+    color:#a7bbc0;
+    font-size:13px;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer{
+    padding:40px 7%;
+
+    border-top:
+        1px solid var(--line);
+
+    text-align:center;
+
+    color:#809aa1;
+    font-size:13px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:1000px){
+
+    .hero,
+    .triangle-area,
+    .vn-map,
+    .impact-wrapper{
+        grid-template-columns:1fr;
+    }
+
+    .grid-4,
+    .response-grid{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .grid-3{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .chain,
+    .feedback{
+        grid-template-columns:1fr;
+    }
+
+    .chain-item::after,
+    .feedback-item::after{
+        display:none;
+    }
+
+    .hero-visual{
+        min-height:460px;
+    }
+
+}
+
+@media(max-width:700px){
+
+    .navlinks{
+        display:none;
+    }
+
+    .hero{
+        padding-top:45px;
+    }
+
+    .hero h1{
+        letter-spacing:-2px;
+    }
+
+    .grid-4,
+    .grid-3,
+    .grid-2,
+    .response-grid,
+    .controls{
+        grid-template-columns:1fr;
+    }
+
+    section{
+        padding:65px 5%;
+    }
+
+    nav{
+        padding:
+            12px 5%;
+    }
+
+    .triangle{
+        border-left-width:130px;
+        border-right-width:130px;
+        border-bottom-width:240px;
+    }
+
+    .tri-node{
+        width:100px;
+        height:100px;
+    }
+
+    .chart-row{
+        grid-template-columns:
+            100px 1fr 50px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ======================================================
+     NAV
+     ====================================================== -->
+
+<nav>
+
+    <div class="brand">
+        <div class="brand-icon">🔥</div>
+        <div>CLIMASCORE</div>
+    </div>
+
+    <div class="navlinks">
+        <a href="#overview">Khái niệm</a>
+        <a href="#causes">Nguyên nhân</a>
+        <a href="#data">Dữ liệu 2026</a>
+        <a href="#impacts">Hậu quả</a>
+        <a href="#vietnam">Việt Nam</a>
+        <a href="#lab">Phòng thí nghiệm</a>
+    </div>
+
+    <button
+        class="home-btn"
+        onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        ↑ Đầu trang
+    </button>
+
+</nav>
+
+
+<!-- ======================================================
+     HERO
+     ====================================================== -->
+
+<header class="hero">
+
+    <div>
+
+        <div class="eyebrow">
+            🔥 CLIMATE HAZARD LEARNING HUB • 2026
+        </div>
+
+        <h1>
+            CHÁY
+            <span>RỪNG</span>
+        </h1>
+
+        <p class="hero-desc">
+            Cháy rừng không đơn thuần là “cây bị cháy”.
+            Đó là sự tương tác giữa
+            <strong>nhiên liệu – nhiệt – oxy – thời tiết –
+            địa hình – hoạt động của con người</strong>,
+            có thể gây ra những tác động lan xa từ hệ sinh thái
+            tới sức khỏe, khí hậu và kinh tế.
+        </p>
+
+        <div class="hero-buttons">
+
+            <button
+                class="btn btn-primary"
+                onclick="
+                document.querySelector('#overview')
+                .scrollIntoView({behavior:'smooth'})">
+                Bắt đầu khám phá
+            </button>
+
+            <button
+                class="btn btn-secondary"
+                onclick="
+                document.querySelector('#data')
+                .scrollIntoView({behavior:'smooth'})">
+                Xem dữ liệu 2026
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="hero-visual">
+
+        <div class="visual-label">
+            ● MÔ PHỎNG CƠ CHẾ LAN TRUYỀN LỬA
+        </div>
+
+        <div class="sun"></div>
+
+        <div class="mountain one"></div>
+        <div class="mountain two"></div>
+
+        <div class="ground"></div>
+
+        <div class="tree t1"></div>
+        <div class="tree t2"></div>
+        <div class="tree t3"></div>
+        <div class="tree t4"></div>
+        <div class="tree t5"></div>
+
+        <div class="fire-zone">
+
+            <div class="flame small"></div>
+            <div class="flame"></div>
+            <div class="flame small2"></div>
+
+        </div>
+
+        <div class="smoke"></div>
+        <div class="smoke s2"></div>
+        <div class="smoke s3"></div>
+
+        <div class="visual-footer">
+            ☀ Nhiệt độ cao + 🌿 thảm thực vật khô +
+            💨 gió mạnh có thể làm đám cháy lan nhanh hơn.
+            Mô hình mang tính minh họa giáo dục.
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- ======================================================
+     1. KHÁI NIỆM
+     ====================================================== -->
+
+<section id="overview">
+
+    <div class="section-head">
+
+        <div class="section-tag">
+            01 / Nền tảng khoa học
+        </div>
+
+        <h2>Cháy rừng là gì?</h2>
+
+        <p>
+            Hiểu đúng khái niệm là bước đầu để phân biệt
+            cháy tự nhiên, cháy do con người và những vụ cháy
+            trở thành thảm họa.
+        </p>
+
+    </div>
+
+
+    <div class="grid grid-3">
+
+        <div class="card">
+
+            <div class="card-icon">🔥</div>
+
+            <h3>Đám cháy ngoài kiểm soát</h3>
+
+            <p>
+                Cháy rừng là đám cháy xảy ra trong khu vực
+                có thảm thực vật và lan truyền ngoài phạm vi
+                kiểm soát mong muốn, có thể tác động đến
+                rừng, đồng cỏ, cây bụi và khu dân cư tiếp giáp.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-icon">🌲</div>
+
+            <h3>Không phải mọi đám cháy đều giống nhau</h3>
+
+            <p>
+                Một số hệ sinh thái đã thích nghi với cháy
+                tự nhiên. Nhưng cháy quá thường xuyên,
+                quá nóng hoặc xảy ra ở hệ sinh thái
+                không thích nghi với lửa có thể gây
+                suy thoái nghiêm trọng.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-icon">🌡️</div>
+
+            <h3>Thời tiết quyết định khả năng lan cháy</h3>
+
+            <p>
+                Nắng nóng, hạn hán, độ ẩm thấp và gió mạnh
+                làm thảm thực vật khô hơn, tăng tốc độ
+                bắt lửa và khiến việc khống chế đám cháy
+                trở nên khó khăn hơn.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     2. TAM GIÁC LỬA
+     ====================================================== -->
+
+<section>
+
+    <div class="section-head">
+
+        <div class="section-tag">
+            02 / Cơ chế hình thành
+        </div>
+
+        <h2>“Tam giác lửa” – ba điều kiện để cháy tồn tại</h2>
+
+        <p>
+            Một quá trình cháy cần đồng thời nguồn nhiệt,
+            vật liệu cháy và oxy. Làm mất một trong ba yếu tố
+            có thể làm suy yếu hoặc dập tắt quá trình cháy.
+        </p>
+
+    </div>
+
+
+    <div class="triangle-area">
+
+        <div class="fire-triangle">
+
+            <div class="triangle"></div>
+
+            <div class="tri-node oxygen">
+                <b>💨</b>
+                <span>OXY</span>
+            </div>
+
+            <div class="tri-node fuel">
+                <b>🌿</b>
+                <span>NHIÊN LIỆU</span>
+            </div>
+
+            <div class="tri-node heat">
+                <b>🌡️</b>
+                <span>NGUỒN NHIỆT</span>
+            </div>
+
+            <div class="center-fire">
+                🔥
+            </div>
+
+        </div>
+
+
+        <div class="fact-list">
+
+            <div class="fact-item">
+
+                <div class="fact-number">1</div>
+
+                <div>
+                    <b>Nhiên liệu cháy</b>
+                    <p>
+                        Lá khô, cỏ, cây bụi, cành cây,
+                        gỗ chết, than bùn và các vật liệu
+                        hữu cơ khác.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="fact-item">
+
+                <div class="fact-number">2</div>
+
+                <div>
+                    <b>Nguồn nhiệt</b>
+                    <p>
+                        Có thể đến từ sét hoặc hoạt động
+                        của con người như đốt thực bì,
+                        lửa trại, thiết bị phát tia lửa,
+                        đường dây điện hoặc hành vi bất cẩn.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="fact-item">
+
+                <div class="fact-number">3</div>
+
+                <div>
+                    <b>Oxy</b>
+                    <p>
+                        Không khí cung cấp oxy cho phản ứng cháy.
+                        Gió đồng thời đưa oxy tới vùng cháy và
+                        có thể đẩy lửa, tàn lửa sang khu vực khác.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="fact-item">
+
+                <div class="fact-number">!</div>
+
+                <div>
+                    <b>Điều quan trọng</b>
+                    <p>
+                        Khí hậu không nhất thiết “châm lửa”,
+                        nhưng khí hậu nóng hơn và khô hơn
+                        có thể tạo điều kiện để đám cháy
+                        dễ phát triển và trở nên cực đoan hơn.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     3. NGUYÊN NHÂN
+     ====================================================== -->
+
+<section id="causes">
+
+    <div class="section-head">
+
+        <div class="section-tag">
+            03 / Nguyên nhân
+        </div>
+
+        <h2>Tại sao cháy rừng xảy ra?</h2>
+
+        <p>
+            Cần phân biệt giữa
+            <strong>nguồn gây cháy</strong>
+            và
+            <strong>điều kiện làm cháy lan mạnh</strong>.
+        </p>
+
+    </div>
+
+
+    <div class="grid grid-4">
+
+        <div class="card">
+            <div class="card-icon">👨‍🌾</div>
+            <h3>Hoạt động con người</h3>
+            <p>
+                Đốt nương, xử lý thực bì, đốt rác,
+                lửa trại, hút thuốc, sử dụng máy móc
+                hay nguồn nhiệt bất cẩn có thể trở thành
+                nguồn khởi phát.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">⚡</div>
+            <h3>Sét</h3>
+            <p>
+                Sét là một nguồn gây cháy tự nhiên quan trọng,
+                đặc biệt trong các vùng rừng rộng,
+                khô và khó tiếp cận.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">☀️</div>
+            <h3>Nắng nóng – hạn</h3>
+            <p>
+                Nhiệt độ cao và thiếu mưa làm giảm
+                độ ẩm của vật liệu cháy, khiến thảm thực vật
+                dễ bắt lửa hơn.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="card-icon">💨</div>
+            <h3>Gió</h3>
+            <p>
+                Gió làm tăng oxy, nghiêng ngọn lửa về phía
+                nhiên liệu chưa cháy và đưa tàn lửa
+                đi xa khỏi mặt lửa chính.
+            </p>
+        </div>
+
+    </div>
+
+
+    <div
+        class="data-note"
+        style="margin-top:28px">
+
+        <strong>WHO, cập nhật 31/7/2026:</strong>
+        ước tính khoảng
+        <strong>80–95% vụ cháy rừng toàn cầu
+        được khởi phát bởi hoạt động của con người</strong>,
+        thay vì nguồn gây cháy tự nhiên.
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     4. CHUỖI THẢM HỌA
+     ====================================================== -->
+
+<section>
+
+    <div class="section-head">
+
+        <div class="section-tag">
+            04 / Tư duy hệ thống
+        </div>
+
+        <h2>Một vụ cháy lớn hình thành như thế nào?</h2>
+
+    </div>
+
+
+    <div class="chain">
+
+        <div class="chain-item">
+            <div class="chain-icon">☀️</div>
+            <b>Nóng – khô</b>
+            <small>
+                Độ ẩm nhiên liệu giảm
+            </small>
+        </div>
+
+        <div class="chain-item">
+            <div class="chain-icon">🍂</div>
+            <b>Nhiên liệu khô</b>
+            <small>
+                Lá, cành, cây bụi dễ bắt lửa
+            </small>
+        </div>
+
+        <div class="chain-item">
+            <div class="chain-icon">🔥</div>
+            <b>Điểm bắt cháy</b>
+            <small>
+                Do con người hoặc tự nhiên
+            </small>
+        </div>
+
+        <div class="chain-item">
+            <div class="chain-icon">💨</div>
+            <b>Lan truyền</b>
+            <small>
+                Gió + địa hình thúc đẩy lửa
+            </small>
+        </div>
+
+        <div class="chain-item">
+            <div class="chain-icon">🌫️</div>
+            <b>Tác động dây chuyền</b>
+            <small>
+                Khói, carbon, mất rừng,
+                thiệt hại xã hội
+            </small>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     5. CÁC DẠNG CHÁY
+     ====================================================== -->
+
+<section>
+
+    <div class="section-head">
+
+        <div class="section-tag">
+            05 / Nhận diện
+        </div>
+
+        <h2>Ba dạng cháy rừng thường được phân biệt</h2>
+
+    </div>
+
+
+    <div class="grid grid-3">
+
+        <div class="card type-card">
+
+            <div class="type-label">
+                Surface fire
+            </div>
+
+            <div class="card-icon">
+                🍂
+            </div>
+
+            <h3>Cháy mặt đất</h3>
+
+            <p>
+                Lửa cháy lớp cỏ, lá khô,
+                cành rơi và cây bụi trên bề mặt đất.
+                Đây là dạng phổ biến và có thể chuyển
+                thành cháy tán khi đủ điều kiện.
+            </p>
+
+        </div>
+
+
+        <div class="card type-card">
+
+            <div class="type-label">
+                Crown fire
+            </div>
+
+            <div class="card-icon">
+                🌲🔥
+            </div>
+
+            <h3>Cháy tán</h3>
+
+            <p>
+                Ngọn lửa lan qua tầng tán cây.
+                Khi kết hợp với gió mạnh và lượng nhiên liệu lớn,
+                tốc độ lan truyền có thể rất cao.
+            </p>
+
+        </div>
+
+
+        <div class="card type-card">
+
+            <div class="type-label">
+                Ground fire
+            </div>
+
+            <div class="card-icon">
+                🟤🔥
+            </div>
+
+            <h3>Cháy dưới mặt đất</h3>
+
+            <p>
+                Cháy lớp hữu cơ hoặc than bùn dưới bề mặt.
+                Có thể âm ỉ trong thời gian dài,
+                khó quan sát và rất khó dập tắt hoàn toàn.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     6. DATA 2026
+     ====================================================== -->
+
+<section
+    id="data"
+    class="stats-section">
+
+    <div class="section-head">
+
+        <div class="section-tag">
+            06 / Data Intelligence 2026
+        </div>
+
+        <h2>Cháy rừng qua những con số</h2>
+
+        <p>
+            “Số liệu mới nhất 2026” không có nghĩa mọi con số
+            đều là tổng cả năm 2026.
+            Các bộ dữ liệu toàn cầu thường có độ trễ.
+            Vì vậy cần ghi đúng thời điểm quan sát.
+        </p>
+
+    </div>
+
+
+    <div class="grid grid-4">
+
+
+        <div class="card big-stat vn-card">
+
+            <div class="stat-label">
+                Việt Nam • 6/2026
+            </div>
+
+            <div class="stat-value">
+                25
+            </div>
+
+            <div>
+                <b>vụ cháy rừng</b>
+                <div class="stat-sub">
+                    từ đầu tháng 6 đến 25/6/2026
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="card big-stat vn-card">
+
+            <div class="stat-label">
+                Thiệt hại rừng • VN
+            </div>
+
+            <div class="stat-value">
+                &gt;90 ha
+            </div>
+
+            <div>
+                <b>rừng bị thiệt hại</b>
+                <div class="stat-sub">
+                    trong chuỗi cháy tháng 6/2026
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="card big-stat world-card">
+
+            <div class="stat-label">
+                Toàn cầu • năm 2025
+            </div>
+
+            <div class="stat-value">
+                42%
+            </div>
+
+            <div>
+                <b>
+                    mất độ che phủ cây
+                    liên quan đến cháy
+                </b>
+
+                <div class="stat-sub">
+                    theo dữ liệu WRI/UMD
+                    công bố năm 2026
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="card big-stat world-card">
+
+            <div class="stat-label">
+                1/1–30/6/2026
+            </div>
+
+            <div class="stat-value">
+                ~400
+            </div>
+
+            <div>
+                <b>Mt carbon</b>
+
+                <div class="stat-sub">
+                    phát thải do đốt sinh khối toàn cầu,
+                    theo CAMS/GFAS
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="grid grid-2"
+         style="margin-top:20px">
+
+
+        <div class="card">
+
+            <h3>
+                🌍 Mất độ che phủ cây toàn cầu 2025
+            </h3>
+
+            <div class="chart">
+
+                <div class="chart-row">
+
+                    <div class="chart-name">
+                        Tổng mất
+                    </div>
+
+                    <div class="bar">
+                        <div
+                            class="bar-fill"
+                            style="width:100%">
+                        </div>
+                    </div>
+
+                    <div class="chart-value">
+                        25,5
+                    </div>
+
+                </div>
+
+
+                <div class="chart-row">
+
+                    <div class="chart-name">
+                        Do cháy
+                    </div>
+
+                    <div class="bar">
+                        <div
+                            class="bar-fill"
+                            style="width:42%">
+                        </div>
+                    </div>
+
+                    <div class="chart-value">
+                        42%
+                    </div>
+
+                </div>
+
+            </div>
+
+            <p
+                style="
+                margin-top:20px;
+                color:#9fb3b9;
+                font-size:13px">
+
+                Đơn vị tổng mất độ che phủ:
+                triệu ha.
+                “Tree cover loss” không hoàn toàn đồng nghĩa
+                với phá rừng vĩnh viễn.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                🔥 Một xu hướng cần chú ý
+            </h3>
+
+            <p style="
+                color:#b0c1c6;
+                margin-top:15px">
+
+                WRI cho biết trong ba năm gần đây,
+                cháy đã đốt diện tích độ che phủ cây
+                cao hơn gấp hơn hai lần so với mức
+                khoảng hai thập kỷ trước.
+            </p>
+
+            <p style="
+                color:#b0c1c6;
+                margin-top:14px">
+
+                Tuy nhiên, mức độ cháy thay đổi rất mạnh
+                giữa các năm và khu vực.
+                Vì vậy không nên sử dụng một mùa cháy đơn lẻ
+                để kết luận xu thế khí hậu dài hạn.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="data-note">
+
+        <strong>Lưu ý khoa học:</strong>
+        số liệu Copernicus ~400 MtC là
+        <b>phát thải carbon từ đốt sinh khối</b>
+        từ ngày 1/1 đến 30/6/2026,
+        không phải diện tích rừng cháy
+        và không phải tổng phát thải CO₂ cả năm.
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     7. KHÓI
+     ====================================================== -->
+
+<section>
+
+    <div class="section-head">
+
+        <div class="section-tag">
+            07 / Wildfire Smoke
+        </div>
+
+        <h2>Nguy hiểm không dừng lại ở ngọn lửa</h2>
+
+        <p>
+            Khói cháy rừng có thể lan qua nhiều vùng,
+            thậm chí vượt biên giới quốc gia.
+        </p>
+
+    </div>
+
+
+    <div class="smoke-demo">
+
+        <div class="fire-source">
+            🔥
+        </div>
+
+        <div class="smoke-cloud"></div>
+
+        <div class="arrow-wind">
+            → → →
+        </div>
+
+        <div class="pm-label">
+            PM₂.₅
+        </div>
+
+        <div class="city">
+            🏙️
+        </div>
+
+        <div class="smoke-text">
+
+            WHO cho biết khói cháy rừng chứa hỗn hợp
+            các hạt và khí ô nhiễm.
+            Khoảng 90% khối lượng hạt phát ra từ cháy
+            thuộc nhóm PM2.5 hoặc nhỏ hơn.
+            Khói có thể di chuyển hàng nghìn kilômét.
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     8. HẬU QUẢ
+     ====================================================== -->
+
+<section id="impacts">
+
+    <div class="section-head">
+
+        <div class="section-tag">
+            08 / Hậu quả
+        </div>
+
+        <h2>
+            Một đám cháy – nhiều lớp tác động
+        </h2>
+
+        <p>
+            Cần nhìn cháy rừng như một vấn đề
+            môi trường – sức khỏe – khí hậu –
+            kinh tế – xã hội có liên kết với nhau.
+        </p>
+
+    </div>
+
+
+    <div class="impact-wrapper">
+
+        <div class="impact-column">
+
+
+            <div class="impact">
+
+                <div class="impact-icon">
+                    🌳
+                </div>
+
+                <div>
+                    <h4>
+                        Mất sinh cảnh
+                    </h4>
+
+                    <p>
+                        Thực vật bị cháy,
+                        nơi cư trú và nguồn thức ăn của
+                        nhiều loài động vật bị suy giảm.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="impact">
+
+                <div class="impact-icon">
+                    🦌
+                </div>
+
+                <div>
+                    <h4>
+                        Đa dạng sinh học
+                    </h4>
+
+                    <p>
+                        Động vật có thể chết,
+                        bị thương, mất nơi cư trú hoặc
+                        buộc phải di chuyển sang khu vực khác.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="impact">
+
+                <div class="impact-icon">
+                    🏔️
+                </div>
+
+                <div>
+                    <h4>
+                        Xói mòn đất
+                    </h4>
+
+                    <p>
+                        Khi lớp phủ thực vật mất đi,
+                        đất dễ bị mưa rửa trôi,
+                        làm tăng nguy cơ xói mòn,
+                        dòng chảy mặt và sạt lở.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="impact">
+
+                <div class="impact-icon">
+                    💧
+                </div>
+
+                <div>
+                    <h4>
+                        Tài nguyên nước
+                    </h4>
+
+                    <p>
+                        Tro, đất và chất ô nhiễm có thể
+                        theo dòng chảy vào sông hồ,
+                        ảnh hưởng chất lượng nước.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="impact-column">
+
+
+            <div class="impact">
+
+                <div class="impact-icon">
+                    🫁
+                </div>
+
+                <div>
+                    <h4>
+                        Sức khỏe con người
+                    </h4>
+
+                    <p>
+                        PM2.5 có thể xâm nhập sâu vào phổi.
+                        Trẻ em, người cao tuổi,
+                        phụ nữ mang thai và người mắc bệnh
+                        tim – phổi đặc biệt dễ bị ảnh hưởng.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="impact">
+
+                <div class="impact-icon">
+                    🏠
+                </div>
+
+                <div>
+                    <h4>
+                        Nhà ở và hạ tầng
+                    </h4>
+
+                    <p>
+                        Đám cháy có thể ảnh hưởng nhà cửa,
+                        đường giao thông, điện,
+                        viễn thông và hoạt động kinh tế.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="impact">
+
+                <div class="impact-icon">
+                    💵
+                </div>
+
+                <div>
+                    <h4>
+                        Sinh kế
+                    </h4>
+
+                    <p>
+                        Lâm nghiệp, nông nghiệp,
+                        du lịch và hoạt động sản xuất
+                        tại khu vực bị cháy có thể
+                        chịu tổn thất dài hạn.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="impact">
+
+                <div class="impact-icon">
+                    🌍
+                </div>
+
+                <div>
+                    <h4>
+                        Khí hậu
+                    </h4>
+
+                    <p>
+                        Cháy giải phóng carbon lưu trữ trong
+                        sinh khối và đất, đồng thời có thể
+                        làm suy giảm khả năng hấp thụ carbon
+                        của hệ sinh thái sau cháy.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     9. FEEDBACK LOOP
+     ====================================================== -->
+
+<section>
+
+    <div class="section-head">
+
+        <div class="section-tag">
+            09 / Climate Feedback
+        </div>
+
+        <h2>
+            Cháy rừng và biến đổi khí hậu:
+            một vòng phản hồi
+        </h2>
+
+    </div>
+
+
+    <div class="feedback">
+
+        <div class="feedback-item">
+
+            <div style="font-size:35px">
+                🌡️
+            </div>
+
+            <b>Khí hậu nóng hơn</b>
+
+        </div>
+
+
+        <div class="feedback-item">
+
+            <div style="font-size:35px">
+                🍂
+            </div>
+
+            <b>
+                Thảm thực vật khô hơn
+            </b>
+
+        </div>
+
+
+        <div class="feedback-item">
+
+            <div style="font-size:35px">
+                🔥
+            </div>
+
+            <b>
+                Nguy cơ cháy cực đoan tăng
+            </b>
+
+        </div>
+
+
+        <div class="feedback-item">
+
+            <div style="font-size:35px">
+                CO₂
+            </div>
+
+            <b>
+                Carbon được giải phóng
+            </b>
+
+        </div>
+
+    </div>
+
+
+    <div class="data-note">
+
+        WHO cập nhật năm 2026 dẫn các đánh giá cho thấy
+        các vụ cháy rừng cực đoan có thể
+        <strong>trở nên thường xuyên hơn tới khoảng 50%
+        vào cuối thế kỷ</strong>.
+        Đây là dự báo về nguy cơ trong tương lai,
+        không phải số vụ cháy hiện tại tăng đúng 50%.
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     10. VIETNAM
+     ====================================================== -->
+
+<section id="vietnam">
+
+    <div class="section-head">
+
+        <div class="section-tag">
+            10 / Việt Nam
+        </div>
+
+        <h2>
+            Vì sao cháy rừng là vấn đề đáng chú ý ở Việt Nam?
+        </h2>
+
+    </div>
+
+
+    <div class="vn-map">
+
+        <div class="map-shape">
+
+            <div class="vietnam-shape"></div>
+
+            <div class="hotspot h1"></div>
+            <div class="hotspot h2"></div>
+            <div class="hotspot h3"></div>
+
+        </div>
+
+
+        <div class="vn-info">
+
+            <h3>
+                🔥 Mùa khô + nắng nóng +
+                vật liệu cháy
+            </h3>
+
+            <ul>
+
+                <li>
+                    Những giai đoạn nắng nóng,
+                    ít mưa kéo dài làm độ ẩm
+                    của thảm thực vật giảm mạnh.
+                </li>
+
+                <li>
+                    Rừng thông, rừng trồng,
+                    rừng có lớp thực bì dày
+                    có thể tích tụ lượng nhiên liệu cháy lớn.
+                </li>
+
+                <li>
+                    Đốt thực bì và sử dụng lửa
+                    gần rừng nếu không kiểm soát
+                    có thể trở thành nguồn gây cháy.
+                </li>
+
+                <li>
+                    Địa hình đồi núi dốc khiến
+                    việc tiếp cận và chữa cháy
+                    tại nhiều khu vực khó khăn.
+                </li>
+
+                <li>
+                    Tháng 6/2026,
+                    nhiều khu rừng ở Bắc Bộ và Trung Bộ
+                    từng được cảnh báo ở
+                    <strong>cấp V – cực kỳ nguy hiểm</strong>.
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+
+    <div class="grid grid-3"
+         style="margin-top:20px">
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🔥
+            </div>
+
+            <h3>25 vụ</h3>
+
+            <p>
+                Cháy rừng được tổng hợp từ đầu
+                tháng 6 tới ngày 25/6/2026.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🌲
+            </div>
+
+            <h3>&gt;90 ha</h3>
+
+            <p>
+                Diện tích rừng các loại
+                bị thiệt hại trong chuỗi vụ cháy
+                nói trên.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                👨‍🚒
+            </div>
+
+            <h3>Gần 1.000 người</h3>
+
+            <p>
+                Được địa phương huy động trong
+                vụ cháy tại khu vực Nam Đàn cũ,
+                Nghệ An, ngày 21–23/6/2026.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     11. INTERACTIVE LAB
+     ====================================================== -->
+
+<section id="lab">
+
+    <div class="section-head">
+
+        <div class="section-tag">
+            11 / Interactive Lab
+        </div>
+
+        <h2>
+            Phòng thí nghiệm nguy cơ cháy
+        </h2>
+
+        <p>
+            Học sinh thay đổi nhiệt độ,
+            độ ẩm và gió để quan sát
+            sự thay đổi tương đối của điều kiện cháy.
+        </p>
+
+    </div>
+
+
+    <div class="lab">
+
+        <div class="controls">
+
+
+            <div class="control-box">
+
+                <label>
+                    🌡️ Nhiệt độ
+                </label>
+
+                <input
+                    id="temperature"
+                    type="range"
+                    min="15"
+                    max="45"
+                    value="30">
+
+                <div
+                    class="control-val"
+                    id="tempValue">
+                    30°C
+                </div>
+
+            </div>
+
+
+            <div class="control-box">
+
+                <label>
+                    💧 Độ ẩm tương đối
+                </label>
+
+                <input
+                    id="humidity"
+                    type="range"
+                    min="10"
+                    max="95"
+                    value="55">
+
+                <div
+                    class="control-val"
+                    id="humidityValue">
+                    55%
+                </div>
+
+            </div>
+
+
+            <div class="control-box">
+
+                <label>
+                    💨 Gió
+                </label>
+
+                <input
+                    id="wind"
+                    type="range"
+                    min="0"
+                    max="50"
+                    value="12">
+
+                <div
+                    class="control-val"
+                    id="windValue">
+                    12 km/h
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="risk-result">
+
+            <div>
+
+                <div class="risk-label">
+                    NGUY CƠ TƯƠNG ĐỐI
+                    TRONG MÔ HÌNH GIÁO DỤC
+                </div>
+
+                <div
+                    class="risk-score"
+                    id="riskText">
+                    TRUNG BÌNH
+                </div>
+
+            </div>
+
+            <div
+                id="riskIcon"
+                style="font-size:55px">
+
+                🔥
+
+            </div>
+
+        </div>
+
+
+        <p class="disclaimer">
+
+            * Đây là mô hình tương tác phục vụ học tập,
+            không phải hệ thống dự báo cháy rừng chính thức.
+            Đánh giá thực tế còn phụ thuộc loại nhiên liệu,
+            độ ẩm nhiên liệu, lượng mưa,
+            địa hình và nhiều biến khí tượng khác.
+            Khi sử dụng thực tế phải theo cảnh báo
+            của cơ quan chức năng.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     12. RESPONSE
+     ====================================================== -->
+
+<section>
+
+    <div class="section-head">
+
+        <div class="section-tag">
+            12 / Giảm thiểu rủi ro
+        </div>
+
+        <h2>
+            Không chỉ chữa cháy – phải quản trị rủi ro
+        </h2>
+
+    </div>
+
+
+    <div class="response-grid">
+
+
+        <div class="step">
+
+            <div class="step-no">
+                01
+            </div>
+
+            <h4>
+                Theo dõi nguy cơ
+            </h4>
+
+            <p>
+                Sử dụng dự báo thời tiết,
+                quan trắc vệ tinh và cảnh báo
+                cháy rừng để nhận diện khu vực nguy hiểm.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-no">
+                02
+            </div>
+
+            <h4>
+                Quản lý nhiên liệu
+            </h4>
+
+            <p>
+                Giảm vật liệu cháy tại các khu vực
+                phù hợp bằng biện pháp lâm sinh
+                và quản lý rừng có kiểm soát.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-no">
+                03
+            </div>
+
+            <h4>
+                Kiểm soát nguồn lửa
+            </h4>
+
+            <p>
+                Hạn chế sử dụng lửa trong và gần rừng
+                vào những thời điểm nguy cơ cao;
+                kiểm soát đốt thực bì.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-no">
+                04
+            </div>
+
+            <h4>
+                Phát hiện sớm
+            </h4>
+
+            <p>
+                Điểm cháy được phát hiện càng sớm,
+                khả năng kiểm soát trước khi lan rộng
+                càng lớn.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-no">
+                05
+            </div>
+
+            <h4>
+                Phương án sơ tán
+            </h4>
+
+            <p>
+                Cộng đồng ở vùng nguy cơ cần biết
+                tuyến thoát hiểm và tuân thủ
+                lệnh sơ tán của cơ quan chức năng.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-no">
+                06
+            </div>
+
+            <h4>
+                Bảo vệ khỏi khói
+            </h4>
+
+            <p>
+                Theo dõi chất lượng không khí,
+                giảm hoạt động ngoài trời khi khói dày
+                và tuân theo hướng dẫn y tế địa phương.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-no">
+                07
+            </div>
+
+            <h4>
+                Phục hồi sau cháy
+            </h4>
+
+            <p>
+                Đánh giá xói mòn,
+                tái sinh rừng, nguồn nước,
+                sinh cảnh và khả năng phục hồi tự nhiên.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-no">
+                08
+            </div>
+
+            <h4>
+                Giảm biến đổi khí hậu
+            </h4>
+
+            <p>
+                Giảm phát thải khí nhà kính
+                góp phần hạn chế xu hướng khí hậu
+                nóng và khô làm gia tăng rủi ro cháy.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     13. FAQ
+     ====================================================== -->
+
+<section>
+
+    <div class="section-head">
+
+        <div class="section-tag">
+            13 / Hiểu đúng
+        </div>
+
+        <h2>
+            Những điều học sinh dễ hiểu sai
+        </h2>
+
+    </div>
+
+
+    <div class="accordion">
+
+
+        <div class="ac-item">
+
+            <button class="ac-title">
+                Cháy rừng có phải lúc nào
+                cũng hoàn toàn xấu không?
+                <span>+</span>
+            </button>
+
+            <div class="ac-body">
+                <div class="ac-body-inner">
+
+                    Không. Trong một số hệ sinh thái
+                    thích nghi với lửa,
+                    cháy tự nhiên định kỳ có thể
+                    là một phần của quá trình sinh thái.
+                    Vấn đề trở nên nghiêm trọng khi cháy
+                    quá lớn, quá mạnh, quá thường xuyên
+                    hoặc xảy ra ở hệ sinh thái
+                    không thích nghi với cháy.
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="ac-item">
+
+            <button class="ac-title">
+                Nắng nóng có tự làm rừng bốc cháy?
+                <span>+</span>
+            </button>
+
+            <div class="ac-body">
+                <div class="ac-body-inner">
+
+                    Nhiệt độ cao chủ yếu làm vật liệu
+                    trong rừng khô hơn,
+                    làm tăng khả năng bắt lửa và lan cháy.
+                    Một nguồn đánh lửa như sét
+                    hoặc hoạt động con người
+                    thường vẫn cần thiết để khởi phát cháy.
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="ac-item">
+
+            <button class="ac-title">
+                Cháy rừng chỉ ảnh hưởng khu vực
+                gần đám cháy?
+                <span>+</span>
+            </button>
+
+            <div class="ac-body">
+                <div class="ac-body-inner">
+
+                    Không.
+                    Khói cháy rừng có thể được gió
+                    vận chuyển hàng trăm tới hàng nghìn
+                    kilômét, làm suy giảm chất lượng không khí
+                    ở những nơi rất xa đám cháy.
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="ac-item">
+
+            <button class="ac-title">
+                Mất độ che phủ cây do cháy
+                có đồng nghĩa với phá rừng?
+                <span>+</span>
+            </button>
+
+            <div class="ac-body">
+                <div class="ac-body-inner">
+
+                    Không nhất thiết.
+                    “Mất độ che phủ cây” ghi nhận
+                    việc tán cây bị mất.
+                    Một số khu rừng có thể tái sinh sau cháy,
+                    trong khi những khu vực khác
+                    có thể bị suy thoái lâu dài
+                    hoặc chuyển sang kiểu hệ sinh thái khác.
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     14. MEDIA
+     ====================================================== -->
+
+<section>
+
+    <div class="section-head">
+
+        <div class="section-tag">
+            14 / Media Learning
+        </div>
+
+        <h2>
+            Hình ảnh – video nên tích hợp
+        </h2>
+
+        <p>
+            Tôi để sẵn các khung media.
+            Khi đưa web lên hệ thống của bạn,
+            có thể gắn video chính thức từ
+            Copernicus, WHO, NASA hoặc cơ quan Kiểm lâm.
+        </p>
+
+    </div>
+
+
+    <div class="grid grid-3">
+
+
+        <div class="card">
+
+            <div style="
+                height:190px;
+                border-radius:18px;
+                display:grid;
+                place-items:center;
+                background:
+                    linear-gradient(
+                        145deg,
+                        #40251b,
+                        #131d1b
+                    );
+                font-size:65px;
+                margin-bottom:17px">
+
+                🛰️🔥🌍
+
+            </div>
+
+            <h3>
+                Vệ tinh phát hiện điểm cháy
+            </h3>
+
+            <p>
+                Gợi ý nội dung:
+                ảnh vệ tinh điểm nóng,
+                Fire Radiative Power
+                và đường đi của khói.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div style="
+                height:190px;
+                border-radius:18px;
+                display:grid;
+                place-items:center;
+                background:
+                    linear-gradient(
+                        145deg,
+                        #40484b,
+                        #151c20
+                    );
+                font-size:65px;
+                margin-bottom:17px">
+
+                🌫️🏙️
+
+            </div>
+
+            <h3>
+                Khói và PM₂.₅
+            </h3>
+
+            <p>
+                Gợi ý video WHO:
+                khói cháy rừng,
+                chất lượng không khí và
+                các nhóm dễ bị tổn thương.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div style="
+                height:190px;
+                border-radius:18px;
+                display:grid;
+                place-items:center;
+                background:
+                    linear-gradient(
+                        145deg,
+                        #24472f,
+                        #17221b
+                    );
+                font-size:65px;
+                margin-bottom:17px">
+
+                🌲 → 🔥 → 🌱
+
+            </div>
+
+            <h3>
+                Trước – trong – sau cháy
+            </h3>
+
+            <p>
+                So sánh ảnh trước cháy,
+                vùng cháy và quá trình
+                phục hồi thảm thực vật.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     SOURCES
+     ====================================================== -->
+
+<section class="sources">
+
+    <div class="section-head">
+
+        <div class="section-tag">
+            15 / Nguồn dữ liệu
+        </div>
+
+        <h2>
+            Dữ liệu không đứng một mình
+        </h2>
+
+        <p>
+            Khi sử dụng website trong dạy học,
+            nên cho học sinh biết
+            số liệu đến từ đâu và
+            mốc thời gian nào.
+        </p>
+
+    </div>
+
+
+    <div class="source-list">
+
+
+        <div class="source">
+
+            <div class="source-logo">
+                WHO
+            </div>
+
+            <div>
+                <b>
+                    World Health Organization
+                </b>
+
+                <p>
+                    Wildfires – Fact Sheet,
+                    cập nhật ngày 31/7/2026.
+                    Sử dụng cho thông tin về nguồn gây cháy,
+                    PM2.5, sức khỏe và xu thế cháy cực đoan.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="source">
+
+            <div class="source-logo">
+                CAMS
+            </div>
+
+            <div>
+                <b>
+                    Copernicus Atmosphere Monitoring Service
+                </b>
+
+                <p>
+                    GFAS và Fire Emissions Watch.
+                    Sử dụng cho dữ liệu phát thải
+                    từ đốt sinh khối toàn cầu năm 2026.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="source">
+
+            <div class="source-logo">
+                WRI
+            </div>
+
+            <div>
+                <b>
+                    World Resources Institute /
+                    Global Forest Watch
+                </b>
+
+                <p>
+                    Dữ liệu độ che phủ cây năm 2025,
+                    công bố tháng 4/2026.
+                    Dùng để phân tích vai trò ngày càng lớn
+                    của cháy trong mất độ che phủ cây.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="source">
+
+            <div class="source-logo">
+                VN
+            </div>
+
+            <div>
+                <b>
+                    Bộ Nông nghiệp và Môi trường /
+                    Cục Lâm nghiệp và Kiểm lâm /
+                    Báo Điện tử Chính phủ
+                </b>
+
+                <p>
+                    Công điện và thông tin chính thức
+                    về tình hình cháy rừng Việt Nam
+                    tháng 6/2026.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<footer>
+
+    CLIMASCORE • WILDFIRE INTELLIGENCE 2026
+    <br>
+    Học liệu số về thích ứng biến đổi khí hậu
+    và hành vi xanh.
+
+</footer>
+
+
+<script>
+
+/* =========================================================
+   ACCORDION
+   ========================================================= */
+
+document
+.querySelectorAll(".ac-title")
+.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        function(){
+
+            const item =
+                this.parentElement;
+
+            item.classList
+                .toggle("active");
+
+            this
+            .querySelector("span")
+            .textContent =
+                item.classList.contains("active")
+                ? "−"
+                : "+";
+        }
+    );
+
+});
+
+
+/* =========================================================
+   EDUCATIONAL FIRE RISK LAB
+   Not an official fire-danger index.
+   ========================================================= */
+
+const temperature =
+    document.getElementById("temperature");
+
+const humidity =
+    document.getElementById("humidity");
+
+const wind =
+    document.getElementById("wind");
+
+const tempValue =
+    document.getElementById("tempValue");
+
+const humidityValue =
+    document.getElementById("humidityValue");
+
+const windValue =
+    document.getElementById("windValue");
+
+const riskText =
+    document.getElementById("riskText");
+
+const riskIcon =
+    document.getElementById("riskIcon");
+
+
+function calculateRisk(){
+
+    const t =
+        Number(temperature.value);
+
+    const h =
+        Number(humidity.value);
+
+    const w =
+        Number(wind.value);
+
+
+    tempValue.textContent =
+        t + "°C";
+
+    humidityValue.textContent =
+        h + "%";
+
+    windValue.textContent =
+        w + " km/h";
+
+
+    /*
+      Simple educational relationship:
+
+      Higher temperature -> higher risk
+      Lower humidity -> higher risk
+      Higher wind -> higher risk
+
+      This is deliberately NOT presented
+      as an official FWI or Vietnamese
+      forest fire danger index.
+    */
+
+    let score = 0;
+
+    score +=
+        ((t - 15) / 30) * 40;
+
+    score +=
+        ((95 - h) / 85) * 35;
+
+    score +=
+        (w / 50) * 25;
+
+
+    if(score < 25){
+
+        riskText.textContent =
+            "THẤP";
+
+        riskText.style.color =
+            "#63e0a6";
+
+        riskIcon.textContent =
+            "🌿";
+
+    }
+
+    else if(score < 45){
+
+        riskText.textContent =
+            "TRUNG BÌNH";
+
+        riskText.style.color =
+            "#f5d460";
+
+        riskIcon.textContent =
+            "🔥";
+
+    }
+
+    else if(score < 65){
+
+        riskText.textContent =
+            "CAO";
+
+        riskText.style.color =
+            "#ff9f48";
+
+        riskIcon.textContent =
+            "🔥🔥";
+
+    }
+
+    else if(score < 80){
+
+        riskText.textContent =
+            "RẤT CAO";
+
+        riskText.style.color =
+            "#ff7045";
+
+        riskIcon.textContent =
+            "🔥🔥🔥";
+
+    }
+
+    else{
+
+        riskText.textContent =
+            "CỰC ĐOAN";
+
+        riskText.style.color =
+            "#ff4545";
+
+        riskIcon.textContent =
+            "⚠️🔥";
+
+    }
+
+}
+
+
+temperature.addEventListener(
+    "input",
+    calculateRisk
+);
+
+humidity.addEventListener(
+    "input",
+    calculateRisk
+);
+
+wind.addEventListener(
+    "input",
+    calculateRisk
+);
+
+calculateRisk();
+
+</script>
+
+</body>
+</html>

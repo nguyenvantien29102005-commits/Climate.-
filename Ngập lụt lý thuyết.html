@@ -1,0 +1,6483 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CLIMASCORE | Ngập lụt – Flood Intelligence</title>
+
+<style>
+
+/* =========================================================
+   CLIMASCORE – FLOOD INTELLIGENCE
+   HỌC LIỆU SỐ MÔI TRƯỜNG – KHÍ HẬU
+   ========================================================= */
+
+:root{
+    --bg:#04131f;
+    --bg2:#071d2c;
+    --panel:#0b2535;
+    --panel2:#103246;
+
+    --blue:#168cff;
+    --cyan:#26d8ff;
+    --cyan2:#59e4ef;
+    --deep:#075cb4;
+
+    --green:#43dfae;
+    --yellow:#ffd05a;
+    --orange:#ff9d47;
+    --red:#ff5c57;
+
+    --text:#f3fbff;
+    --muted:#a7c1cc;
+
+    --line:rgba(255,255,255,.09);
+
+    --radius:25px;
+
+    --shadow:
+        0 25px 70px rgba(0,0,0,.28);
+}
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:
+        Inter,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color:var(--text);
+
+    background:
+        radial-gradient(
+            circle at 15% 0%,
+            rgba(27,142,255,.15),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(48,224,241,.09),
+            transparent 28%
+        ),
+
+        var(--bg);
+
+    line-height:1.65;
+}
+
+button,
+input{
+    font:inherit;
+}
+
+strong{
+    color:#fff;
+}
+
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+nav{
+
+    position:sticky;
+
+    top:0;
+
+    z-index:1000;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    padding:14px 6%;
+
+    background:
+        rgba(4,19,31,.85);
+
+    backdrop-filter:
+        blur(18px);
+
+    border-bottom:
+        1px solid var(--line);
+}
+
+
+.brand{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-weight:950;
+
+    letter-spacing:.8px;
+}
+
+
+.brand-icon{
+
+    width:43px;
+
+    height:43px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:14px;
+
+    font-size:23px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #28d9ff,
+            #117ce9
+        );
+
+    box-shadow:
+        0 10px 35px
+        rgba(20,150,255,.28);
+}
+
+
+.navlinks{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:24px;
+}
+
+
+.navlinks a{
+
+    text-decoration:none;
+
+    color:#bed0d8;
+
+    font-size:14px;
+
+    transition:.25s;
+}
+
+
+.navlinks a:hover{
+
+    color:#fff;
+}
+
+
+.top-btn{
+
+    border:
+        1px solid rgba(255,255,255,.12);
+
+    background:
+        rgba(255,255,255,.05);
+
+    color:white;
+
+    padding:9px 14px;
+
+    border-radius:13px;
+
+    cursor:pointer;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero{
+
+    min-height:90vh;
+
+    display:grid;
+
+    grid-template-columns:
+        1.05fr .95fr;
+
+    align-items:center;
+
+    gap:45px;
+
+    padding:
+        65px 7% 55px;
+}
+
+
+.eyebrow{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:7px 13px;
+
+    margin-bottom:20px;
+
+    border-radius:999px;
+
+    color:#90e8ff;
+
+    font-weight:800;
+
+    font-size:13px;
+
+    background:
+        rgba(38,216,255,.08);
+
+    border:
+        1px solid
+        rgba(38,216,255,.20);
+}
+
+
+.hero h1{
+
+    font-size:
+        clamp(53px,8vw,96px);
+
+    line-height:.92;
+
+    letter-spacing:-4px;
+
+    margin-bottom:24px;
+}
+
+
+.hero h1 span{
+
+    color:transparent;
+
+    background:
+        linear-gradient(
+            100deg,
+            #63edff,
+            #1da1ff,
+            #3a6fff
+        );
+
+    -webkit-background-clip:text;
+
+    background-clip:text;
+}
+
+
+.hero-description{
+
+    max-width:750px;
+
+    color:#b9cfd7;
+
+    font-size:18px;
+
+    margin-bottom:28px;
+}
+
+
+.hero-actions{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:12px;
+}
+
+
+.btn{
+
+    padding:13px 20px;
+
+    border:none;
+
+    border-radius:15px;
+
+    cursor:pointer;
+
+    font-weight:850;
+
+    transition:.25s;
+}
+
+
+.btn-primary{
+
+    color:#031521;
+
+    background:
+        linear-gradient(
+            135deg,
+            #70edff,
+            #1c9dff
+        );
+}
+
+
+.btn-primary:hover{
+
+    transform:
+        translateY(-3px);
+
+    box-shadow:
+        0 14px 35px
+        rgba(24,151,255,.25);
+}
+
+
+.btn-secondary{
+
+    color:#fff;
+
+    background:
+        rgba(255,255,255,.055);
+
+    border:
+        1px solid var(--line);
+}
+
+
+/* =========================================================
+   HERO FLOOD SCENE
+   ========================================================= */
+
+.flood-scene{
+
+    position:relative;
+
+    min-height:570px;
+
+    overflow:hidden;
+
+    border-radius:35px;
+
+    border:
+        1px solid var(--line);
+
+    background:
+        linear-gradient(
+            #17384b 0%,
+            #204e61 43%,
+            #173f42 44%,
+            #0b2827 100%
+        );
+
+    box-shadow:var(--shadow);
+}
+
+
+.scene-label{
+
+    position:absolute;
+
+    left:22px;
+
+    top:22px;
+
+    z-index:30;
+
+    padding:9px 13px;
+
+    border-radius:13px;
+
+    font-size:12px;
+
+    background:
+        rgba(3,15,24,.62);
+
+    backdrop-filter:
+        blur(10px);
+
+    border:
+        1px solid var(--line);
+}
+
+
+.cloud{
+
+    position:absolute;
+
+    top:70px;
+
+    width:150px;
+
+    height:53px;
+
+    border-radius:60px;
+
+    background:#a8c0c9;
+
+    opacity:.88;
+}
+
+
+.cloud:before,
+.cloud:after{
+
+    content:"";
+
+    position:absolute;
+
+    border-radius:50%;
+
+    background:inherit;
+}
+
+
+.cloud:before{
+
+    width:70px;
+
+    height:70px;
+
+    left:25px;
+
+    top:-33px;
+}
+
+
+.cloud:after{
+
+    width:85px;
+
+    height:85px;
+
+    right:15px;
+
+    top:-44px;
+}
+
+
+.cloud.c1{
+
+    left:45px;
+}
+
+
+.cloud.c2{
+
+    right:50px;
+
+    top:100px;
+
+    transform:
+        scale(.8);
+}
+
+
+.rain-area{
+
+    position:absolute;
+
+    inset:0;
+
+    overflow:hidden;
+
+    pointer-events:none;
+}
+
+
+.drop{
+
+    position:absolute;
+
+    top:-40px;
+
+    width:2px;
+
+    height:25px;
+
+    background:
+        linear-gradient(
+            transparent,
+            #6fe8ff
+        );
+
+    opacity:.7;
+
+    animation:
+        rain 1s linear infinite;
+}
+
+
+@keyframes rain{
+
+    to{
+
+        transform:
+            translateY(650px)
+            translateX(-40px);
+    }
+}
+
+
+.mountain{
+
+    position:absolute;
+
+    bottom:165px;
+
+    left:-110px;
+
+    width:0;
+
+    height:0;
+
+    border-left:
+        270px solid transparent;
+
+    border-right:
+        270px solid transparent;
+
+    border-bottom:
+        290px solid #24534d;
+}
+
+
+.mountain.m2{
+
+    left:auto;
+
+    right:-170px;
+
+    border-left-width:330px;
+
+    border-right-width:330px;
+
+    border-bottom-color:#1f4845;
+}
+
+
+.city-ground{
+
+    position:absolute;
+
+    bottom:0;
+
+    left:0;
+
+    width:100%;
+
+    height:210px;
+
+    background:#263d40;
+}
+
+
+.building{
+
+    position:absolute;
+
+    bottom:150px;
+
+    width:70px;
+
+    background:#d5d6ca;
+
+    border-radius:
+        6px 6px 0 0;
+
+    border:
+        5px solid #9ca9a7;
+
+    z-index:8;
+}
+
+
+.building:before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:15px;
+
+    background:
+
+        repeating-linear-gradient(
+            90deg,
+            #50738a 0 11px,
+            transparent 11px 25px
+        ),
+
+        repeating-linear-gradient(
+            0deg,
+            transparent 0 18px,
+            rgba(255,255,255,.7) 18px 20px
+        );
+}
+
+
+.b1{
+
+    left:12%;
+
+    height:130px;
+}
+
+
+.b2{
+
+    left:25%;
+
+    width:90px;
+
+    height:180px;
+}
+
+
+.b3{
+
+    right:14%;
+
+    width:100px;
+
+    height:145px;
+}
+
+
+.road{
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    bottom:80px;
+
+    height:75px;
+
+    background:#38434a;
+
+    z-index:9;
+
+    border-top:
+        3px solid #66757b;
+}
+
+
+.road:after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    top:35px;
+
+    height:4px;
+
+    background:
+
+        repeating-linear-gradient(
+            90deg,
+            white 0 30px,
+            transparent 30px 55px
+        );
+
+    opacity:.55;
+}
+
+
+.car{
+
+    position:absolute;
+
+    bottom:105px;
+
+    width:55px;
+
+    height:25px;
+
+    border-radius:
+        10px 15px 5px 5px;
+
+    background:#f2b449;
+
+    z-index:15;
+}
+
+
+.car:before,
+.car:after{
+
+    content:"";
+
+    position:absolute;
+
+    bottom:-7px;
+
+    width:14px;
+
+    height:14px;
+
+    border-radius:50%;
+
+    background:#152126;
+}
+
+
+.car:before{
+
+    left:7px;
+}
+
+
+.car:after{
+
+    right:7px;
+}
+
+
+.car.c1{
+
+    left:41%;
+}
+
+
+.car.c2{
+
+    left:60%;
+
+    background:#e9665e;
+
+    transform:
+        scale(.8);
+}
+
+
+.flood-water{
+
+    position:absolute;
+
+    left:-4%;
+
+    width:108%;
+
+    height:140px;
+
+    bottom:-35px;
+
+    z-index:20;
+
+    background:
+
+        repeating-radial-gradient(
+            ellipse at 50% 0,
+            rgba(255,255,255,.12)
+            0 2px,
+
+            transparent
+            3px 18px
+        ),
+
+        linear-gradient(
+            rgba(48,176,218,.87),
+            rgba(15,106,169,.93)
+        );
+
+    animation:
+        water 3s ease-in-out infinite alternate;
+
+    border-top:
+        3px solid
+        rgba(127,235,255,.7);
+}
+
+
+@keyframes water{
+
+    from{
+
+        transform:
+            translateY(10px);
+    }
+
+    to{
+
+        transform:
+            translateY(-10px);
+    }
+}
+
+
+.scene-caption{
+
+    position:absolute;
+
+    z-index:40;
+
+    left:22px;
+
+    right:22px;
+
+    bottom:20px;
+
+    padding:14px 16px;
+
+    border-radius:17px;
+
+    background:
+        rgba(2,14,22,.75);
+
+    backdrop-filter:
+        blur(14px);
+
+    border:
+        1px solid var(--line);
+
+    color:#d3e4e9;
+
+    font-size:13px;
+}
+
+
+/* =========================================================
+   SECTIONS
+   ========================================================= */
+
+section{
+
+    padding:
+        85px 7%;
+}
+
+
+.section-header{
+
+    max-width:900px;
+
+    margin-bottom:38px;
+}
+
+
+.section-tag{
+
+    margin-bottom:8px;
+
+    color:#5de7ff;
+
+    font-size:13px;
+
+    font-weight:900;
+
+    text-transform:uppercase;
+
+    letter-spacing:1.5px;
+}
+
+
+.section-header h2{
+
+    margin-bottom:15px;
+
+    font-size:
+        clamp(34px,4.4vw,55px);
+
+    line-height:1.07;
+
+    letter-spacing:-2px;
+}
+
+
+.section-header p{
+
+    color:var(--muted);
+
+    font-size:17px;
+}
+
+
+/* =========================================================
+   GENERAL GRID / CARD
+   ========================================================= */
+
+.grid{
+
+    display:grid;
+
+    gap:20px;
+}
+
+
+.grid-2{
+
+    grid-template-columns:
+        repeat(2,1fr);
+}
+
+
+.grid-3{
+
+    grid-template-columns:
+        repeat(3,1fr);
+}
+
+
+.grid-4{
+
+    grid-template-columns:
+        repeat(4,1fr);
+}
+
+
+.card{
+
+    position:relative;
+
+    padding:25px;
+
+    overflow:hidden;
+
+    border-radius:var(--radius);
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.06),
+            rgba(255,255,255,.025)
+        );
+
+    border:
+        1px solid var(--line);
+
+    box-shadow:
+        0 14px 45px
+        rgba(0,0,0,.14);
+}
+
+
+.card:hover{
+
+    border-color:
+        rgba(76,213,255,.24);
+}
+
+
+.card-icon{
+
+    width:52px;
+
+    height:52px;
+
+    display:grid;
+
+    place-items:center;
+
+    margin-bottom:16px;
+
+    border-radius:16px;
+
+    background:
+        rgba(33,166,255,.11);
+
+    font-size:26px;
+}
+
+
+.card h3{
+
+    margin-bottom:8px;
+
+    font-size:19px;
+}
+
+
+.card p{
+
+    color:#abc0c9;
+
+    font-size:14.5px;
+}
+
+
+/* =========================================================
+   FLOOD VS INUNDATION
+   ========================================================= */
+
+.compare{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 75px 1fr;
+
+    align-items:center;
+
+    gap:20px;
+}
+
+
+.compare-card{
+
+    min-height:310px;
+
+    padding:28px;
+
+    border-radius:28px;
+
+    border:
+        1px solid var(--line);
+
+    background:
+        rgba(255,255,255,.035);
+}
+
+
+.compare-title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:20px;
+}
+
+
+.compare-icon{
+
+    width:65px;
+
+    height:65px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:20px;
+
+    background:
+        rgba(40,184,255,.10);
+
+    font-size:33px;
+}
+
+
+.compare-title h3{
+
+    font-size:27px;
+}
+
+
+.compare-card ul{
+
+    padding-left:20px;
+
+    color:#adc1ca;
+}
+
+
+.compare-card li{
+
+    margin-bottom:10px;
+}
+
+
+.vs{
+
+    display:grid;
+
+    place-items:center;
+
+    width:65px;
+
+    height:65px;
+
+    border-radius:50%;
+
+    margin:auto;
+
+    color:#60eaff;
+
+    font-weight:950;
+
+    background:
+        rgba(45,195,255,.10);
+
+    border:
+        1px solid
+        rgba(45,195,255,.20);
+}
+
+
+/* =========================================================
+   WATER CYCLE
+   ========================================================= */
+
+.flow-chain{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(6,1fr);
+
+    gap:10px;
+}
+
+
+.flow-step{
+
+    position:relative;
+
+    min-height:165px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    padding:18px;
+
+    border-radius:22px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid var(--line);
+}
+
+
+.flow-step:not(:last-child):after{
+
+    content:"→";
+
+    position:absolute;
+
+    right:-18px;
+
+    top:43%;
+
+    z-index:10;
+
+    color:#43dfff;
+
+    font-size:27px;
+
+    font-weight:900;
+}
+
+
+.flow-icon{
+
+    margin-bottom:8px;
+
+    font-size:36px;
+}
+
+
+.flow-step b{
+
+    font-size:14px;
+}
+
+
+.flow-step small{
+
+    color:#9eb5be;
+
+    margin-top:6px;
+}
+
+
+/* =========================================================
+   FLOOD TYPES
+   ========================================================= */
+
+.type-card{
+
+    min-height:310px;
+}
+
+
+.type-tag{
+
+    display:inline-block;
+
+    margin-bottom:15px;
+
+    padding:5px 10px;
+
+    border-radius:999px;
+
+    color:#73e8ff;
+
+    font-size:11px;
+
+    font-weight:900;
+
+    letter-spacing:.7px;
+
+    text-transform:uppercase;
+
+    background:
+        rgba(33,177,255,.09);
+}
+
+
+.type-visual{
+
+    height:115px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    margin-bottom:18px;
+
+    border-radius:18px;
+
+    font-size:50px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(23,142,224,.13),
+            rgba(15,38,54,.32)
+        );
+}
+
+
+/* =========================================================
+   URBAN FLOOD
+   ========================================================= */
+
+.urban-demo{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:22px;
+}
+
+
+.city-panel{
+
+    position:relative;
+
+    min-height:390px;
+
+    overflow:hidden;
+
+    border-radius:28px;
+
+    border:
+        1px solid var(--line);
+
+    background:
+        linear-gradient(
+            #1e4658,
+            #1b4142
+        );
+}
+
+
+.panel-label{
+
+    position:absolute;
+
+    z-index:30;
+
+    left:18px;
+
+    top:18px;
+
+    padding:8px 12px;
+
+    border-radius:12px;
+
+    background:
+        rgba(2,17,25,.7);
+
+    font-size:12px;
+
+    font-weight:800;
+}
+
+
+.mini-cloud{
+
+    position:absolute;
+
+    left:45%;
+
+    top:70px;
+
+    font-size:65px;
+
+    filter:
+        grayscale(.2);
+}
+
+
+.mini-rain{
+
+    position:absolute;
+
+    left:43%;
+
+    top:120px;
+
+    color:#55dcff;
+
+    font-size:35px;
+
+    line-height:.6;
+
+    transform:
+        rotate(8deg);
+}
+
+
+.soil-area{
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    bottom:0;
+
+    height:130px;
+
+    background:#35664d;
+}
+
+
+.concrete-area{
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    bottom:0;
+
+    height:130px;
+
+    background:#555f65;
+}
+
+
+.house-mini{
+
+    position:absolute;
+
+    bottom:110px;
+
+    left:20%;
+
+    font-size:80px;
+}
+
+
+.tree-mini{
+
+    position:absolute;
+
+    bottom:105px;
+
+    right:17%;
+
+    font-size:75px;
+}
+
+
+.arrow-down{
+
+    position:absolute;
+
+    bottom:65px;
+
+    left:50%;
+
+    color:#6fedff;
+
+    font-size:35px;
+
+    animation:
+        soak 1.5s infinite alternate;
+}
+
+
+@keyframes soak{
+
+    to{
+
+        transform:
+            translateY(20px);
+    }
+}
+
+
+.surface-water{
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    bottom:0;
+
+    height:72px;
+
+    background:
+        rgba(37,170,234,.78);
+
+    border-top:
+        2px solid #8defff;
+
+    animation:
+        surfaceWave
+        2s infinite alternate;
+}
+
+
+@keyframes surfaceWave{
+
+    to{
+        height:90px;
+    }
+}
+
+
+/* =========================================================
+   DRIVER MATRIX
+   ========================================================= */
+
+.driver{
+
+    display:flex;
+
+    gap:15px;
+
+    padding:18px;
+
+    border-radius:19px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid var(--line);
+}
+
+
+.driver-icon{
+
+    flex:none;
+
+    width:48px;
+
+    height:48px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:15px;
+
+    font-size:25px;
+
+    background:
+        rgba(34,179,255,.10);
+}
+
+
+.driver p{
+
+    color:#a8bec7;
+
+    margin-top:4px;
+
+    font-size:14px;
+}
+
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+.data-section{
+
+    background:
+
+        linear-gradient(
+            180deg,
+            rgba(25,158,255,.045),
+            transparent
+        );
+}
+
+
+.stat-card{
+
+    min-height:235px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+}
+
+
+.stat-label{
+
+    font-size:12px;
+
+    font-weight:800;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    color:#9eb7c1;
+}
+
+
+.stat-number{
+
+    margin:
+        17px 0;
+
+    font-size:
+        clamp(37px,5vw,64px);
+
+    font-weight:950;
+
+    letter-spacing:-3px;
+
+    color:#5ae7ff;
+}
+
+
+.stat-card.orange
+.stat-number{
+
+    color:#ffb45b;
+}
+
+
+.stat-card.green
+.stat-number{
+
+    color:#58e3ae;
+}
+
+
+.stat-note{
+
+    color:#a9bdc4;
+
+    font-size:13px;
+}
+
+
+.data-warning{
+
+    margin-top:22px;
+
+    padding:18px 20px;
+
+    border-radius:18px;
+
+    background:
+        rgba(54,203,232,.055);
+
+    border:
+        1px solid
+        rgba(54,203,232,.16);
+
+    color:#b6dce3;
+
+    font-size:14px;
+}
+
+
+/* =========================================================
+   VIETNAM
+   ========================================================= */
+
+.vn-zone{
+
+    display:grid;
+
+    grid-template-columns:
+        .8fr 1.2fr;
+
+    gap:25px;
+
+    align-items:stretch;
+}
+
+
+.vn-map{
+
+    position:relative;
+
+    min-height:470px;
+
+    overflow:hidden;
+
+    border-radius:30px;
+
+    background:
+
+        radial-gradient(
+            circle at center,
+            rgba(48,211,255,.10),
+            transparent 48%
+        ),
+
+        #0c2735;
+
+    border:
+        1px solid var(--line);
+}
+
+
+.vn-shape{
+
+    position:absolute;
+
+    left:44%;
+
+    top:40px;
+
+    width:78px;
+
+    height:360px;
+
+    border-radius:
+        90% 30% 75% 35% /
+        30% 55% 45% 75%;
+
+    transform:
+        rotate(-9deg);
+
+    background:
+        linear-gradient(
+            #46e3ae,
+            #188469
+        );
+
+    box-shadow:
+        0 0 60px
+        rgba(54,225,170,.16);
+}
+
+
+.flood-point{
+
+    position:absolute;
+
+    width:18px;
+
+    height:18px;
+
+    border-radius:50%;
+
+    background:#2ad4ff;
+
+    border:
+        3px solid #c8f7ff;
+
+    animation:
+        pulse 1.5s infinite;
+}
+
+
+@keyframes pulse{
+
+    50%{
+
+        box-shadow:
+            0 0 0 18px
+            rgba(55,214,255,0);
+    }
+}
+
+
+.p1{
+    top:110px;
+    left:49%;
+}
+
+.p2{
+    top:190px;
+    left:42%;
+}
+
+.p3{
+    top:245px;
+    left:47%;
+}
+
+.p4{
+    top:330px;
+    left:44%;
+}
+
+
+.vn-legend{
+
+    position:absolute;
+
+    left:20px;
+
+    bottom:18px;
+
+    font-size:12px;
+
+    color:#abc3ca;
+}
+
+
+.vn-content{
+
+    display:grid;
+
+    gap:14px;
+}
+
+
+.vn-row{
+
+    display:grid;
+
+    grid-template-columns:
+        55px 1fr;
+
+    gap:15px;
+
+    align-items:start;
+
+    padding:18px;
+
+    border-radius:19px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid var(--line);
+}
+
+
+.vn-row-icon{
+
+    width:50px;
+
+    height:50px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:15px;
+
+    background:
+        rgba(35,178,255,.10);
+
+    font-size:26px;
+}
+
+
+.vn-row p{
+
+    color:#abc0c8;
+
+    font-size:14px;
+}
+
+
+/* =========================================================
+   IMPACT TREE
+   ========================================================= */
+
+.impact-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:16px;
+}
+
+
+.impact{
+
+    display:flex;
+
+    gap:16px;
+
+    padding:20px;
+
+    border-radius:21px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid var(--line);
+}
+
+
+.impact-icon{
+
+    flex:none;
+
+    width:52px;
+
+    height:52px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:16px;
+
+    background:
+        rgba(24,151,255,.10);
+
+    font-size:27px;
+}
+
+
+.impact p{
+
+    margin-top:4px;
+
+    color:#a9bdc6;
+
+    font-size:14px;
+}
+
+
+/* =========================================================
+   CASCADING IMPACT
+   ========================================================= */
+
+.cascade{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(5,1fr);
+
+    gap:10px;
+}
+
+
+.cascade-item{
+
+    position:relative;
+
+    min-height:155px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    padding:15px;
+
+    border-radius:21px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid var(--line);
+}
+
+
+.cascade-item:not(:last-child):after{
+
+    content:"→";
+
+    position:absolute;
+
+    right:-18px;
+
+    z-index:5;
+
+    color:#40ddff;
+
+    font-size:27px;
+}
+
+
+.cascade-item div{
+
+    font-size:35px;
+
+    margin-bottom:8px;
+}
+
+
+.cascade-item small{
+
+    color:#9fb6be;
+
+    margin-top:5px;
+}
+
+
+/* =========================================================
+   WORLD EXAMPLES
+   ========================================================= */
+
+.event-card{
+
+    min-height:320px;
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+
+.event-year{
+
+    color:#5de5ff;
+
+    font-size:12px;
+
+    font-weight:900;
+
+    letter-spacing:1px;
+}
+
+
+.event-number{
+
+    margin:
+        15px 0 7px;
+
+    font-size:34px;
+
+    font-weight:950;
+
+    color:#fff;
+}
+
+
+.event-card p{
+
+    flex-grow:1;
+}
+
+
+.event-source{
+
+    margin-top:18px;
+
+    padding-top:12px;
+
+    border-top:
+        1px solid var(--line);
+
+    color:#7fa3b0;
+
+    font-size:11px;
+}
+
+
+/* =========================================================
+   FLOOD LAB
+   ========================================================= */
+
+.lab{
+
+    border-radius:30px;
+
+    padding:30px;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            #0e3143,
+            #09212f
+        );
+
+    border:
+        1px solid var(--line);
+}
+
+
+.controls{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:16px;
+
+    margin-bottom:25px;
+}
+
+
+.control{
+
+    padding:17px;
+
+    border-radius:18px;
+
+    background:
+        rgba(255,255,255,.04);
+
+    border:
+        1px solid
+        rgba(255,255,255,.05);
+}
+
+
+.control label{
+
+    display:block;
+
+    min-height:42px;
+
+    color:#b1c6cf;
+
+    font-size:13px;
+}
+
+
+.control input{
+
+    width:100%;
+
+    margin-top:10px;
+}
+
+
+.control-value{
+
+    margin-top:8px;
+
+    font-size:23px;
+
+    font-weight:900;
+
+    color:#65e7ff;
+}
+
+
+.lab-display{
+
+    display:grid;
+
+    grid-template-columns:
+        1.2fr .8fr;
+
+    gap:20px;
+}
+
+
+.city-sim{
+
+    position:relative;
+
+    min-height:310px;
+
+    overflow:hidden;
+
+    border-radius:22px;
+
+    background:
+        linear-gradient(
+            #1b475a 0 55%,
+            #404d52 55%
+        );
+
+    border:
+        1px solid var(--line);
+}
+
+
+.sim-cloud{
+
+    position:absolute;
+
+    left:42%;
+
+    top:35px;
+
+    font-size:65px;
+}
+
+
+.sim-rain{
+
+    position:absolute;
+
+    left:40%;
+
+    top:92px;
+
+    white-space:pre;
+
+    color:#5ee3ff;
+
+    font-size:25px;
+
+    line-height:.7;
+}
+
+
+.sim-house{
+
+    position:absolute;
+
+    bottom:70px;
+
+    left:15%;
+
+    font-size:65px;
+
+    z-index:4;
+}
+
+
+.sim-building{
+
+    position:absolute;
+
+    bottom:70px;
+
+    right:15%;
+
+    font-size:85px;
+
+    z-index:4;
+}
+
+
+.sim-water{
+
+    position:absolute;
+
+    left:0;
+
+    right:0;
+
+    bottom:0;
+
+    height:20px;
+
+    z-index:5;
+
+    background:
+        linear-gradient(
+            #41ccef,
+            #1579ba
+        );
+
+    border-top:
+        2px solid #a2f5ff;
+
+    transition:
+        height .6s ease;
+}
+
+
+.risk-panel{
+
+    padding:23px;
+
+    border-radius:22px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid var(--line);
+}
+
+
+.risk-title{
+
+    color:#9eb6c0;
+
+    font-size:12px;
+
+    letter-spacing:1px;
+}
+
+
+.risk-level{
+
+    margin:
+        10px 0;
+
+    font-size:39px;
+
+    line-height:1.05;
+
+    font-weight:950;
+
+    color:#59e2af;
+}
+
+
+.risk-description{
+
+    color:#aec2c9;
+
+    font-size:14px;
+}
+
+
+.disclaimer{
+
+    margin-top:18px;
+
+    color:#819da7;
+
+    font-size:12px;
+}
+
+
+/* =========================================================
+   SOLUTIONS
+   ========================================================= */
+
+.solution{
+
+    min-height:265px;
+}
+
+
+.solution-number{
+
+    font-size:46px;
+
+    line-height:1;
+
+    color:
+        rgba(80,220,255,.15);
+
+    font-weight:950;
+}
+
+
+.solution h3{
+
+    margin:
+        10px 0;
+}
+
+
+/* =========================================================
+   SPONGE CITY
+   ========================================================= */
+
+.sponge-demo{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 80px 1fr;
+
+    gap:20px;
+
+    align-items:center;
+}
+
+
+.sponge-card{
+
+    min-height:330px;
+
+    padding:25px;
+
+    border-radius:28px;
+
+    background:
+        rgba(255,255,255,.035);
+
+    border:
+        1px solid var(--line);
+}
+
+
+.sponge-visual{
+
+    height:170px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:65px;
+
+    margin-bottom:20px;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(20,155,227,.12),
+            rgba(35,84,64,.15)
+        );
+}
+
+
+.arrow-center{
+
+    text-align:center;
+
+    color:#5eeaff;
+
+    font-size:38px;
+}
+
+
+/* =========================================================
+   VIDEO
+   ========================================================= */
+
+.media-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        1.25fr .75fr;
+
+    gap:22px;
+}
+
+
+.video-card{
+
+    position:relative;
+
+    min-height:400px;
+
+    overflow:hidden;
+
+    border-radius:30px;
+
+    border:
+        1px solid var(--line);
+
+    background:
+
+        radial-gradient(
+            circle at center,
+            rgba(60,202,255,.12),
+            transparent 40%
+        ),
+
+        linear-gradient(
+            #17374a,
+            #081e2b
+        );
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+}
+
+
+.play{
+
+    width:82px;
+
+    height:82px;
+
+    display:grid;
+
+    place-items:center;
+
+    margin:
+        0 auto 16px;
+
+    border-radius:50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #65ebff,
+            #168bff
+        );
+
+    color:#021421;
+
+    font-size:32px;
+
+    box-shadow:
+        0 0 50px
+        rgba(40,190,255,.25);
+}
+
+
+.video-title{
+
+    font-size:25px;
+
+    font-weight:900;
+}
+
+
+.video-sub{
+
+    color:#9fb8c1;
+
+    max-width:500px;
+
+    margin:
+        8px auto;
+
+    padding:
+        0 20px;
+}
+
+
+.media-side{
+
+    display:grid;
+
+    gap:16px;
+}
+
+
+.media-box{
+
+    padding:20px;
+
+    border-radius:22px;
+
+    border:
+        1px solid var(--line);
+
+    background:
+        rgba(255,255,255,.035);
+}
+
+
+/* =========================================================
+   SOURCE
+   ========================================================= */
+
+.sources{
+
+    background:#061923;
+}
+
+
+.source-list{
+
+    display:grid;
+
+    gap:12px;
+}
+
+
+.source{
+
+    display:grid;
+
+    grid-template-columns:
+        60px 1fr;
+
+    gap:15px;
+
+    padding:18px;
+
+    border-radius:19px;
+
+    background:
+        rgba(255,255,255,.03);
+
+    border:
+        1px solid var(--line);
+}
+
+
+.source-logo{
+
+    width:55px;
+
+    height:55px;
+
+    display:grid;
+
+    place-items:center;
+
+    border-radius:16px;
+
+    color:#60e4ff;
+
+    background:
+        rgba(47,193,255,.08);
+
+    font-weight:950;
+}
+
+
+.source p{
+
+    color:#9eb6bf;
+
+    font-size:13px;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer{
+
+    padding:
+        40px 7%;
+
+    text-align:center;
+
+    color:#7999a5;
+
+    border-top:
+        1px solid var(--line);
+
+    font-size:13px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width:1050px){
+
+    .hero,
+    .vn-zone,
+    .urban-demo,
+    .media-grid,
+    .lab-display{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .grid-4{
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+
+    .grid-3,
+    .impact-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+
+    .flow-chain,
+    .cascade{
+
+        grid-template-columns:
+            repeat(3,1fr);
+    }
+
+
+    .flow-step:after,
+    .cascade-item:after{
+
+        display:none;
+    }
+
+
+    .controls{
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+}
+
+
+@media(max-width:720px){
+
+    .navlinks{
+
+        display:none;
+    }
+
+
+    section{
+
+        padding:
+            65px 5%;
+    }
+
+
+    .hero{
+
+        padding:
+            45px 5%;
+    }
+
+
+    .hero h1{
+
+        letter-spacing:-2.5px;
+    }
+
+
+    .grid-2,
+    .grid-3,
+    .grid-4,
+    .impact-grid,
+    .controls,
+    .flow-chain,
+    .cascade{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .compare,
+    .sponge-demo{
+
+        grid-template-columns:1fr;
+    }
+
+
+    .vs,
+    .arrow-center{
+
+        transform:
+            rotate(90deg);
+    }
+
+
+    .flood-scene{
+
+        min-height:480px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- ======================================================
+     NAVIGATION
+     ====================================================== -->
+
+<nav>
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🌊
+        </div>
+
+        <div>
+            CLIMASCORE
+        </div>
+
+    </div>
+
+
+    <div class="navlinks">
+
+        <a href="#concept">
+            Khái niệm
+        </a>
+
+        <a href="#types">
+            Phân loại
+        </a>
+
+        <a href="#data">
+            Dữ liệu 2026
+        </a>
+
+        <a href="#vietnam">
+            Việt Nam
+        </a>
+
+        <a href="#impact">
+            Hậu quả
+        </a>
+
+        <a href="#lab">
+            Mô phỏng
+        </a>
+
+    </div>
+
+
+    <button
+        class="top-btn"
+        onclick="
+        window.scrollTo({
+            top:0,
+            behavior:'smooth'
+        })">
+
+        ↑ Đầu trang
+
+    </button>
+
+</nav>
+
+
+<!-- ======================================================
+     HERO
+     ====================================================== -->
+
+<header class="hero">
+
+
+    <div>
+
+        <div class="eyebrow">
+
+            🌊 CLIMATE HAZARD
+            LEARNING HUB • 2026
+
+        </div>
+
+
+        <h1>
+
+            NGẬP
+            <span>LỤT</span>
+
+        </h1>
+
+
+        <p class="hero-description">
+
+            Ngập lụt không chỉ xảy ra vì
+            <strong>“mưa quá nhiều”</strong>.
+
+            Nó xuất hiện khi lượng nước đổ vào một khu vực
+            <strong>vượt quá khả năng chứa,
+            thấm hoặc tiêu thoát nước</strong>.
+
+            Vì vậy, mưa lớn, lũ sông,
+            triều cường, nước biển dâng,
+            bê tông hóa đô thị và hệ thống thoát nước
+            đều có thể cùng tham gia tạo nên một trận ngập.
+
+        </p>
+
+
+        <div class="hero-actions">
+
+            <button
+                class="btn btn-primary"
+                onclick="
+                document.querySelector('#concept')
+                .scrollIntoView({
+                    behavior:'smooth'
+                })">
+
+                Khám phá hiện tượng
+
+            </button>
+
+
+            <button
+                class="btn btn-secondary"
+                onclick="
+                document.querySelector('#data')
+                .scrollIntoView({
+                    behavior:'smooth'
+                })">
+
+                Xem dữ liệu mới nhất
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- FLOOD VISUAL -->
+
+    <div class="flood-scene">
+
+        <div class="scene-label">
+
+            ● MÔ PHỎNG NGẬP ĐÔ THỊ
+
+        </div>
+
+
+        <div class="cloud c1"></div>
+        <div class="cloud c2"></div>
+
+
+        <div
+            class="rain-area"
+            id="heroRain">
+        </div>
+
+
+        <div class="mountain"></div>
+        <div class="mountain m2"></div>
+
+
+        <div class="city-ground"></div>
+
+
+        <div class="building b1"></div>
+        <div class="building b2"></div>
+        <div class="building b3"></div>
+
+
+        <div class="road"></div>
+
+
+        <div class="car c1"></div>
+        <div class="car c2"></div>
+
+
+        <div class="flood-water"></div>
+
+
+        <div class="scene-caption">
+
+            🌧️ Mưa lớn làm nước tập trung nhanh
+            → mặt bê tông hạn chế thấm
+            → hệ thống thoát nước quá tải
+            → nước tích tụ trên bề mặt
+            → hình thành ngập đô thị.
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<!-- ======================================================
+     01. CONCEPT
+     ====================================================== -->
+
+<section id="concept">
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            01 / Kiến thức nền tảng
+        </div>
+
+
+        <h2>
+            Ngập lụt là gì?
+        </h2>
+
+
+        <p>
+
+            Ngập lụt xảy ra khi nước bao phủ
+            một vùng đất vốn bình thường không bị ngập.
+            Nước có thể đến từ sông,
+            mưa lớn, biển, triều,
+            hồ chứa hoặc sự kết hợp của nhiều nguồn.
+
+        </p>
+
+    </div>
+
+
+    <div class="grid grid-3">
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🌧️
+            </div>
+
+            <h3>
+                Nước vào quá nhanh
+            </h3>
+
+            <p>
+
+                Lượng mưa lớn trong thời gian ngắn
+                có thể tạo ra lượng nước vượt quá
+                khả năng thấm của đất và khả năng
+                tiêu thoát của cống, kênh và sông.
+
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🌊
+            </div>
+
+            <h3>
+                Nước sông vượt bờ
+            </h3>
+
+            <p>
+
+                Khi lưu lượng nước trên sông tăng mạnh,
+                mực nước có thể vượt quá lòng sông
+                hoặc hệ thống đê,
+                làm ngập vùng đất thấp xung quanh.
+
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🏙️
+            </div>
+
+            <h3>
+                Nước không thoát kịp
+            </h3>
+
+            <p>
+
+                Ở đô thị,
+                mặt đường và công trình
+                làm giảm khả năng thấm nước.
+                Khi hệ thống thoát nước bị quá tải,
+                nước nhanh chóng tích tụ.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     02. FLOOD VS INUNDATION
+     ====================================================== -->
+
+<section>
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            02 / Phân biệt khái niệm
+        </div>
+
+
+        <h2>
+            “Lũ” và “ngập lụt”
+            không hoàn toàn giống nhau
+        </h2>
+
+    </div>
+
+
+    <div class="compare">
+
+
+        <div class="compare-card">
+
+            <div class="compare-title">
+
+                <div class="compare-icon">
+                    🌊
+                </div>
+
+                <div>
+
+                    <small>
+                        FLOOD FLOW
+                    </small>
+
+                    <h3>
+                        Lũ
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <ul>
+
+                <li>
+                    Là hiện tượng
+                    <strong>mực nước và lưu lượng
+                    trên sông, suối tăng cao</strong>.
+                </li>
+
+                <li>
+                    Thường liên quan đến
+                    mưa lớn trên lưu vực,
+                    bão hoặc xả nước.
+                </li>
+
+                <li>
+                    Lũ chưa nhất thiết
+                    làm mọi khu vực xung quanh bị ngập.
+                </li>
+
+            </ul>
+
+        </div>
+
+
+        <div class="vs">
+            ≠
+        </div>
+
+
+        <div class="compare-card">
+
+            <div class="compare-title">
+
+                <div class="compare-icon">
+                    🏘️
+                </div>
+
+                <div>
+
+                    <small>
+                        INUNDATION
+                    </small>
+
+                    <h3>
+                        Ngập lụt
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <ul>
+
+                <li>
+                    Là tình trạng
+                    <strong>nước phủ lên vùng đất
+                    vốn bình thường khô ráo</strong>.
+                </li>
+
+                <li>
+                    Có thể do lũ sông,
+                    mưa lớn tại chỗ,
+                    triều cường,
+                    nước biển dâng hoặc nhiều nguyên nhân kết hợp.
+                </li>
+
+                <li>
+                    Đô thị có thể ngập
+                    dù sông chưa xuất hiện một trận lũ lớn.
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     03. MECHANISM
+     ====================================================== -->
+
+<section>
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            03 / Cơ chế
+        </div>
+
+
+        <h2>
+            Một trận ngập hình thành như thế nào?
+        </h2>
+
+
+        <p>
+
+            Hãy nhìn ngập lụt như một
+            <strong>bài toán cân bằng nước</strong>:
+            nước đi vào nhanh hơn nước
+            có thể thấm, chứa hoặc thoát đi.
+
+        </p>
+
+    </div>
+
+
+    <div class="flow-chain">
+
+
+        <div class="flow-step">
+
+            <div class="flow-icon">
+                ☁️
+            </div>
+
+            <b>
+                Không khí chứa ẩm
+            </b>
+
+            <small>
+                hình thành mây
+            </small>
+
+        </div>
+
+
+        <div class="flow-step">
+
+            <div class="flow-icon">
+                🌧️
+            </div>
+
+            <b>
+                Mưa lớn
+            </b>
+
+            <small>
+                lượng nước tăng nhanh
+            </small>
+
+        </div>
+
+
+        <div class="flow-step">
+
+            <div class="flow-icon">
+                🏔️
+            </div>
+
+            <b>
+                Dòng chảy mặt
+            </b>
+
+            <small>
+                nước tập trung xuống thấp
+            </small>
+
+        </div>
+
+
+        <div class="flow-step">
+
+            <div class="flow-icon">
+                🏙️
+            </div>
+
+            <b>
+                Ít thấm
+            </b>
+
+            <small>
+                bê tông hóa
+            </small>
+
+        </div>
+
+
+        <div class="flow-step">
+
+            <div class="flow-icon">
+                🚧
+            </div>
+
+            <b>
+                Thoát chậm
+            </b>
+
+            <small>
+                cống quá tải
+            </small>
+
+        </div>
+
+
+        <div class="flow-step">
+
+            <div class="flow-icon">
+                🌊
+            </div>
+
+            <b>
+                Ngập
+            </b>
+
+            <small>
+                nước tích tụ
+            </small>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     04. TYPES
+     ====================================================== -->
+
+<section id="types">
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            04 / Phân loại
+        </div>
+
+
+        <h2>
+            Không phải mọi trận ngập
+            đều hình thành giống nhau
+        </h2>
+
+    </div>
+
+
+    <div class="grid grid-3">
+
+
+        <div class="card type-card">
+
+            <div class="type-tag">
+                River Flood
+            </div>
+
+
+            <div class="type-visual">
+                🏞️🌊
+            </div>
+
+
+            <h3>
+                Ngập do lũ sông
+            </h3>
+
+
+            <p>
+
+                Mưa lớn trên toàn lưu vực
+                làm lưu lượng và mực nước sông tăng.
+                Khi nước vượt bờ,
+                vùng đồng bằng và vùng trũng ven sông
+                có thể bị ngập trên diện rộng.
+
+            </p>
+
+        </div>
+
+
+        <div class="card type-card">
+
+            <div class="type-tag">
+                Pluvial Flood
+            </div>
+
+
+            <div class="type-visual">
+                🌧️🏙️
+            </div>
+
+
+            <h3>
+                Ngập do mưa
+            </h3>
+
+
+            <p>
+
+                Mưa có cường độ lớn
+                vượt quá khả năng thấm và tiêu thoát.
+                Loại này đặc biệt phổ biến
+                ở khu vực đô thị.
+
+            </p>
+
+        </div>
+
+
+        <div class="card type-card">
+
+            <div class="type-tag">
+                Coastal Flood
+            </div>
+
+
+            <div class="type-visual">
+                🌊🏘️
+            </div>
+
+
+            <h3>
+                Ngập ven biển
+            </h3>
+
+
+            <p>
+
+                Nước biển dâng cao do
+                triều, nước dâng do bão
+                hoặc các hiện tượng khí tượng biển
+                có thể tràn vào vùng ven bờ thấp.
+
+            </p>
+
+        </div>
+
+
+        <div class="card type-card">
+
+            <div class="type-tag">
+                Urban Flood
+            </div>
+
+
+            <div class="type-visual">
+                🏙️💧
+            </div>
+
+
+            <h3>
+                Ngập đô thị
+            </h3>
+
+
+            <p>
+
+                Bê tông hóa,
+                mật độ xây dựng cao,
+                cống thoát nước quá tải
+                và địa hình trũng
+                làm nước mưa tích tụ nhanh.
+
+            </p>
+
+        </div>
+
+
+        <div class="card type-card">
+
+            <div class="type-tag">
+                Compound Flood
+            </div>
+
+
+            <div class="type-visual">
+                🌧️+🌊
+            </div>
+
+
+            <h3>
+                Ngập tổng hợp
+            </h3>
+
+
+            <p>
+
+                Xảy ra khi nhiều yếu tố
+                cùng xuất hiện,
+                chẳng hạn mưa lớn + lũ sông +
+                triều cao hoặc nước dâng do bão.
+
+            </p>
+
+        </div>
+
+
+        <div class="card type-card">
+
+            <div class="type-tag">
+                Dam / Reservoir
+            </div>
+
+
+            <div class="type-visual">
+                🏞️⚠️
+            </div>
+
+
+            <h3>
+                Ngập liên quan hồ chứa
+            </h3>
+
+
+            <p>
+
+                Có thể liên quan đến
+                điều tiết hoặc sự cố công trình.
+                Đây là dạng cần hệ thống
+                quản lý và cảnh báo chuyên biệt.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     05. URBANIZATION
+     ====================================================== -->
+
+<section>
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            05 / Đô thị hóa
+        </div>
+
+
+        <h2>
+            Cùng một trận mưa,
+            tại sao nơi này ngập còn nơi khác không?
+        </h2>
+
+
+        <p>
+
+            Khả năng nước
+            <strong>thấm vào đất</strong>
+            và
+            <strong>thoát khỏi bề mặt</strong>
+            tạo ra khác biệt rất lớn.
+
+        </p>
+
+    </div>
+
+
+    <div class="urban-demo">
+
+
+        <!-- GREEN AREA -->
+
+        <div class="city-panel">
+
+            <div class="panel-label">
+
+                🌳 BỀ MẶT THẤM NƯỚC TỐT
+
+            </div>
+
+
+            <div class="mini-cloud">
+                ☁️
+            </div>
+
+
+            <div class="mini-rain">
+
+                │ │ │
+                │ │ │
+                │ │ │
+
+            </div>
+
+
+            <div class="soil-area"></div>
+
+
+            <div class="house-mini">
+                🏡
+            </div>
+
+
+            <div class="tree-mini">
+                🌳
+            </div>
+
+
+            <div class="arrow-down">
+                ↓
+            </div>
+
+        </div>
+
+
+
+        <!-- CONCRETE AREA -->
+
+        <div class="city-panel">
+
+            <div class="panel-label">
+
+                🏙️ BỀ MẶT KHÔNG THẤM NƯỚC CAO
+
+            </div>
+
+
+            <div class="mini-cloud">
+                ☁️
+            </div>
+
+
+            <div class="mini-rain">
+
+                │ │ │
+                │ │ │
+                │ │ │
+
+            </div>
+
+
+            <div class="concrete-area"></div>
+
+
+            <div class="house-mini">
+                🏢
+            </div>
+
+
+            <div class="tree-mini">
+                🏬
+            </div>
+
+
+            <div class="surface-water"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     06. DRIVERS
+     ====================================================== -->
+
+<section>
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            06 / Nguyên nhân và yếu tố làm tăng nguy cơ
+        </div>
+
+
+        <h2>
+            Ngập lụt thường là kết quả
+            của nhiều yếu tố cùng lúc
+        </h2>
+
+    </div>
+
+
+    <div class="grid grid-2">
+
+
+        <div class="driver">
+
+            <div class="driver-icon">
+                🌧️
+            </div>
+
+            <div>
+
+                <b>
+                    Mưa lớn kéo dài
+                </b>
+
+                <p>
+
+                    Tổng lượng nước lớn
+                    khiến đất bão hòa,
+                    sông đầy và hệ thống thoát nước
+                    mất khả năng tiếp nhận thêm nước.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="driver">
+
+            <div class="driver-icon">
+                ⛈️
+            </div>
+
+            <div>
+
+                <b>
+                    Mưa cực đoan thời gian ngắn
+                </b>
+
+                <p>
+
+                    Một lượng mưa rất lớn
+                    rơi trong vài giờ
+                    có thể gây ngập nhanh,
+                    đặc biệt tại thành phố.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="driver">
+
+            <div class="driver-icon">
+                🏙️
+            </div>
+
+            <div>
+
+                <b>
+                    Bê tông hóa
+                </b>
+
+                <p>
+
+                    Đường, mái nhà và bãi đỗ xe
+                    làm giảm diện tích đất
+                    có khả năng hấp thụ nước.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="driver">
+
+            <div class="driver-icon">
+                🗑️
+            </div>
+
+            <div>
+
+                <b>
+                    Tắc nghẽn thoát nước
+                </b>
+
+                <p>
+
+                    Rác thải và bùn đất
+                    có thể làm giảm khả năng
+                    dẫn nước của cống và kênh.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="driver">
+
+            <div class="driver-icon">
+                🌊
+            </div>
+
+            <div>
+
+                <b>
+                    Triều và nước dâng do bão
+                </b>
+
+                <p>
+
+                    Mực nước biển cao
+                    có thể làm nước khó thoát ra biển,
+                    đồng thời đẩy nước vào vùng ven bờ.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="driver">
+
+            <div class="driver-icon">
+                🌳
+            </div>
+
+            <div>
+
+                <b>
+                    Thay đổi sử dụng đất
+                </b>
+
+                <p>
+
+                    Mất thảm thực vật
+                    hoặc biến đổi lưu vực
+                    có thể làm dòng chảy mặt
+                    hình thành nhanh hơn.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="driver">
+
+            <div class="driver-icon">
+                📉
+            </div>
+
+            <div>
+
+                <b>
+                    Sụt lún đất
+                </b>
+
+                <p>
+
+                    Khi mặt đất hạ thấp,
+                    một số khu vực đô thị và ven biển
+                    trở nên nhạy cảm hơn với ngập.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="driver">
+
+            <div class="driver-icon">
+                🌡️
+            </div>
+
+            <div>
+
+                <b>
+                    Biến đổi khí hậu
+                </b>
+
+                <p>
+
+                    Khí hậu ấm hơn
+                    có thể làm tăng cường
+                    một số sự kiện mưa lớn,
+                    đồng thời nước biển dâng
+                    làm tăng nguy cơ ngập ven biển.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     07. CLIMATE SCIENCE
+     ====================================================== -->
+
+<section>
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            07 / Biến đổi khí hậu
+        </div>
+
+
+        <h2>
+            Không nên nói đơn giản:
+            “Biến đổi khí hậu gây ra mọi trận lũ”
+        </h2>
+
+    </div>
+
+
+    <div class="grid grid-3">
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🌡️
+            </div>
+
+
+            <h3>
+                Không khí ấm giữ nhiều hơi nước hơn
+            </h3>
+
+
+            <p>
+
+                Về mặt vật lý,
+                khả năng chứa hơi nước
+                của khí quyển tăng khoảng
+                <strong>7% cho mỗi 1°C ấm lên</strong>,
+                tạo điều kiện cho mưa cực đoan
+                trở nên mạnh hơn trong nhiều trường hợp.
+
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🌧️
+            </div>
+
+
+            <h3>
+                Mưa lớn có thể tăng
+            </h3>
+
+
+            <p>
+
+                IPCC đánh giá rằng
+                khí hậu ấm hơn sẽ làm gia tăng
+                cường độ các sự kiện mưa lớn
+                ở nhiều khu vực,
+                từ đó làm tăng nguy cơ ngập.
+
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🌊
+            </div>
+
+
+            <h3>
+                Nước biển dâng
+            </h3>
+
+
+            <p>
+
+                Mực nước nền cao hơn
+                làm các vùng ven biển thấp
+                dễ chịu tác động hơn
+                khi xuất hiện triều cao
+                hoặc nước dâng do bão.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     08. DATA 2026
+     ====================================================== -->
+
+<section
+    id="data"
+    class="data-section">
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            08 / DATA INTELLIGENCE 2026
+        </div>
+
+
+        <h2>
+            Ngập lụt qua những con số
+        </h2>
+
+
+        <p>
+
+            “Dữ liệu 2026” phải được hiểu đúng:
+            một số con số là sự kiện xảy ra năm 2026,
+            trong khi một số thống kê đầy đủ nhất
+            là dữ liệu năm 2025 được
+            các tổ chức quốc tế công bố trong năm 2026.
+
+        </p>
+
+    </div>
+
+
+    <div class="grid grid-4">
+
+
+        <div class="card stat-card">
+
+            <div class="stat-label">
+
+                Việt Nam
+                • đến giữa 9/2026
+
+            </div>
+
+
+            <div class="stat-number">
+                6
+            </div>
+
+
+            <div>
+
+                <strong>
+                    đợt lũ
+                </strong>
+
+                <div class="stat-note">
+
+                    đã xuất hiện tại
+                    Bắc Bộ và Trung Bộ.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card stat-card orange">
+
+            <div class="stat-label">
+
+                Việt Nam
+                • thiên tai 2026
+
+            </div>
+
+
+            <div class="stat-number">
+                63
+            </div>
+
+
+            <div>
+
+                <strong>
+                    người chết, mất tích
+                </strong>
+
+                <div class="stat-note">
+
+                    Tổng hợp thiên tai từ đầu năm
+                    đến thời điểm báo cáo,
+                    không phải riêng do ngập lụt.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card stat-card orange">
+
+            <div class="stat-label">
+
+                Việt Nam
+                • thiệt hại thiên tai
+
+            </div>
+
+
+            <div class="stat-number">
+                &gt;2.221
+            </div>
+
+
+            <div>
+
+                <strong>
+                    tỷ đồng
+                </strong>
+
+                <div class="stat-note">
+
+                    Thiệt hại vật chất
+                    ước tính tính tới giữa
+                    tháng 9/2026.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card stat-card green">
+
+            <div class="stat-label">
+
+                Toàn cầu
+                • UNDRR
+
+            </div>
+
+
+            <div class="stat-number">
+                $388B
+            </div>
+
+
+            <div>
+
+                <strong>
+                    tổn thất trung bình/năm
+                </strong>
+
+                <div class="stat-note">
+
+                    Ước tính tổn thất
+                    trung bình hằng năm
+                    liên quan đến lũ trên toàn cầu.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div
+        class="grid grid-3"
+        style="margin-top:20px">
+
+
+        <div class="card stat-card">
+
+            <div class="stat-label">
+
+                Việt Nam
+                • 9–11/2025
+
+            </div>
+
+
+            <div class="stat-number">
+                200+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    người thiệt mạng
+                </strong>
+
+                <div class="stat-note">
+
+                    Trong các đợt ngập lụt
+                    lớn cuối năm 2025,
+                    theo tổng hợp của WMO
+                    công bố năm 2026.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card stat-card orange">
+
+            <div class="stat-label">
+
+                Việt Nam
+                • 9–11/2025
+
+            </div>
+
+
+            <div class="stat-number">
+                $1.9B+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    thiệt hại
+                </strong>
+
+                <div class="stat-note">
+
+                    Ước tính thiệt hại kinh tế
+                    từ các sự kiện ngập lụt
+                    được WMO tổng hợp.
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card stat-card green">
+
+            <div class="stat-label">
+
+                Pakistan
+                • mùa mưa 2025
+
+            </div>
+
+
+            <div class="stat-number">
+                1.037
+            </div>
+
+
+            <div>
+
+                <strong>
+                    ca tử vong liên quan lũ
+                </strong>
+
+                <div class="stat-note">
+
+                    Hơn 3 triệu người
+                    cần được hỗ trợ;
+                    WMO công bố năm 2026.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="data-warning">
+
+        <strong>⚠ Đọc số liệu cho đúng:</strong>
+
+        con số 63 người chết/mất tích
+        và hơn 2.221 tỷ đồng tại Việt Nam
+        là thiệt hại
+        <strong>do thiên tai nói chung</strong>
+        trong báo cáo đến giữa tháng 9/2026.
+
+        Không nên viết thành
+        “ngập lụt năm 2026 làm 63 người chết”
+        nếu nguồn không tách riêng nguyên nhân.
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     09. VIETNAM
+     ====================================================== -->
+
+<section id="vietnam">
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            09 / Việt Nam
+        </div>
+
+
+        <h2>
+            Vì sao Việt Nam nhạy cảm
+            với ngập lụt?
+        </h2>
+
+    </div>
+
+
+    <div class="vn-zone">
+
+
+        <div class="vn-map">
+
+
+            <div class="vn-shape"></div>
+
+
+            <div class="flood-point p1"></div>
+            <div class="flood-point p2"></div>
+            <div class="flood-point p3"></div>
+            <div class="flood-point p4"></div>
+
+
+            <div class="vn-legend">
+
+                ● Điểm mô phỏng minh họa
+                các vùng thường cần quan tâm
+                tới nguy cơ lũ/ngập.
+                Không phải bản đồ cảnh báo thực tế.
+
+            </div>
+
+        </div>
+
+
+
+        <div class="vn-content">
+
+
+            <div class="vn-row">
+
+                <div class="vn-row-icon">
+                    🌧️
+                </div>
+
+                <div>
+
+                    <strong>
+                        Khí hậu gió mùa
+                    </strong>
+
+                    <p>
+
+                        Việt Nam có mùa mưa rõ rệt
+                        ở nhiều khu vực,
+                        đồng thời thường chịu tác động
+                        của bão và áp thấp nhiệt đới.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="vn-row">
+
+                <div class="vn-row-icon">
+                    🏞️
+                </div>
+
+                <div>
+
+                    <strong>
+                        Mạng lưới sông dày
+                    </strong>
+
+                    <p>
+
+                        Nhiều đồng bằng
+                        và khu dân cư phát triển
+                        dọc các hệ thống sông,
+                        tạo điều kiện thuận lợi
+                        cho sản xuất nhưng cũng
+                        làm gia tăng mức độ phơi nhiễm.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="vn-row">
+
+                <div class="vn-row-icon">
+                    🏔️
+                </div>
+
+                <div>
+
+                    <strong>
+                        Địa hình dốc ở miền núi
+                    </strong>
+
+                    <p>
+
+                        Nước tập trung nhanh
+                        từ sườn núi xuống thung lũng,
+                        làm tăng nguy cơ
+                        lũ quét và ngập cục bộ.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="vn-row">
+
+                <div class="vn-row-icon">
+                    🏙️
+                </div>
+
+                <div>
+
+                    <strong>
+                        Đô thị hóa nhanh
+                    </strong>
+
+                    <p>
+
+                        Diện tích bề mặt không thấm nước
+                        tăng nhanh trong khi
+                        hạ tầng thoát nước
+                        không phải lúc nào cũng
+                        theo kịp tốc độ xây dựng.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="vn-row">
+
+                <div class="vn-row-icon">
+                    🌊
+                </div>
+
+                <div>
+
+                    <strong>
+                        Bờ biển dài
+                    </strong>
+
+                    <p>
+
+                        Nhiều vùng đồng bằng
+                        và đô thị ven biển thấp
+                        chịu tác động đồng thời của
+                        triều, nước dâng do bão,
+                        mưa lớn và nước từ sông.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     10. 2026 EXAMPLE
+     ====================================================== -->
+
+<section>
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            10 / Ví dụ thực tế 2026
+        </div>
+
+
+        <h2>
+            Khi một đợt mưa mạnh
+            trở thành nguy cơ ngập
+        </h2>
+
+    </div>
+
+
+    <div class="grid grid-3">
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🌧️
+            </div>
+
+
+            <h3>
+                150–250 mm
+            </h3>
+
+
+            <p>
+
+                Trong dự báo đợt mưa
+                21–24/9/2026,
+                một số khu vực Nam Trung Bộ
+                và Nam Bộ được dự báo
+                có tổng lượng mưa phổ biến
+                150–250 mm/đợt.
+
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                ⛈️
+            </div>
+
+
+            <h3>
+                Cục bộ &gt;400 mm
+            </h3>
+
+
+            <p>
+
+                Một số điểm có khả năng
+                xuất hiện lượng mưa
+                vượt 400 mm trong cả đợt.
+
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                ⏱️
+            </div>
+
+
+            <h3>
+                &gt;100 mm / 3 giờ
+            </h3>
+
+
+            <p>
+
+                Cường độ mưa rất lớn
+                trong vài giờ có thể khiến
+                nước tập trung nhanh
+                và tạo áp lực lớn
+                lên hệ thống tiêu thoát nước.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     11. IMPACTS
+     ====================================================== -->
+
+<section id="impact">
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            11 / Hậu quả
+        </div>
+
+
+        <h2>
+            Nước rút không có nghĩa
+            hậu quả đã kết thúc
+        </h2>
+
+
+        <p>
+
+            Ngập lụt tạo ra tác động
+            trực tiếp và gián tiếp
+            lên con người,
+            kinh tế, môi trường,
+            sức khỏe và hoạt động xã hội.
+
+        </p>
+
+    </div>
+
+
+    <div class="impact-grid">
+
+
+        <div class="impact">
+
+            <div class="impact-icon">
+                🧍
+            </div>
+
+            <div>
+
+                <strong>
+                    Tính mạng
+                </strong>
+
+                <p>
+
+                    Đuối nước,
+                    tai nạn,
+                    dòng nước xiết,
+                    lũ bất ngờ và sạt lở
+                    có thể gây thương vong.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="impact">
+
+            <div class="impact-icon">
+                🏠
+            </div>
+
+            <div>
+
+                <strong>
+                    Nhà ở
+                </strong>
+
+                <p>
+
+                    Nước có thể làm hỏng
+                    kết cấu, đồ dùng,
+                    hệ thống điện
+                    và tài sản của hộ gia đình.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="impact">
+
+            <div class="impact-icon">
+                🌾
+            </div>
+
+            <div>
+
+                <strong>
+                    Nông nghiệp
+                </strong>
+
+                <p>
+
+                    Ruộng, cây trồng
+                    và vật nuôi bị thiệt hại;
+                    đất nông nghiệp có thể
+                    bị bồi lấp hoặc xói mòn.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="impact">
+
+            <div class="impact-icon">
+                🛣️
+            </div>
+
+            <div>
+
+                <strong>
+                    Giao thông
+                </strong>
+
+                <p>
+
+                    Đường, cầu
+                    và hệ thống giao thông
+                    có thể bị chia cắt,
+                    làm gián đoạn cứu trợ
+                    và đi lại.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="impact">
+
+            <div class="impact-icon">
+                ⚡
+            </div>
+
+            <div>
+
+                <strong>
+                    Hạ tầng
+                </strong>
+
+                <p>
+
+                    Điện, nước,
+                    viễn thông,
+                    bệnh viện và trường học
+                    có thể bị gián đoạn.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="impact">
+
+            <div class="impact-icon">
+                🦠
+            </div>
+
+            <div>
+
+                <strong>
+                    Sức khỏe
+                </strong>
+
+                <p>
+
+                    Nguồn nước có thể bị ô nhiễm,
+                    nguy cơ bệnh truyền qua nước
+                    và vệ sinh môi trường tăng.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="impact">
+
+            <div class="impact-icon">
+                💧
+            </div>
+
+            <div>
+
+                <strong>
+                    Nước sạch
+                </strong>
+
+                <p>
+
+                    Nước lũ có thể
+                    mang bùn, rác,
+                    nước thải và hóa chất
+                    vào nguồn nước sinh hoạt.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="impact">
+
+            <div class="impact-icon">
+                🏭
+            </div>
+
+            <div>
+
+                <strong>
+                    Kinh tế
+                </strong>
+
+                <p>
+
+                    Doanh nghiệp ngừng hoạt động,
+                    chuỗi cung ứng gián đoạn,
+                    chi phí khắc phục
+                    và tái thiết tăng cao.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="impact">
+
+            <div class="impact-icon">
+                📚
+            </div>
+
+            <div>
+
+                <strong>
+                    Giáo dục
+                </strong>
+
+                <p>
+
+                    Trường học có thể
+                    phải đóng cửa,
+                    học sinh bị gián đoạn
+                    việc học và đi lại.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     12. CASCADING
+     ====================================================== -->
+
+<section>
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            12 / Tác động dây chuyền
+        </div>
+
+
+        <h2>
+            Một trận ngập có thể
+            kích hoạt cả chuỗi vấn đề
+        </h2>
+
+    </div>
+
+
+    <div class="cascade">
+
+
+        <div class="cascade-item">
+
+            <div>
+                🌧️
+            </div>
+
+            <b>
+                Mưa lớn
+            </b>
+
+        </div>
+
+
+        <div class="cascade-item">
+
+            <div>
+                🌊
+            </div>
+
+            <b>
+                Ngập
+            </b>
+
+        </div>
+
+
+        <div class="cascade-item">
+
+            <div>
+                🚧
+            </div>
+
+            <b>
+                Giao thông gián đoạn
+            </b>
+
+        </div>
+
+
+        <div class="cascade-item">
+
+            <div>
+                🏭
+            </div>
+
+            <b>
+                Sản xuất đình trệ
+            </b>
+
+        </div>
+
+
+        <div class="cascade-item">
+
+            <div>
+                💰
+            </div>
+
+            <b>
+                Thiệt hại kinh tế
+            </b>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     13. WORLD
+     ====================================================== -->
+
+<section>
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            13 / Thế giới
+        </div>
+
+
+        <h2>
+            Những sự kiện gần đây
+            cho thấy quy mô rủi ro
+        </h2>
+
+    </div>
+
+
+    <div class="grid grid-3">
+
+
+        <div class="card event-card">
+
+            <div class="event-year">
+                TEXAS • 2025
+            </div>
+
+
+            <div class="event-number">
+                ≥135 người
+            </div>
+
+
+            <p>
+
+                Lũ quét nghiêm trọng
+                xảy ra ngày 4–5/7/2025.
+                Một số nơi ghi nhận
+                lượng mưa tới khoảng 500 mm,
+                phần lớn chỉ trong vài giờ.
+
+            </p>
+
+
+            <div class="event-source">
+
+                NGUỒN:
+                WMO Significant Weather
+                and Climate Events 2025.
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card event-card">
+
+            <div class="event-year">
+                PAKISTAN • 2025
+            </div>
+
+
+            <div class="event-number">
+                1.037 người
+            </div>
+
+
+            <p>
+
+                WMO ghi nhận
+                hơn một nghìn trường hợp
+                tử vong liên quan tới lũ
+                trong mùa gió mùa;
+                hơn 229.000 ngôi nhà
+                bị hư hỏng hoặc phá hủy.
+
+            </p>
+
+
+            <div class="event-source">
+
+                NGUỒN:
+                WMO State of
+                the Global Climate 2025.
+
+            </div>
+
+        </div>
+
+
+
+        <div class="card event-card">
+
+            <div class="event-year">
+                SRI LANKA • 2025
+            </div>
+
+
+            <div class="event-number">
+                640 người
+            </div>
+
+
+            <p>
+
+                Bão Ditwah gây
+                mưa kéo dài và lũ lớn.
+                WMO ghi nhận hơn
+                114.000 ngôi nhà
+                bị hư hại hoặc phá hủy.
+
+            </p>
+
+
+            <div class="event-source">
+
+                NGUỒN:
+                WMO • công bố 2026.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     14. LAB
+     ====================================================== -->
+
+<section id="lab">
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            14 / Interactive Flood Lab
+        </div>
+
+
+        <h2>
+            Nếu em là nhà quy hoạch đô thị...
+        </h2>
+
+
+        <p>
+
+            Thay đổi các thông số để xem
+            nguy cơ ngập thay đổi như thế nào.
+
+        </p>
+
+    </div>
+
+
+    <div class="lab">
+
+
+        <div class="controls">
+
+
+            <div class="control">
+
+                <label>
+                    🌧️ Cường độ mưa
+                </label>
+
+
+                <input
+                    type="range"
+                    id="rain"
+                    min="10"
+                    max="150"
+                    value="55">
+
+
+                <div
+                    class="control-value"
+                    id="rainValue">
+
+                    55 mm/h
+
+                </div>
+
+            </div>
+
+
+
+            <div class="control">
+
+                <label>
+                    🏙️ Tỉ lệ bề mặt
+                    không thấm nước
+                </label>
+
+
+                <input
+                    type="range"
+                    id="concrete"
+                    min="10"
+                    max="95"
+                    value="55">
+
+
+                <div
+                    class="control-value"
+                    id="concreteValue">
+
+                    55%
+
+                </div>
+
+            </div>
+
+
+
+            <div class="control">
+
+                <label>
+                    🚰 Khả năng thoát nước
+                </label>
+
+
+                <input
+                    type="range"
+                    id="drain"
+                    min="10"
+                    max="100"
+                    value="55">
+
+
+                <div
+                    class="control-value"
+                    id="drainValue">
+
+                    55%
+
+                </div>
+
+            </div>
+
+
+
+            <div class="control">
+
+                <label>
+                    🌳 Không gian xanh
+                </label>
+
+
+                <input
+                    type="range"
+                    id="green"
+                    min="5"
+                    max="70"
+                    value="30">
+
+
+                <div
+                    class="control-value"
+                    id="greenValue">
+
+                    30%
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="lab-display">
+
+
+            <div class="city-sim">
+
+
+                <div class="sim-cloud">
+                    ☁️
+                </div>
+
+
+                <div class="sim-rain">
+
+│ │ │ │
+ │ │ │
+│ │ │ │
+ │ │ │
+
+                </div>
+
+
+                <div class="sim-house">
+                    🏡
+                </div>
+
+
+                <div class="sim-building">
+                    🏢
+                </div>
+
+
+                <div
+                    class="sim-water"
+                    id="simWater">
+                </div>
+
+            </div>
+
+
+
+            <div class="risk-panel">
+
+
+                <div class="risk-title">
+
+                    NGUY CƠ NGẬP TƯƠNG ĐỐI
+
+                </div>
+
+
+                <div
+                    class="risk-level"
+                    id="riskLevel">
+
+                    THẤP
+
+                </div>
+
+
+                <div
+                    class="risk-description"
+                    id="riskDescription">
+
+                    Hệ thống hiện tại
+                    còn khả năng tiếp nhận
+                    lượng nước mô phỏng.
+
+                </div>
+
+
+                <div
+                    style="
+                    font-size:55px;
+                    margin-top:22px"
+                    id="riskIcon">
+
+                    🌿
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="disclaimer">
+
+            * Đây là mô hình giáo dục đơn giản,
+            không phải mô hình thủy văn
+            hay hệ thống cảnh báo ngập chính thức.
+
+            Dự báo thực tế còn cần
+            địa hình, lưu vực,
+            lượng mưa tích lũy,
+            mực nước sông,
+            triều, cống,
+            độ bão hòa đất
+            và nhiều dữ liệu khác.
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     15. SOLUTIONS
+     ====================================================== -->
+
+<section>
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            15 / Giải pháp
+        </div>
+
+
+        <h2>
+            Không thể chỉ “làm cống lớn hơn”
+        </h2>
+
+
+        <p>
+
+            Giảm ngập bền vững cần
+            kết hợp công trình kỹ thuật,
+            quy hoạch không gian,
+            giải pháp dựa vào tự nhiên,
+            cảnh báo sớm và thay đổi hành vi.
+
+        </p>
+
+    </div>
+
+
+    <div class="grid grid-4">
+
+
+        <div class="card solution">
+
+            <div class="solution-number">
+                01
+            </div>
+
+            <h3>
+                Hồ điều hòa
+            </h3>
+
+            <p>
+
+                Tạm giữ nước khi mưa lớn,
+                giảm lượng nước đổ
+                vào hệ thống thoát cùng một lúc.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="card solution">
+
+            <div class="solution-number">
+                02
+            </div>
+
+            <h3>
+                Mặt đường thấm nước
+            </h3>
+
+            <p>
+
+                Tăng khả năng
+                nước mưa thấm xuống đất
+                thay vì chuyển hoàn toàn
+                thành dòng chảy mặt.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="card solution">
+
+            <div class="solution-number">
+                03
+            </div>
+
+            <h3>
+                Không gian xanh
+            </h3>
+
+            <p>
+
+                Công viên,
+                cây xanh và đất tự nhiên
+                giúp lưu giữ và làm chậm nước mưa.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="card solution">
+
+            <div class="solution-number">
+                04
+            </div>
+
+            <h3>
+                Phục hồi sông – kênh
+            </h3>
+
+            <p>
+
+                Bảo vệ hành lang thoát lũ
+                và khả năng lưu thông
+                của hệ thống sông, kênh.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="card solution">
+
+            <div class="solution-number">
+                05
+            </div>
+
+            <h3>
+                Quy hoạch vùng ngập
+            </h3>
+
+            <p>
+
+                Hạn chế bố trí
+                các công trình dễ tổn thương
+                tại khu vực nguy cơ rất cao.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="card solution">
+
+            <div class="solution-number">
+                06
+            </div>
+
+            <h3>
+                Cảnh báo sớm
+            </h3>
+
+            <p>
+
+                Dự báo mưa,
+                mực nước và tác động
+                giúp người dân
+                có thêm thời gian ứng phó.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="card solution">
+
+            <div class="solution-number">
+                07
+            </div>
+
+            <h3>
+                Quản lý rác
+            </h3>
+
+            <p>
+
+                Hạn chế rác làm
+                tắc cửa thu nước,
+                cống và kênh thoát.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="card solution">
+
+            <div class="solution-number">
+                08
+            </div>
+
+            <h3>
+                Thích ứng khí hậu
+            </h3>
+
+            <p>
+
+                Hạ tầng phải được
+                thiết kế cho điều kiện
+                khí hậu tương lai,
+                không chỉ dựa trên quá khứ.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     16. SPONGE CITY
+     ====================================================== -->
+
+<section>
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            16 / Thành phố bọt biển
+        </div>
+
+
+        <h2>
+            Từ “đẩy nước đi thật nhanh”
+            sang “giữ – thấm – làm chậm”
+        </h2>
+
+    </div>
+
+
+    <div class="sponge-demo">
+
+
+        <div class="sponge-card">
+
+
+            <div class="sponge-visual">
+
+                🏙️🌧️🌊
+
+            </div>
+
+
+            <h3>
+                Thành phố truyền thống
+            </h3>
+
+
+            <p>
+
+                Bề mặt bê tông lớn
+                → nước mưa nhanh chóng
+                trở thành dòng chảy mặt
+                → dồn về cống
+                trong thời gian ngắn.
+
+            </p>
+
+        </div>
+
+
+
+        <div class="arrow-center">
+            →
+        </div>
+
+
+
+        <div class="sponge-card">
+
+
+            <div class="sponge-visual">
+
+                🌳💧🏡
+
+            </div>
+
+
+            <h3>
+                Thành phố “bọt biển”
+            </h3>
+
+
+            <p>
+
+                Công viên trũng,
+                mái xanh,
+                hồ điều hòa,
+                đất thấm nước
+                và mặt lát thấm
+                giúp giữ và làm chậm nước mưa.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     17. MEDIA
+     ====================================================== -->
+
+<section>
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            17 / Media Learning
+        </div>
+
+
+        <h2>
+            Hình ảnh và video minh họa
+            nên xem
+        </h2>
+
+    </div>
+
+
+    <div class="media-grid">
+
+
+        <div class="video-card">
+
+
+            <div>
+
+                <div class="play">
+                    ▶
+                </div>
+
+
+                <div class="video-title">
+
+                    WMO
+                    • State of the Climate
+                    in Asia 2025
+
+                </div>
+
+
+                <div class="video-sub">
+
+                    Video chính thức
+                    được WMO công bố tháng 6/2026,
+                    trình bày các hiện tượng khí hậu
+                    cực đoan tại châu Á,
+                    trong đó có mưa lớn
+                    và ngập lụt tại Việt Nam.
+
+                </div>
+
+
+                <div
+                    style="
+                    margin-top:15px;
+                    color:#62e6ff;
+                    font-size:13px">
+
+                    VIDEO ID:
+                    l45BE1xYQig
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="media-side">
+
+
+            <div class="media-box">
+
+                <div
+                    style="
+                    font-size:42px;
+                    margin-bottom:8px">
+
+                    🛰️🌊
+
+                </div>
+
+
+                <strong>
+                    Ảnh vệ tinh vùng ngập
+                </strong>
+
+
+                <p
+                    style="
+                    margin-top:7px;
+                    color:#9eb7c0;
+                    font-size:13px">
+
+                    Có thể sử dụng ảnh radar
+                    Sentinel-1 để so sánh
+                    diện tích trước và sau ngập,
+                    đặc biệt vì radar vẫn
+                    quan sát được qua mây.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="media-box">
+
+                <div
+                    style="
+                    font-size:42px;
+                    margin-bottom:8px">
+
+                    🏙️🌧️
+
+                </div>
+
+
+                <strong>
+                    Ảnh ngập đô thị
+                </strong>
+
+
+                <p
+                    style="
+                    margin-top:7px;
+                    color:#9eb7c0;
+                    font-size:13px">
+
+                    Cho học sinh nhận diện
+                    mặt đường bê tông,
+                    cửa thu nước,
+                    cao độ đường,
+                    nhà dân
+                    và hướng dòng chảy.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="media-box">
+
+                <div
+                    style="
+                    font-size:42px;
+                    margin-bottom:8px">
+
+                    🏞️➡️🌊
+                </div>
+
+
+                <strong>
+                    Mô hình lưu vực
+                </strong>
+
+
+                <p
+                    style="
+                    margin-top:7px;
+                    color:#9eb7c0;
+                    font-size:13px">
+
+                    Quan sát nước từ
+                    vùng cao tập trung xuống sông,
+                    đồng bằng và khu vực trũng.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     18. THINKING QUESTIONS
+     ====================================================== -->
+
+<section>
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            18 / Thinking Challenge
+        </div>
+
+
+        <h2>
+            Đừng chỉ hỏi:
+            “Ngập do đâu?”
+        </h2>
+
+    </div>
+
+
+    <div class="grid grid-2">
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🧠
+            </div>
+
+
+            <h3>
+                Tình huống 1
+            </h3>
+
+
+            <p>
+
+                Hai khu phố nhận
+                lượng mưa gần giống nhau.
+                Khu A có công viên,
+                hồ điều hòa và mặt đường thấm nước.
+                Khu B gần như được bê tông hóa hoàn toàn.
+
+                <br><br>
+
+                <strong>
+                    Khu nào có nguy cơ
+                    ngập nhanh hơn?
+                    Vì sao?
+                </strong>
+
+            </p>
+
+        </div>
+
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🧠
+            </div>
+
+
+            <h3>
+                Tình huống 2
+            </h3>
+
+
+            <p>
+
+                Một thành phố ven biển
+                xuất hiện cùng lúc
+                mưa lớn,
+                triều cao
+                và nước sông đang lên.
+
+                <br><br>
+
+                <strong>
+                    Tại sao đây là
+                    dạng ngập tổng hợp
+                    nguy hiểm?
+                </strong>
+
+            </p>
+
+        </div>
+
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🔍
+            </div>
+
+
+            <h3>
+                Tình huống 3
+            </h3>
+
+
+            <p>
+
+                Một tuyến đường
+                chỉ mới bắt đầu ngập
+                thường xuyên trong vài năm gần đây.
+
+                <br><br>
+
+                Học sinh cần kiểm tra
+                những dữ liệu nào trước khi kết luận
+                nguyên nhân do biến đổi khí hậu?
+
+            </p>
+
+        </div>
+
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🏙️
+            </div>
+
+
+            <h3>
+                Tình huống 4
+            </h3>
+
+
+            <p>
+
+                Nếu chỉ được lựa chọn
+                ba giải pháp để giảm ngập
+                cho khu vực trường học,
+                em sẽ chọn giải pháp nào?
+
+                <br><br>
+
+                <strong>
+                    Hãy giải thích bằng
+                    cơ chế dòng chảy nước.
+                </strong>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ======================================================
+     SOURCES
+     ====================================================== -->
+
+<section class="sources">
+
+
+    <div class="section-header">
+
+        <div class="section-tag">
+            19 / Nguồn khoa học
+        </div>
+
+
+        <h2>
+            Dữ liệu cần được đọc
+            cùng nguồn và thời điểm
+        </h2>
+
+    </div>
+
+
+    <div class="source-list">
+
+
+        <div class="source">
+
+            <div class="source-logo">
+                WMO
+            </div>
+
+
+            <div>
+
+                <strong>
+                    World Meteorological Organization
+                </strong>
+
+                <p>
+
+                    State of the Climate in Asia 2025
+                    và State of the Global Climate 2025,
+                    công bố năm 2026.
+                    Dùng cho các ví dụ ngập lụt
+                    tại Việt Nam, Pakistan,
+                    Sri Lanka và Hoa Kỳ.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="source">
+
+            <div class="source-logo">
+                UN
+            </div>
+
+
+            <div>
+
+                <strong>
+                    UNDRR
+                </strong>
+
+                <p>
+
+                    Global Assessment Report 2025
+                    – Hazard Exploration:
+                    Floods.
+                    Dùng cho số liệu
+                    tổn thất trung bình hằng năm
+                    do lũ toàn cầu.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="source">
+
+            <div class="source-logo">
+                VN
+            </div>
+
+
+            <div>
+
+                <strong>
+                    Cơ quan phòng,
+                    chống thiên tai Việt Nam
+                    và Báo Điện tử Chính phủ
+                </strong>
+
+                <p>
+
+                    Dùng cho thống kê
+                    các đợt lũ,
+                    thiệt hại thiên tai
+                    và dự báo mưa lớn
+                    trong năm 2026.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="source">
+
+            <div class="source-logo">
+                IPCC
+            </div>
+
+
+            <div>
+
+                <strong>
+                    Intergovernmental Panel
+                    on Climate Change
+                </strong>
+
+                <p>
+
+                    Dùng cho mối liên hệ giữa
+                    khí hậu ấm lên,
+                    khả năng chứa hơi nước,
+                    mưa cực đoan,
+                    lũ và ngập ven biển.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<footer>
+
+    CLIMASCORE
+    • FLOOD INTELLIGENCE 2026
+
+    <br>
+
+    Học liệu số về
+    môi trường – khí hậu –
+    thích ứng với biến đổi khí hậu.
+
+</footer>
+
+
+
+<script>
+
+/* =========================================================
+   HERO RAIN
+   ========================================================= */
+
+const heroRain =
+    document.getElementById("heroRain");
+
+
+for(let i = 0; i < 90; i++){
+
+    const drop =
+        document.createElement("div");
+
+    drop.className =
+        "drop";
+
+    drop.style.left =
+        Math.random() * 100 + "%";
+
+    drop.style.animationDelay =
+        Math.random() * 2 + "s";
+
+    drop.style.animationDuration =
+        (
+            0.6 +
+            Math.random() * 0.8
+        ) + "s";
+
+    drop.style.opacity =
+        0.2 +
+        Math.random() * 0.7;
+
+    heroRain.appendChild(drop);
+}
+
+
+
+/* =========================================================
+   FLOOD LAB
+   Mô hình giáo dục đơn giản
+   ========================================================= */
+
+const rain =
+    document.getElementById("rain");
+
+const concrete =
+    document.getElementById("concrete");
+
+const drain =
+    document.getElementById("drain");
+
+const green =
+    document.getElementById("green");
+
+
+const rainValue =
+    document.getElementById("rainValue");
+
+const concreteValue =
+    document.getElementById("concreteValue");
+
+const drainValue =
+    document.getElementById("drainValue");
+
+const greenValue =
+    document.getElementById("greenValue");
+
+
+const simWater =
+    document.getElementById("simWater");
+
+const riskLevel =
+    document.getElementById("riskLevel");
+
+const riskDescription =
+    document.getElementById("riskDescription");
+
+const riskIcon =
+    document.getElementById("riskIcon");
+
+
+function updateFloodRisk(){
+
+    const r =
+        Number(rain.value);
+
+    const c =
+        Number(concrete.value);
+
+    const d =
+        Number(drain.value);
+
+    const g =
+        Number(green.value);
+
+
+    rainValue.textContent =
+        r + " mm/h";
+
+    concreteValue.textContent =
+        c + "%";
+
+    drainValue.textContent =
+        d + "%";
+
+    greenValue.textContent =
+        g + "%";
+
+
+    /*
+       QUAN HỆ GIÁO DỤC
+
+       Mưa tăng
+       -> nguy cơ tăng.
+
+       Bề mặt không thấm tăng
+       -> dòng chảy mặt tăng.
+
+       Khả năng thoát nước tăng
+       -> nguy cơ giảm.
+
+       Không gian xanh tăng
+       -> khả năng giữ/thấm nước tăng.
+
+       Đây KHÔNG PHẢI công thức
+       thủy văn chính thức.
+    */
+
+
+    let score = 0;
+
+
+    score +=
+        (r / 150) * 45;
+
+
+    score +=
+        (c / 95) * 30;
+
+
+    score +=
+        ((100 - d) / 90) * 20;
+
+
+    score -=
+        (g / 70) * 15;
+
+
+    score =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                score
+            )
+        );
+
+
+    let waterHeight =
+        15 + score * 1.8;
+
+
+    simWater.style.height =
+        Math.min(
+            waterHeight,
+            210
+        ) + "px";
+
+
+    if(score < 25){
+
+        riskLevel.textContent =
+            "THẤP";
+
+        riskLevel.style.color =
+            "#59e2af";
+
+        riskIcon.textContent =
+            "🌿";
+
+        riskDescription.textContent =
+            "Bề mặt và hệ thống thoát nước "
+            + "trong mô hình vẫn còn khả năng "
+            + "tiếp nhận phần lớn lượng nước.";
+
+    }
+
+
+    else if(score < 45){
+
+        riskLevel.textContent =
+            "TRUNG BÌNH";
+
+        riskLevel.style.color =
+            "#ffe067";
+
+        riskIcon.textContent =
+            "🌧️";
+
+        riskDescription.textContent =
+            "Nước bắt đầu tích tụ tại "
+            + "các vị trí trũng. Nếu mưa kéo dài, "
+            + "nguy cơ có thể tăng nhanh.";
+
+    }
+
+
+    else if(score < 65){
+
+        riskLevel.textContent =
+            "CAO";
+
+        riskLevel.style.color =
+            "#ffb14e";
+
+        riskIcon.textContent =
+            "🌊";
+
+        riskDescription.textContent =
+            "Lượng nước sinh ra vượt đáng kể "
+            + "khả năng thấm và tiêu thoát "
+            + "trong mô hình.";
+
+    }
+
+
+    else if(score < 80){
+
+        riskLevel.textContent =
+            "RẤT CAO";
+
+        riskLevel.style.color =
+            "#ff7853";
+
+        riskIcon.textContent =
+            "⚠️🌊";
+
+        riskDescription.textContent =
+            "Ngập có thể lan rộng. "
+            + "Cần tăng khả năng giữ nước, "
+            + "thấm nước hoặc tiêu thoát.";
+
+    }
+
+
+    else{
+
+        riskLevel.textContent =
+            "CỰC ĐOAN";
+
+        riskLevel.style.color =
+            "#ff5555";
+
+        riskIcon.textContent =
+            "🚨🌊";
+
+        riskDescription.textContent =
+            "Mô hình cho thấy điều kiện "
+            + "ngập nghiêm trọng khi mưa rất lớn, "
+            + "bề mặt bê tông cao và "
+            + "khả năng thoát nước thấp.";
+
+    }
+
+}
+
+
+[
+    rain,
+    concrete,
+    drain,
+    green
+
+].forEach(
+
+    element => {
+
+        element.addEventListener(
+            "input",
+            updateFloodRisk
+        );
+
+    }
+
+);
+
+
+updateFloodRisk();
+
+</script>
+
+</body>
+</html>

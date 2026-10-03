@@ -1,0 +1,4227 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CLIMASCORE | Lũ quét 3D nâng cấp</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:"Segoe UI",Arial,sans-serif;
+    background:#06131c;
+    color:#fff;
+}
+
+button,input{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+:root{
+    --cyan:#2be5ff;
+    --green:#2be2ac;
+    --yellow:#ffd45f;
+    --orange:#ff9d43;
+    --red:#ff6057;
+    --blue:#168cff;
+
+    --panel:rgba(4,28,41,.90);
+    --border:rgba(86,224,255,.16);
+    --soft:#acd0d7;
+}
+
+#app{
+    width:100vw;
+    height:100vh;
+    position:relative;
+    overflow:hidden;
+}
+
+#scene{
+    position:absolute;
+    inset:0;
+}
+
+canvas{
+    display:block;
+}
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+.topbar{
+    position:absolute;
+    z-index:50;
+
+    top:14px;
+    left:18px;
+    right:18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+
+    padding:12px 15px;
+
+    border-radius:18px;
+    border:1px solid var(--border);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(3,31,45,.92),
+            rgba(2,18,28,.88)
+        );
+
+    backdrop-filter:blur(18px);
+
+    box-shadow:
+        0 18px 55px rgba(0,0,0,.28);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+}
+
+.brand-logo{
+    width:40px;
+    height:40px;
+
+    display:grid;
+    place-items:center;
+
+    border-radius:12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--green),
+            var(--cyan)
+        );
+
+    color:#03151c;
+    font-weight:900;
+}
+
+.brand strong{
+    display:block;
+    font-size:15px;
+}
+
+.brand small{
+    display:block;
+    margin-top:2px;
+
+    color:#83b8c2;
+    font-size:10px;
+}
+
+.top-actions{
+    display:flex;
+    gap:8px;
+}
+
+.top-btn{
+    padding:9px 13px;
+
+    border:1px solid rgba(82,224,255,.14);
+    border-radius:11px;
+
+    background:rgba(7,66,85,.4);
+    color:#d5eef2;
+
+    transition:.25s;
+}
+
+.top-btn:hover{
+    transform:translateY(-2px);
+}
+
+.top-btn.primary{
+    color:#03161d;
+    font-weight:900;
+
+    border:none;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--green),
+            var(--cyan)
+        );
+}
+
+/* =========================================================
+   LEFT PANEL
+========================================================= */
+.panel{
+    position:absolute;
+    z-index:40;
+
+    top:88px;
+    left:18px;
+    bottom:18px;
+
+    width:340px;
+
+    overflow:auto;
+
+    padding:17px;
+
+    border:1px solid var(--border);
+    border-radius:22px;
+
+    background:
+        linear-gradient(
+            160deg,
+            rgba(6,42,57,.93),
+            rgba(2,20,31,.94)
+        );
+
+    backdrop-filter:blur(18px);
+
+    box-shadow:
+        0 25px 75px rgba(0,0,0,.28);
+}
+
+.panel::-webkit-scrollbar{
+    width:6px;
+}
+
+.panel::-webkit-scrollbar-thumb{
+    border-radius:99px;
+    background:rgba(75,223,255,.25);
+}
+
+.label{
+    color:var(--green);
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:1.6px;
+}
+
+.panel h1{
+    margin-top:5px;
+    font-size:23px;
+}
+
+.panel-desc{
+    margin-top:7px;
+
+    color:var(--soft);
+
+    font-size:11px;
+    line-height:1.55;
+}
+
+.section{
+    margin-top:18px;
+    padding-top:15px;
+
+    border-top:
+        1px solid rgba(89,224,255,.10);
+}
+
+.section-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:12px;
+
+    font-size:12px;
+    font-weight:800;
+}
+
+/* =========================================================
+   PRESET
+========================================================= */
+.preset-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:7px;
+}
+
+.preset{
+    min-height:56px;
+
+    border:1px solid rgba(78,221,255,.13);
+    border-radius:13px;
+
+    background:rgba(6,54,70,.5);
+    color:#d4edf1;
+
+    font-size:10px;
+    font-weight:700;
+
+    transition:.25s;
+}
+
+.preset:hover{
+    transform:translateY(-2px);
+}
+
+.preset.active{
+    color:#03151c;
+    font-weight:900;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--green),
+            var(--cyan)
+        );
+}
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+.control{
+    margin-bottom:14px;
+}
+
+.control-head{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+
+    margin-bottom:7px;
+
+    font-size:11px;
+}
+
+.control-head span:last-child{
+    color:var(--yellow);
+    font-weight:900;
+}
+
+input[type="range"]{
+    width:100%;
+    accent-color:var(--cyan);
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+.run-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.run-grid button{
+    min-height:44px;
+
+    border:none;
+    border-radius:13px;
+
+    font-weight:900;
+
+    transition:.25s;
+}
+
+.run-grid button:hover{
+    transform:translateY(-2px);
+}
+
+.run-start{
+    color:#03151c;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--green),
+            var(--cyan)
+        );
+}
+
+.run-pause{
+    color:#fff;
+
+    background:
+        linear-gradient(
+            90deg,
+            #7768ff,
+            #288cff
+        );
+}
+
+.run-reset{
+    grid-column:1/-1;
+
+    color:#fff;
+
+    background:rgba(255,255,255,.055);
+
+    border:
+        1px solid rgba(255,255,255,.08)!important;
+}
+
+/* =========================================================
+   METRICS
+========================================================= */
+.metrics{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.metric{
+    padding:11px;
+
+    border-radius:13px;
+
+    border:
+        1px solid rgba(80,220,255,.09);
+
+    background:
+        rgba(2,26,38,.55);
+}
+
+.metric small{
+    display:block;
+
+    margin-bottom:4px;
+
+    color:#7fa9b3;
+
+    font-size:9px;
+}
+
+.metric strong{
+    font-size:18px;
+}
+
+/* =========================================================
+   RIGHT PANEL
+========================================================= */
+.info-panel{
+    position:absolute;
+    z-index:40;
+
+    top:88px;
+    right:18px;
+
+    width:305px;
+
+    padding:17px;
+
+    border:1px solid var(--border);
+    border-radius:22px;
+
+    background:
+        linear-gradient(
+            160deg,
+            rgba(6,42,57,.92),
+            rgba(2,20,31,.93)
+        );
+
+    backdrop-filter:blur(18px);
+}
+
+.info-panel h2{
+    margin-top:5px;
+    font-size:22px;
+}
+
+.warning{
+    margin-top:13px;
+
+    padding:13px;
+
+    border-radius:15px;
+
+    border:
+        1px solid rgba(255,210,80,.15);
+
+    background:
+        rgba(110,78,16,.13);
+}
+
+.warning-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    margin-bottom:8px;
+}
+
+.badge{
+    padding:5px 8px;
+
+    border-radius:8px;
+
+    color:#ff8872;
+
+    background:
+        rgba(255,91,73,.16);
+
+    font-size:9px;
+    font-weight:900;
+}
+
+.warning p{
+    color:#b5d1d6;
+
+    font-size:11px;
+    line-height:1.5;
+}
+
+.impact-list{
+    display:grid;
+    gap:8px;
+
+    margin-top:13px;
+}
+
+.impact{
+    display:flex;
+    justify-content:space-between;
+
+    padding:10px;
+
+    border-radius:11px;
+
+    background:
+        rgba(2,26,38,.54);
+
+    font-size:10px;
+}
+
+/* =========================================================
+   STATUS
+========================================================= */
+.status{
+    position:absolute;
+    z-index:45;
+
+    left:50%;
+    bottom:18px;
+
+    transform:translateX(-50%);
+
+    min-width:440px;
+
+    padding:10px 16px;
+
+    text-align:center;
+
+    border-radius:14px;
+
+    border:
+        1px solid rgba(82,224,255,.13);
+
+    background:
+        rgba(2,22,34,.82);
+
+    backdrop-filter:blur(14px);
+}
+
+.status strong{
+    display:block;
+    font-size:11px;
+}
+
+.status span{
+    color:#82b5c0;
+    font-size:9px;
+}
+
+/* =========================================================
+   HELP TAG
+========================================================= */
+.rotate-tip{
+    position:absolute;
+    z-index:20;
+
+    right:20px;
+    bottom:20px;
+
+    padding:8px 12px;
+
+    border-radius:12px;
+
+    color:#c4e4e9;
+
+    background:
+        rgba(2,22,34,.7);
+
+    border:
+        1px solid rgba(78,224,255,.12);
+
+    font-size:10px;
+
+    pointer-events:none;
+}
+
+/* =========================================================
+   LOADER
+========================================================= */
+.loading{
+    position:absolute;
+    z-index:100;
+
+    inset:0;
+
+    display:grid;
+    place-items:center;
+
+    background:
+        radial-gradient(
+            circle,
+            #0a4253,
+            #020a11 72%
+        );
+
+    transition:.5s;
+}
+
+.loading.hide{
+    opacity:0;
+    visibility:hidden;
+}
+
+.loader{
+    text-align:center;
+}
+
+.loader-ring{
+    width:72px;
+    height:72px;
+
+    margin:
+        0 auto 16px;
+
+    border-radius:50%;
+
+    border:
+        4px solid rgba(50,225,255,.12);
+
+    border-top-color:
+        var(--cyan);
+
+    animation:
+        spin 1s linear infinite;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+.loader p{
+    margin-top:7px;
+
+    color:#89b7c1;
+
+    font-size:11px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media(max-width:920px){
+
+    .info-panel{
+        display:none;
+    }
+
+    .rotate-tip{
+        display:none;
+    }
+}
+
+@media(max-width:650px){
+
+    .top-actions{
+        display:none;
+    }
+
+    .panel{
+        top:auto;
+        left:10px;
+        right:10px;
+        bottom:10px;
+
+        width:auto;
+        height:285px;
+    }
+
+    .status{
+        display:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+    <!-- LOADING -->
+    <div class="loading" id="loading">
+
+        <div class="loader">
+
+            <div class="loader-ring"></div>
+
+            <h2>
+                CLIMASCORE 3D
+            </h2>
+
+            <p>
+                Đang dựng mô hình lũ quét...
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- 3D -->
+    <div id="scene"></div>
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                C
+            </div>
+
+            <div>
+
+                <strong>
+                    CLIMASCORE · LŨ QUÉT 3D
+                </strong>
+
+                <small>
+                    Dòng lũ cực mạnh từ thượng nguồn xuống khu dân cư
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="top-actions">
+
+            <button
+                class="top-btn"
+                onclick="resetCamera()"
+            >
+                🎥 Góc mặc định
+            </button>
+
+            <button
+                class="top-btn"
+                id="soundBtn"
+                onclick="toggleSound()"
+            >
+                🔊 Âm thanh
+            </button>
+
+            <button
+                class="top-btn primary"
+                onclick="startSimulation()"
+            >
+                ▶ Chạy mô phỏng
+            </button>
+
+        </div>
+
+    </header>
+
+    <!-- CONTROL PANEL -->
+    <aside class="panel">
+
+        <div class="label">
+            FLASH FLOOD SIMULATOR
+        </div>
+
+        <h1>
+            Dòng lũ quét cực mạnh
+        </h1>
+
+        <p class="panel-desc">
+            Xoay mô hình bằng chuột.
+            Kéo để quan sát từ nhiều góc,
+            cuộn chuột để phóng to – thu nhỏ.
+            Dòng lũ sẽ lao từ vùng núi xuống khu dân cư.
+        </p>
+
+        <!-- PRESET -->
+        <div class="section">
+
+            <div class="section-title">
+                <span>Kịch bản</span>
+            </div>
+
+            <div class="preset-grid">
+
+                <button
+                    class="preset"
+                    onclick="setPreset('safe',this)"
+                >
+                    🌤️
+                    <br>
+                    Bình thường
+                </button>
+
+                <button
+                    class="preset active"
+                    onclick="setPreset('high',this)"
+                >
+                    🌧️
+                    <br>
+                    Lũ mạnh
+                </button>
+
+                <button
+                    class="preset"
+                    onclick="setPreset('extreme',this)"
+                >
+                    ⚠️
+                    <br>
+                    Cực đoan
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- PARAMETERS -->
+        <div class="section">
+
+            <div class="section-title">
+
+                <span>
+                    Điều kiện hình thành
+                </span>
+
+                <span style="color:var(--cyan)">
+                    LIVE
+                </span>
+
+            </div>
+
+            <div class="control">
+
+                <div class="control-head">
+
+                    <span>
+                        🌧️ Cường độ mưa
+                    </span>
+
+                    <span id="rainValue">
+                        185 mm/h
+                    </span>
+
+                </div>
+
+                <input
+                    id="rain"
+                    type="range"
+                    min="0"
+                    max="250"
+                    value="185"
+                >
+
+            </div>
+
+            <div class="control">
+
+                <div class="control-head">
+
+                    <span>
+                        🟫 Đất bão hòa
+                    </span>
+
+                    <span id="soilValue">
+                        86%
+                    </span>
+
+                </div>
+
+                <input
+                    id="soil"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="86"
+                >
+
+            </div>
+
+            <div class="control">
+
+                <div class="control-head">
+
+                    <span>
+                        🌲 Độ che phủ rừng
+                    </span>
+
+                    <span id="forestValue">
+                        42%
+                    </span>
+
+                </div>
+
+                <input
+                    id="forest"
+                    type="range"
+                    min="0"
+                    max="100"
+                    value="42"
+                >
+
+            </div>
+
+            <div class="control">
+
+                <div class="control-head">
+
+                    <span>
+                        ⛰️ Độ dốc
+                    </span>
+
+                    <span id="slopeValue">
+                        45°
+                    </span>
+
+                </div>
+
+                <input
+                    id="slope"
+                    type="range"
+                    min="10"
+                    max="60"
+                    value="45"
+                >
+
+            </div>
+
+        </div>
+
+        <!-- RUN -->
+        <div class="section">
+
+            <div class="section-title">
+                <span>Điều khiển</span>
+            </div>
+
+            <div class="run-grid">
+
+                <button
+                    class="run-start"
+                    onclick="startSimulation()"
+                >
+                    ▶ BẮT ĐẦU
+                </button>
+
+                <button
+                    class="run-pause"
+                    onclick="pauseSimulation()"
+                >
+                    ⏸ TẠM DỪNG
+                </button>
+
+                <button
+                    class="run-reset"
+                    onclick="resetSimulation()"
+                >
+                    ↻ KHÔI PHỤC
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- METRICS -->
+        <div class="section">
+
+            <div class="section-title">
+                <span>Thông số dòng lũ</span>
+            </div>
+
+            <div class="metrics">
+
+                <div class="metric">
+                    <small>TỐC ĐỘ</small>
+                    <strong id="speed">8.0</strong> m/s
+                </div>
+
+                <div class="metric">
+                    <small>ĐỘ SÂU</small>
+                    <strong id="depth">3.8</strong> m
+                </div>
+
+                <div class="metric">
+                    <small>BÙN ĐÁ</small>
+                    <strong id="debris">68</strong> %
+                </div>
+
+                <div class="metric">
+                    <small>RỦI RO</small>
+                    <strong id="risk">82</strong>/100
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+    <!-- INFO -->
+    <aside class="info-panel">
+
+        <div class="label">
+            IMPACT ANALYSIS
+        </div>
+
+        <h2>
+            Tác động – Hệ quả
+        </h2>
+
+        <div class="warning">
+
+            <div class="warning-top">
+
+                <strong>
+                    Mức cảnh báo
+                </strong>
+
+                <span
+                    id="warningBadge"
+                    class="badge"
+                >
+                    RẤT NGUY HIỂM
+                </span>
+
+            </div>
+
+            <p id="warningText">
+                Khối nước lớn đang hình thành trên lưu vực dốc.
+            </p>
+
+        </div>
+
+        <div class="impact-list">
+
+            <div class="impact">
+                <span>🏠 Nhà dân</span>
+                <strong id="houseImpact">0/18</strong>
+            </div>
+
+            <div class="impact">
+                <span>🌉 Cầu</span>
+                <strong id="bridgeImpact">An toàn</strong>
+            </div>
+
+            <div class="impact">
+                <span>🌲 Cây cối</span>
+                <strong id="treeImpact">Ổn định</strong>
+            </div>
+
+            <div class="impact">
+                <span>👤 Người dân</span>
+                <strong id="peopleImpact">Cần cảnh giác</strong>
+            </div>
+
+            <div class="impact">
+                <span>🪨 Bùn đá</span>
+                <strong id="mudImpact">Cao</strong>
+            </div>
+
+        </div>
+
+    </aside>
+
+    <!-- STATUS -->
+    <div class="status">
+
+        <strong id="statusTitle">
+            SẴN SÀNG MÔ PHỎNG
+        </strong>
+
+        <span id="statusText">
+            Bấm Bắt đầu để kích hoạt lũ quét và âm thanh
+        </span>
+
+    </div>
+
+    <div class="rotate-tip">
+        🖱️ Giữ chuột trái để xoay · Cuộn để zoom
+    </div>
+
+</div>
+
+<!-- =========================================================
+     THREE.JS
+========================================================= -->
+<script type="importmap">
+{
+    "imports":{
+        "three":"https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js",
+        "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"
+    }
+}
+</script>
+
+<script type="module">
+
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const rainEl =
+    document.getElementById("rain");
+
+const soilEl =
+    document.getElementById("soil");
+
+const forestEl =
+    document.getElementById("forest");
+
+const slopeEl =
+    document.getElementById("slope");
+
+const rainValue =
+    document.getElementById("rainValue");
+
+const soilValue =
+    document.getElementById("soilValue");
+
+const forestValue =
+    document.getElementById("forestValue");
+
+const slopeValue =
+    document.getElementById("slopeValue");
+
+const speedEl =
+    document.getElementById("speed");
+
+const depthEl =
+    document.getElementById("depth");
+
+const debrisEl =
+    document.getElementById("debris");
+
+const riskEl =
+    document.getElementById("risk");
+
+const warningBadge =
+    document.getElementById("warningBadge");
+
+const warningText =
+    document.getElementById("warningText");
+
+const houseImpact =
+    document.getElementById("houseImpact");
+
+const bridgeImpact =
+    document.getElementById("bridgeImpact");
+
+const treeImpact =
+    document.getElementById("treeImpact");
+
+const peopleImpact =
+    document.getElementById("peopleImpact");
+
+const mudImpact =
+    document.getElementById("mudImpact");
+
+const statusTitle =
+    document.getElementById("statusTitle");
+
+const statusText =
+    document.getElementById("statusText");
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let running =
+    false;
+
+let floodProgress =
+    0;
+
+let elapsed =
+    0;
+
+let soundEnabled =
+    true;
+
+const settings = {
+
+    rain:185,
+
+    soil:86,
+
+    forest:42,
+
+    slope:45
+
+};
+
+/* =========================================================
+   SCENE
+========================================================= */
+
+const scene =
+    new THREE.Scene();
+
+scene.background =
+    new THREE.Color(
+        0x8abcc7
+    );
+
+scene.fog =
+    new THREE.FogExp2(
+        0x9cbfc7,
+        .0065
+    );
+
+/* =========================================================
+   CAMERA
+========================================================= */
+
+const camera =
+    new THREE.PerspectiveCamera(
+        44,
+        innerWidth/innerHeight,
+        .1,
+        500
+    );
+
+camera.position.set(
+    34,
+    26,
+    47
+);
+
+/* =========================================================
+   RENDERER
+========================================================= */
+
+const renderer =
+    new THREE.WebGLRenderer({
+
+        antialias:true,
+
+        powerPreference:
+            "high-performance"
+
+    });
+
+renderer.setSize(
+    innerWidth,
+    innerHeight
+);
+
+renderer.setPixelRatio(
+    Math.min(
+        devicePixelRatio,
+        2
+    )
+);
+
+renderer.shadowMap.enabled =
+    true;
+
+renderer.shadowMap.type =
+    THREE.PCFSoftShadowMap;
+
+renderer.outputColorSpace =
+    THREE.SRGBColorSpace;
+
+renderer.toneMapping =
+    THREE.ACESFilmicToneMapping;
+
+renderer.toneMappingExposure =
+    1.06;
+
+document
+    .getElementById("scene")
+    .appendChild(
+        renderer.domElement
+    );
+
+/* =========================================================
+   ORBIT CONTROLS
+   ĐÃ BẬT XOAY
+========================================================= */
+
+const controls =
+    new OrbitControls(
+        camera,
+        renderer.domElement
+    );
+
+controls.enableDamping =
+    true;
+
+controls.dampingFactor =
+    .07;
+
+/*
+    BẬT XOAY MÔ HÌNH
+*/
+controls.enableRotate =
+    true;
+
+controls.enableZoom =
+    true;
+
+controls.enablePan =
+    false;
+
+/*
+    Giới hạn để không lật camera xuống dưới đất.
+*/
+controls.minPolarAngle =
+    .35;
+
+controls.maxPolarAngle =
+    Math.PI*.49;
+
+controls.minDistance =
+    24;
+
+controls.maxDistance =
+    72;
+
+controls.rotateSpeed =
+    .65;
+
+controls.zoomSpeed =
+    .9;
+
+controls.target.set(
+    0,
+    3,
+    -4
+);
+
+/* =========================================================
+   LIGHT
+========================================================= */
+
+scene.add(
+
+    new THREE.HemisphereLight(
+        0xd7f3ff,
+        0x384431,
+        2.1
+    )
+
+);
+
+const sun =
+    new THREE.DirectionalLight(
+        0xfff1d0,
+        3
+    );
+
+sun.position.set(
+    -28,
+    50,
+    22
+);
+
+sun.castShadow =
+    true;
+
+sun.shadow.mapSize.set(
+    4096,
+    4096
+);
+
+sun.shadow.camera.left =
+    -65;
+
+sun.shadow.camera.right =
+    65;
+
+sun.shadow.camera.top =
+    65;
+
+sun.shadow.camera.bottom =
+    -65;
+
+scene.add(sun);
+
+/* =========================================================
+   GROUPS
+========================================================= */
+
+const terrainGroup =
+    new THREE.Group();
+
+const forestGroup =
+    new THREE.Group();
+
+const villageGroup =
+    new THREE.Group();
+
+const peopleGroup =
+    new THREE.Group();
+
+const floodGroup =
+    new THREE.Group();
+
+const debrisGroup =
+    new THREE.Group();
+
+const weatherGroup =
+    new THREE.Group();
+
+scene.add(
+    terrainGroup,
+    forestGroup,
+    villageGroup,
+    peopleGroup,
+    floodGroup,
+    debrisGroup,
+    weatherGroup
+);
+
+/* =========================================================
+   TERRAIN FUNCTION
+========================================================= */
+
+function terrainHeight(x,z){
+
+    const upstream =
+        THREE.MathUtils.clamp(
+            (-z+44)/88,
+            0,
+            1
+        );
+
+    const side =
+        Math.pow(
+            Math.abs(x)/40,
+            1.5
+        )*
+        upstream*
+        23;
+
+    const peak =
+        upstream*
+        upstream*
+        12.5;
+
+    const valley =
+        -Math.exp(
+            -(x*x)/34
+        )*
+        upstream*
+        7.7;
+
+    const detail =
+        Math.sin(
+            x*.25+
+            z*.17
+        )*.45
+        +
+        Math.sin(
+            z*.3
+        )*.32;
+
+    return (
+        side+
+        peak+
+        valley+
+        detail
+    );
+}
+
+/* =========================================================
+   TERRAIN
+========================================================= */
+
+function createTerrain(){
+
+    const geo =
+        new THREE.PlaneGeometry(
+            84,
+            98,
+            170,
+            195
+        );
+
+    geo.rotateX(
+        -Math.PI/2
+    );
+
+    const pos =
+        geo.attributes.position;
+
+    for(
+        let i=0;
+        i<pos.count;
+        i++
+    ){
+
+        const x =
+            pos.getX(i);
+
+        const z =
+            pos.getZ(i);
+
+        pos.setY(
+            i,
+            terrainHeight(
+                x,
+                z
+            )
+        );
+    }
+
+    geo.computeVertexNormals();
+
+    const mat =
+        new THREE.MeshStandardMaterial({
+
+            color:
+                0x567247,
+
+            roughness:
+                .98
+
+        });
+
+    const terrain =
+        new THREE.Mesh(
+            geo,
+            mat
+        );
+
+    terrain.receiveShadow =
+        true;
+
+    terrainGroup.add(
+        terrain
+    );
+}
+
+createTerrain();
+
+/* =========================================================
+   FLOOD PATH
+========================================================= */
+
+const pathPoints = [];
+
+for(let i=0;i<92;i++){
+
+    const z =
+        -44+
+        i*.99;
+
+    const x =
+        Math.sin(
+            i*.095
+        )*.7;
+
+    const y =
+        terrainHeight(
+            x,
+            z
+        )+
+        .22;
+
+    pathPoints.push(
+
+        new THREE.Vector3(
+            x,
+            y,
+            z
+        )
+
+    );
+}
+
+const floodPath =
+    new THREE.CatmullRomCurve3(
+        pathPoints
+    );
+
+/* =========================================================
+   RIVER BED
+========================================================= */
+
+const riverBed =
+    new THREE.Mesh(
+
+        new THREE.TubeGeometry(
+            floodPath,
+            280,
+            1.75,
+            12,
+            false
+        ),
+
+        new THREE.MeshStandardMaterial({
+
+            color:
+                0x3b4945,
+
+            roughness:
+                .98
+
+        })
+
+    );
+
+riverBed.receiveShadow =
+    true;
+
+terrainGroup.add(
+    riverBed
+);
+
+/* =========================================================
+   FOREST
+========================================================= */
+
+const trees = [];
+
+function createTree(
+    x,
+    z,
+    scale=1
+){
+
+    const g =
+        new THREE.Group();
+
+    const trunk =
+        new THREE.Mesh(
+
+            new THREE.CylinderGeometry(
+                .10*scale,
+                .14*scale,
+                1.3*scale,
+                7
+            ),
+
+            new THREE.MeshStandardMaterial({
+                color:0x69472e,
+                roughness:1
+            })
+
+        );
+
+    trunk.position.y =
+        .65*scale;
+
+    const foliage =
+        new THREE.MeshStandardMaterial({
+
+            color:
+                Math.random()>.5
+                ? 0x2c7847
+                : 0x225f38,
+
+            roughness:
+                .96
+
+        });
+
+    const c1 =
+        new THREE.Mesh(
+
+            new THREE.ConeGeometry(
+                .64*scale,
+                1.45*scale,
+                8
+            ),
+
+            foliage
+
+        );
+
+    c1.position.y =
+        1.48*scale;
+
+    const c2 =
+        new THREE.Mesh(
+
+            new THREE.ConeGeometry(
+                .46*scale,
+                1.05*scale,
+                8
+            ),
+
+            foliage
+
+        );
+
+    c2.position.y =
+        1.98*scale;
+
+    g.add(
+        trunk,
+        c1,
+        c2
+    );
+
+    g.position.set(
+        x,
+        terrainHeight(x,z),
+        z
+    );
+
+    g.userData = {
+
+        origin:
+            g.position.clone(),
+
+        fallen:false
+
+    };
+
+    forestGroup.add(g);
+
+    trees.push(g);
+}
+
+/*
+    Rừng hai bên sườn.
+*/
+for(let i=0;i<265;i++){
+
+    const side =
+        Math.random()<.5
+        ? -1
+        : 1;
+
+    const z =
+        -41+
+        Math.random()*70;
+
+    const x =
+        side*
+        (
+            5+
+            Math.random()*29
+        );
+
+    createTree(
+        x,
+        z,
+        .7+
+        Math.random()*.75
+    );
+}
+
+/* =========================================================
+   HOUSES
+   NÂNG LÊN 18 NHÀ
+========================================================= */
+
+const houses = [];
+
+function createHouse(
+    x,
+    z,
+    scale=1
+){
+
+    const g =
+        new THREE.Group();
+
+    const base =
+        new THREE.Mesh(
+
+            new THREE.BoxGeometry(
+                2.3*scale,
+                1.6*scale,
+                1.95*scale
+            ),
+
+            new THREE.MeshStandardMaterial({
+
+                color:
+                    Math.random()>.5
+                    ? 0xe4bd86
+                    : 0xd4a069,
+
+                roughness:
+                    .85
+
+            })
+
+        );
+
+    base.position.y =
+        .8*scale;
+
+    base.castShadow =
+        true;
+
+    const roof =
+        new THREE.Mesh(
+
+            new THREE.ConeGeometry(
+                1.8*scale,
+                1.05*scale,
+                4
+            ),
+
+            new THREE.MeshStandardMaterial({
+
+                color:
+                    Math.random()>.5
+                    ? 0x9b4335
+                    : 0x7d392e,
+
+                roughness:
+                    .9
+
+            })
+
+        );
+
+    roof.position.y =
+        1.95*scale;
+
+    roof.rotation.y =
+        Math.PI/4;
+
+    roof.castShadow =
+        true;
+
+    g.add(
+        base,
+        roof
+    );
+
+    g.position.set(
+        x,
+        terrainHeight(x,z)+.1,
+        z
+    );
+
+    g.userData = {
+
+        origin:
+            g.position.clone(),
+
+        rotation:
+            g.rotation.clone(),
+
+        damaged:false
+
+    };
+
+    villageGroup.add(g);
+
+    houses.push(g);
+}
+
+/*
+    Hai dãy nhà dọc hạ lưu.
+*/
+[
+    [-8,16],
+    [8,16],
+
+    [-10,20],
+    [10,20],
+
+    [-6,23],
+    [6,23],
+
+    [-12,26],
+    [12,26],
+
+    [-8,29],
+    [8,29],
+
+    [-14,32],
+    [14,32],
+
+    [-5,35],
+    [5,35],
+
+    [-11,38],
+    [11,38],
+
+    [-16,41],
+    [16,41]
+
+]
+.forEach(
+    p=>
+        createHouse(
+            p[0],
+            p[1],
+            .88+
+            Math.random()*.18
+        )
+);
+
+/* =========================================================
+   PEOPLE
+========================================================= */
+
+const people = [];
+
+function createPerson(
+    x,
+    z,
+    color
+){
+
+    const g =
+        new THREE.Group();
+
+    const body =
+        new THREE.Mesh(
+
+            new THREE.CapsuleGeometry(
+                .15,
+                .5,
+                4,
+                8
+            ),
+
+            new THREE.MeshStandardMaterial({
+                color,
+                roughness:.8
+            })
+
+        );
+
+    body.position.y =
+        .53;
+
+    const head =
+        new THREE.Mesh(
+
+            new THREE.SphereGeometry(
+                .14,
+                14,
+                12
+            ),
+
+            new THREE.MeshStandardMaterial({
+                color:0xe8b98e,
+                roughness:.8
+            })
+
+        );
+
+    head.position.y =
+        1.02;
+
+    g.add(
+        body,
+        head
+    );
+
+    g.position.set(
+        x,
+        terrainHeight(x,z)+.04,
+        z
+    );
+
+    g.userData = {
+
+        origin:
+            g.position.clone(),
+
+        rotation:
+            g.rotation.clone(),
+
+        caught:false
+
+    };
+
+    peopleGroup.add(g);
+
+    people.push(g);
+}
+
+/*
+    Nhiều người hơn.
+*/
+[
+    [-5,18,0x278bff],
+    [5,18,0xffc84a],
+
+    [-8,22,0xe65767],
+    [8,22,0x31c486],
+
+    [-4,25,0x7967ff],
+    [4,25,0xff9148],
+
+    [-10,29,0x3f9eff],
+    [10,29,0xffd43d],
+
+    [-6,33,0xe35962],
+    [6,33,0x36c28b],
+
+    [-12,36,0x6d68ff],
+    [12,36,0xff944d]
+
+]
+.forEach(
+    p=>
+        createPerson(
+            p[0],
+            p[1],
+            p[2]
+        )
+);
+
+/* =========================================================
+   BRIDGE
+========================================================= */
+
+const bridge =
+    new THREE.Group();
+
+const bridgeMat =
+    new THREE.MeshStandardMaterial({
+        color:0x747c79,
+        roughness:.9
+    });
+
+const deck =
+    new THREE.Mesh(
+
+        new THREE.BoxGeometry(
+            10,
+            .45,
+            2.1
+        ),
+
+        bridgeMat
+
+    );
+
+bridge.add(deck);
+
+[-4,4]
+.forEach(x=>{
+
+    const pillar =
+        new THREE.Mesh(
+
+            new THREE.BoxGeometry(
+                .65,
+                2.7,
+                .65
+            ),
+
+            bridgeMat
+
+        );
+
+    pillar.position.set(
+        x,
+        -1.4,
+        0
+    );
+
+    bridge.add(
+        pillar
+    );
+});
+
+bridge.position.set(
+    0,
+    terrainHeight(0,14)+1.35,
+    14
+);
+
+bridge.userData = {
+
+    origin:
+        bridge.position.clone(),
+
+    rotation:
+        bridge.rotation.clone()
+
+};
+
+villageGroup.add(
+    bridge
+);
+
+/* =========================================================
+   FLOOD RIBBON
+========================================================= */
+
+const floodSegments = [];
+
+function createFloodRibbon(){
+
+    const count =
+        145;
+
+    const positions = [];
+
+    const indices = [];
+
+    for(
+        let i=0;
+        i<count;
+        i++
+    ){
+
+        const t =
+            i/(count-1);
+
+        const center =
+            floodPath.getPoint(t);
+
+        const tangent =
+            floodPath
+            .getTangent(t)
+            .normalize();
+
+        const normal =
+            new THREE.Vector3(
+                -tangent.z,
+                0,
+                tangent.x
+            )
+            .normalize();
+
+        const width =
+            .85+
+            t*2.2;
+
+        const left =
+            center
+            .clone()
+            .add(
+                normal
+                .clone()
+                .multiplyScalar(width)
+            );
+
+        const right =
+            center
+            .clone()
+            .add(
+                normal
+                .clone()
+                .multiplyScalar(-width)
+            );
+
+        left.y +=
+            .12;
+
+        right.y +=
+            .12;
+
+        positions.push(
+
+            left.x,
+            left.y,
+            left.z,
+
+            right.x,
+            right.y,
+            right.z
+
+        );
+
+        floodSegments.push({
+
+            left:
+                i*2,
+
+            right:
+                i*2+1,
+
+            t
+
+        });
+    }
+
+    for(
+        let i=0;
+        i<count-1;
+        i++
+    ){
+
+        const a =
+            i*2;
+
+        const b =
+            i*2+1;
+
+        const c =
+            i*2+2;
+
+        const d =
+            i*2+3;
+
+        indices.push(
+            a,b,c,
+            b,d,c
+        );
+    }
+
+    const geo =
+        new THREE.BufferGeometry();
+
+    geo.setAttribute(
+
+        "position",
+
+        new THREE.Float32BufferAttribute(
+            positions,
+            3
+        )
+
+    );
+
+    geo.setIndex(
+        indices
+    );
+
+    geo.computeVertexNormals();
+
+    const mat =
+        new THREE.MeshPhysicalMaterial({
+
+            color:
+                0x70624a,
+
+            roughness:
+                .45,
+
+            transparent:
+                true,
+
+            opacity:
+                .97,
+
+            side:
+                THREE.DoubleSide
+
+        });
+
+    const mesh =
+        new THREE.Mesh(
+            geo,
+            mat
+        );
+
+    mesh.visible =
+        false;
+
+    floodGroup.add(
+        mesh
+    );
+
+    return mesh;
+}
+
+const floodRibbon =
+    createFloodRibbon();
+
+/* =========================================================
+   FOAM
+========================================================= */
+
+const foamParticles = [];
+
+const foamMaterial =
+    new THREE.MeshBasicMaterial({
+
+        color:
+            0xe7f7f4,
+
+        transparent:
+            true,
+
+        opacity:
+            .68
+
+    });
+
+for(let i=0;i<220;i++){
+
+    const foam =
+        new THREE.Mesh(
+
+            new THREE.IcosahedronGeometry(
+                .07+
+                Math.random()*.15,
+                1
+            ),
+
+            foamMaterial
+
+        );
+
+    foam.userData = {
+
+        t:
+            Math.random()*.02,
+
+        side:
+            (
+                Math.random()-.5
+            )*3,
+
+        speed:
+            .0012+
+            Math.random()*.0019
+
+    };
+
+    foam.visible =
+        false;
+
+    floodGroup.add(
+        foam
+    );
+
+    foamParticles.push(
+        foam
+    );
+}
+
+/* =========================================================
+   ROCK DEBRIS
+========================================================= */
+
+const rocks = [];
+
+const rockMaterial =
+    new THREE.MeshStandardMaterial({
+
+        color:
+            0x674c38,
+
+        roughness:
+            1
+
+    });
+
+for(let i=0;i<140;i++){
+
+    const rock =
+        new THREE.Mesh(
+
+            new THREE.DodecahedronGeometry(
+                .16+
+                Math.random()*.55,
+                0
+            ),
+
+            rockMaterial
+
+        );
+
+    rock.userData = {
+
+        t:
+            Math.random()*.02,
+
+        offset:
+            (
+                Math.random()-.5
+            )*3.2,
+
+        speed:
+            .001+
+            Math.random()*.002
+
+    };
+
+    rock.visible =
+        false;
+
+    debrisGroup.add(
+        rock
+    );
+
+    rocks.push(
+        rock
+    );
+}
+
+/* =========================================================
+   LOGS
+========================================================= */
+
+const logs = [];
+
+const logMaterial =
+    new THREE.MeshStandardMaterial({
+
+        color:
+            0x604028,
+
+        roughness:
+            1
+
+    });
+
+for(let i=0;i<38;i++){
+
+    const log =
+        new THREE.Mesh(
+
+            new THREE.CylinderGeometry(
+                .11,
+                .17,
+                1.8+
+                Math.random()*1.7,
+                7
+            ),
+
+            logMaterial
+
+        );
+
+    log.rotation.z =
+        Math.PI/2;
+
+    log.userData = {
+
+        t:
+            Math.random()*.02,
+
+        offset:
+            (
+                Math.random()-.5
+            )*2.6,
+
+        speed:
+            .0013+
+            Math.random()*.0018
+
+    };
+
+    log.visible =
+        false;
+
+    debrisGroup.add(
+        log
+    );
+
+    logs.push(
+        log
+    );
+}
+
+/* =========================================================
+   RAIN
+========================================================= */
+
+const rainCount =
+    3000;
+
+const rainGeo =
+    new THREE.BufferGeometry();
+
+const rainPositions =
+    new Float32Array(
+        rainCount*3
+    );
+
+for(let i=0;i<rainCount;i++){
+
+    rainPositions[i*3] =
+        (
+            Math.random()-.5
+        )*80;
+
+    rainPositions[i*3+1] =
+        10+
+        Math.random()*50;
+
+    rainPositions[i*3+2] =
+        -48+
+        Math.random()*90;
+}
+
+rainGeo.setAttribute(
+
+    "position",
+
+    new THREE.BufferAttribute(
+        rainPositions,
+        3
+    )
+
+);
+
+const rainMaterial =
+    new THREE.PointsMaterial({
+
+        color:
+            0xd0edf2,
+
+        size:
+            .065,
+
+        transparent:
+            true,
+
+        opacity:
+            .58
+
+    });
+
+const rain =
+    new THREE.Points(
+        rainGeo,
+        rainMaterial
+    );
+
+weatherGroup.add(
+    rain
+);
+
+/* =========================================================
+   AUDIO - FIXED
+========================================================= */
+
+let audioContext =
+    null;
+
+let rainSource =
+    null;
+
+let rainGain =
+    null;
+
+let rumbleOsc =
+    null;
+
+let rumbleGain =
+    null;
+
+let audioReady =
+    false;
+
+async function initAudio(){
+
+    try{
+
+        if(
+            !audioContext
+        ){
+
+            audioContext =
+                new (
+                    window.AudioContext ||
+                    window.webkitAudioContext
+                )();
+
+        }
+
+        if(
+            audioContext.state ===
+            "suspended"
+        ){
+
+            await audioContext.resume();
+        }
+
+        if(
+            audioReady
+        ){
+            return;
+        }
+
+        /* ==========================
+           RAIN NOISE
+        ========================== */
+
+        const length =
+            audioContext.sampleRate*2;
+
+        const buffer =
+            audioContext.createBuffer(
+                1,
+                length,
+                audioContext.sampleRate
+            );
+
+        const channel =
+            buffer.getChannelData(0);
+
+        for(
+            let i=0;
+            i<length;
+            i++
+        ){
+
+            channel[i] =
+                Math.random()*2-1;
+        }
+
+        rainSource =
+            audioContext.createBufferSource();
+
+        rainSource.buffer =
+            buffer;
+
+        rainSource.loop =
+            true;
+
+        const rainFilter =
+            audioContext.createBiquadFilter();
+
+        rainFilter.type =
+            "lowpass";
+
+        rainFilter.frequency.value =
+            1700;
+
+        rainGain =
+            audioContext.createGain();
+
+        rainGain.gain.value =
+            0;
+
+        rainSource.connect(
+            rainFilter
+        );
+
+        rainFilter.connect(
+            rainGain
+        );
+
+        rainGain.connect(
+            audioContext.destination
+        );
+
+        rainSource.start();
+
+        /* ==========================
+           FLOOD RUMBLE
+        ========================== */
+
+        rumbleOsc =
+            audioContext.createOscillator();
+
+        rumbleOsc.type =
+            "sawtooth";
+
+        rumbleOsc.frequency.value =
+            38;
+
+        const rumbleFilter =
+            audioContext.createBiquadFilter();
+
+        rumbleFilter.type =
+            "lowpass";
+
+        rumbleFilter.frequency.value =
+            120;
+
+        rumbleGain =
+            audioContext.createGain();
+
+        rumbleGain.gain.value =
+            0;
+
+        rumbleOsc.connect(
+            rumbleFilter
+        );
+
+        rumbleFilter.connect(
+            rumbleGain
+        );
+
+        rumbleGain.connect(
+            audioContext.destination
+        );
+
+        rumbleOsc.start();
+
+        audioReady =
+            true;
+
+    }
+    catch(error){
+
+        console.warn(
+            "Không thể khởi tạo âm thanh:",
+            error
+        );
+    }
+}
+
+function updateAudio(){
+
+    if(
+        !audioReady ||
+        !audioContext
+    ){
+        return;
+    }
+
+    const now =
+        audioContext.currentTime;
+
+    if(
+        !soundEnabled
+    ){
+
+        rainGain.gain
+            .setTargetAtTime(
+                0,
+                now,
+                .05
+            );
+
+        rumbleGain.gain
+            .setTargetAtTime(
+                0,
+                now,
+                .05
+            );
+
+        return;
+    }
+
+    const rainLevel =
+        settings.rain/250;
+
+    const floodLevel =
+        running
+        ? metrics().risk/100
+        : 0;
+
+    rainGain.gain
+        .setTargetAtTime(
+
+            .008+
+            rainLevel*.052,
+
+            now,
+
+            .12
+        );
+
+    rumbleGain.gain
+        .setTargetAtTime(
+
+            floodLevel*.032,
+
+            now,
+
+            .12
+        );
+}
+
+/* =========================================================
+   METRICS
+========================================================= */
+
+function metrics(){
+
+    const rainFactor =
+        settings.rain/250;
+
+    const soilFactor =
+        settings.soil/100;
+
+    const forestFactor =
+        settings.forest/100;
+
+    const slopeFactor =
+        (
+            settings.slope-10
+        )/50;
+
+    const risk =
+        THREE.MathUtils.clamp(
+
+            (
+                rainFactor*.39+
+                soilFactor*.25+
+                slopeFactor*.24+
+                (
+                    1-forestFactor
+                )*.12
+            )*100,
+
+            0,
+            100
+        );
+
+    /*
+       Tăng tốc rõ hơn.
+    */
+    const speed =
+        2.3+
+        rainFactor*4.8+
+        slopeFactor*5.1;
+
+    /*
+       Nước sâu hơn.
+    */
+    const depth =
+        .55+
+        rainFactor*3.3+
+        soilFactor*1.3;
+
+    const debris =
+        THREE.MathUtils.clamp(
+
+            slopeFactor*48+
+            soilFactor*28+
+            (
+                1-forestFactor
+            )*45,
+
+            0,
+            100
+        );
+
+    return {
+
+        risk,
+
+        speed,
+
+        depth,
+
+        debris
+
+    };
+}
+
+/* =========================================================
+   UI
+========================================================= */
+
+function updateUI(){
+
+    settings.rain =
+        Number(
+            rainEl.value
+        );
+
+    settings.soil =
+        Number(
+            soilEl.value
+        );
+
+    settings.forest =
+        Number(
+            forestEl.value
+        );
+
+    settings.slope =
+        Number(
+            slopeEl.value
+        );
+
+    rainValue.textContent =
+        settings.rain+
+        " mm/h";
+
+    soilValue.textContent =
+        settings.soil+
+        "%";
+
+    forestValue.textContent =
+        settings.forest+
+        "%";
+
+    slopeValue.textContent =
+        settings.slope+
+        "°";
+
+    const m =
+        metrics();
+
+    speedEl.textContent =
+        m.speed.toFixed(1);
+
+    depthEl.textContent =
+        m.depth.toFixed(1);
+
+    debrisEl.textContent =
+        Math.round(
+            m.debris
+        );
+
+    riskEl.textContent =
+        Math.round(
+            m.risk
+        );
+
+    if(
+        m.risk<35
+    ){
+
+        warningBadge.textContent =
+            "THẤP";
+
+        warningText.textContent =
+            "Dòng chảy chưa đủ mạnh để tạo lũ quét nghiêm trọng.";
+
+    }
+    else if(
+        m.risk<65
+    ){
+
+        warningBadge.textContent =
+            "CẢNH GIÁC";
+
+        warningText.textContent =
+            "Nước đang tập trung nhanh xuống khe suối.";
+
+    }
+    else{
+
+        warningBadge.textContent =
+            m.risk>85
+            ? "CỰC KỲ NGUY HIỂM"
+            : "RẤT NGUY HIỂM";
+
+        warningText.textContent =
+            "Dòng lũ lớn, chảy xiết, mang nhiều bùn đá và cây gỗ xuống khu dân cư.";
+
+    }
+
+    houseImpact.textContent =
+        Math.floor(
+
+            THREE.MathUtils.clamp(
+                (
+                    m.risk-40
+                )/3.3,
+                0,
+                houses.length
+            )
+
+        )+
+        "/"+
+        houses.length;
+
+    bridgeImpact.textContent =
+        m.risk>72
+        ? "Có thể hư hỏng"
+        : m.risk>52
+        ? "Nguy cơ cao"
+        : "An toàn";
+
+    treeImpact.textContent =
+        m.risk>68
+        ? "Bị quật đổ"
+        : m.risk>48
+        ? "Nguy cơ"
+        : "Ổn định";
+
+    peopleImpact.textContent =
+        m.risk>70
+        ? "Cần sơ tán ngay"
+        : m.risk>50
+        ? "Cần sơ tán"
+        : "An toàn";
+
+    mudImpact.textContent =
+        m.debris>70
+        ? "Rất cao"
+        : m.debris>40
+        ? "Cao"
+        : "Thấp";
+
+    /*
+        Forest coverage
+    */
+    const ratio =
+        settings.forest/100;
+
+    trees.forEach(
+        (tree,i)=>{
+
+            tree.visible =
+                i/trees.length<
+                ratio;
+
+        }
+    );
+
+    const storm =
+        settings.rain/250;
+
+    scene.background =
+        new THREE.Color(
+            0x8abcc7
+        )
+        .lerp(
+
+            new THREE.Color(
+                0x4c6870
+            ),
+
+            storm*.78
+
+        );
+
+    rainMaterial.opacity =
+        .12+
+        storm*.68;
+
+    updateAudio();
+}
+
+/* =========================================================
+   FLOOD SURFACE
+========================================================= */
+
+function updateFloodRibbon(
+    progress,
+    m
+){
+
+    floodRibbon.visible =
+        true;
+
+    const pos =
+        floodRibbon
+        .geometry
+        .attributes
+        .position;
+
+    for(
+        let i=0;
+        i<floodSegments.length;
+        i++
+    ){
+
+        const s =
+            floodSegments[i];
+
+        const t =
+            s.t;
+
+        const center =
+            floodPath.getPoint(t);
+
+        const tangent =
+            floodPath
+            .getTangent(t)
+            .normalize();
+
+        const normal =
+            new THREE.Vector3(
+                -tangent.z,
+                0,
+                tangent.x
+            )
+            .normalize();
+
+        /*
+            Rộng hơn bản trước.
+        */
+        const width =
+            1.0+
+            t*2.35+
+            m.risk/100*1.0;
+
+        /*
+            Dòng lũ dày và dữ hơn.
+        */
+        const waterHeight =
+            .20+
+            m.depth*.18;
+
+        const wave1 =
+            Math.sin(
+                elapsed*12+
+                i*.42
+            )*.08;
+
+        const wave2 =
+            Math.sin(
+                elapsed*7+
+                i*.9
+            )*.045;
+
+        const left =
+            center.clone()
+            .add(
+                normal.clone()
+                .multiplyScalar(width)
+            );
+
+        const right =
+            center.clone()
+            .add(
+                normal.clone()
+                .multiplyScalar(-width)
+            );
+
+        if(
+            t<=progress
+        ){
+
+            /*
+                Sóng đầu lũ mạnh hơn,
+                nhưng vẫn không tạo "cục".
+            */
+            const frontDistance =
+                Math.abs(
+                    progress-t
+                );
+
+            const frontWave =
+                THREE.MathUtils.clamp(
+                    1-
+                    frontDistance/.075,
+                    0,
+                    1
+                )*
+                (
+                    .35+
+                    m.depth*.24
+                );
+
+            left.y +=
+                waterHeight+
+                wave1+
+                wave2+
+                frontWave;
+
+            right.y +=
+                waterHeight-
+                wave1*.35+
+                wave2+
+                frontWave;
+
+        }
+        else{
+
+            left.y =
+                terrainHeight(
+                    left.x,
+                    left.z
+                )-
+                2.5;
+
+            right.y =
+                terrainHeight(
+                    right.x,
+                    right.z
+                )-
+                2.5;
+        }
+
+        pos.setXYZ(
+            s.left,
+            left.x,
+            left.y,
+            left.z
+        );
+
+        pos.setXYZ(
+            s.right,
+            right.x,
+            right.y,
+            right.z
+        );
+    }
+
+    pos.needsUpdate =
+        true;
+
+    floodRibbon
+        .geometry
+        .computeVertexNormals();
+}
+
+/* =========================================================
+   FOAM
+========================================================= */
+
+function updateFoam(
+    frontT,
+    m,
+    delta
+){
+
+    foamParticles.forEach(
+        (foam,i)=>{
+
+            foam.visible =
+                true;
+
+            foam.userData.t +=
+                foam.userData.speed*
+                m.speed*
+                delta*
+                125;
+
+            if(
+                foam.userData.t>
+                frontT
+            ){
+
+                foam.userData.t =
+                    Math.random()*
+                    Math.max(
+                        .01,
+                        frontT
+                    );
+            }
+
+            const p =
+                floodPath.getPoint(
+
+                    THREE.MathUtils.clamp(
+                        foam.userData.t,
+                        0,
+                        .999
+                    )
+
+                );
+
+            foam.position.set(
+
+                p.x+
+                foam.userData.side,
+
+                p.y+
+                .4+
+                Math.sin(
+                    elapsed*13+i
+                )*.22,
+
+                p.z
+
+            );
+
+            foam.scale.setScalar(
+                .9+
+                m.depth*.11
+            );
+        }
+    );
+}
+
+/* =========================================================
+   ROCKS
+========================================================= */
+
+function updateRocks(
+    frontT,
+    m,
+    delta
+){
+
+    rocks.forEach(
+        (rock,i)=>{
+
+            rock.visible =
+                i/rocks.length <
+                m.debris/100;
+
+            if(
+                !rock.visible
+            ){
+                return;
+            }
+
+            rock.userData.t +=
+                rock.userData.speed*
+                m.speed*
+                delta*
+                130;
+
+            if(
+                rock.userData.t>
+                frontT
+            ){
+
+                rock.userData.t =
+                    Math.random()*
+                    Math.max(
+                        .01,
+                        frontT
+                    );
+            }
+
+            const p =
+                floodPath.getPoint(
+
+                    THREE.MathUtils.clamp(
+                        rock.userData.t,
+                        0,
+                        .999
+                    )
+
+                );
+
+            rock.position.set(
+
+                p.x+
+                rock.userData.offset,
+
+                p.y+
+                .32+
+                Math.sin(
+                    elapsed*8+i
+                )*.12,
+
+                p.z
+
+            );
+
+            rock.rotation.x +=
+                delta*6;
+
+            rock.rotation.y +=
+                delta*4;
+
+            rock.rotation.z +=
+                delta*7;
+        }
+    );
+}
+
+/* =========================================================
+   LOGS
+========================================================= */
+
+function updateLogs(
+    frontT,
+    m,
+    delta
+){
+
+    logs.forEach(
+        (log,i)=>{
+
+            log.visible =
+                i/logs.length <
+                m.risk/100;
+
+            if(
+                !log.visible
+            ){
+                return;
+            }
+
+            log.userData.t +=
+                log.userData.speed*
+                m.speed*
+                delta*
+                118;
+
+            if(
+                log.userData.t>
+                frontT
+            ){
+
+                log.userData.t =
+                    Math.random()*
+                    Math.max(
+                        .01,
+                        frontT
+                    );
+            }
+
+            const p =
+                floodPath.getPoint(
+
+                    THREE.MathUtils.clamp(
+                        log.userData.t,
+                        0,
+                        .999
+                    )
+
+                );
+
+            log.position.set(
+
+                p.x+
+                log.userData.offset,
+
+                p.y+
+                .45,
+
+                p.z
+
+            );
+
+            log.rotation.x +=
+                delta*4;
+
+            log.rotation.y +=
+                delta*5;
+        }
+    );
+}
+
+/* =========================================================
+   DAMAGE TREES
+========================================================= */
+
+function updateTrees(
+    m,
+    delta
+){
+
+    if(
+        floodProgress<.48
+    ){
+        return;
+    }
+
+    const force =
+        THREE.MathUtils.clamp(
+            (
+                m.risk-45
+            )/55,
+            0,
+            1
+        );
+
+    trees.forEach(
+        (tree,i)=>{
+
+            if(
+                !tree.visible
+            ){
+                return;
+            }
+
+            const nearChannel =
+                Math.abs(
+                    tree.position.x
+                )<6.8;
+
+            if(
+                nearChannel &&
+                tree.position.z>-10 &&
+                !tree.userData.fallen &&
+                Math.random()<
+                force*
+                delta*
+                1.2
+            ){
+
+                tree.userData.fallen =
+                    true;
+
+                tree.rotation.z =
+                    (
+                        Math.random()<.5
+                        ? -1
+                        : 1
+                    )*
+                    (
+                        .8+
+                        Math.random()*.7
+                    );
+            }
+
+            if(
+                tree.userData.fallen
+            ){
+
+                tree.position.z +=
+                    force*
+                    delta*
+                    2.7;
+
+                tree.position.x +=
+                    Math.sin(
+                        elapsed*6+i
+                    )*
+                    delta*
+                    .45;
+            }
+        }
+    );
+}
+
+/* =========================================================
+   DAMAGE HOUSES
+========================================================= */
+
+function updateHouses(
+    m,
+    delta
+){
+
+    const force =
+        THREE.MathUtils.clamp(
+            (
+                m.risk-48
+            )/52,
+            0,
+            1
+        );
+
+    houses.forEach(
+        (house,i)=>{
+
+            /*
+                nhà càng gần dòng suối
+                càng bị trước
+            */
+            const x =
+                Math.abs(
+                    house.position.x
+                );
+
+            const vulnerability =
+                THREE.MathUtils.clamp(
+                    1-
+                    x/20,
+                    .15,
+                    1
+                );
+
+            const trigger =
+                .64+
+                i*.008-
+                vulnerability*.06;
+
+            if(
+                floodProgress>
+                trigger &&
+                force>
+                .15
+            ){
+
+                house.userData.damaged =
+                    true;
+            }
+
+            if(
+                house.userData.damaged
+            ){
+
+                house.position.z +=
+                    force*
+                    vulnerability*
+                    delta*
+                    3.0;
+
+                house.position.x +=
+                    Math.sin(
+                        elapsed*5+i
+                    )*
+                    force*
+                    delta*
+                    .4;
+
+                house.rotation.z +=
+                    force*
+                    vulnerability*
+                    delta*
+                    .45;
+
+                house.rotation.x +=
+                    force*
+                    delta*
+                    .12;
+            }
+        }
+    );
+
+    if(
+        m.risk>68 &&
+        floodProgress>.6
+    ){
+
+        bridge.rotation.z =
+            THREE.MathUtils.lerp(
+                bridge.rotation.z,
+                -.24,
+                delta*.8
+            );
+
+        bridge.position.y -=
+            delta*.03;
+    }
+}
+
+/* =========================================================
+   PEOPLE
+========================================================= */
+
+function updatePeople(
+    m,
+    delta
+){
+
+    const force =
+        THREE.MathUtils.clamp(
+            (
+                m.risk-50
+            )/50,
+            0,
+            1
+        );
+
+    people.forEach(
+        (person,i)=>{
+
+            if(
+                floodProgress>
+                .68+
+                i*.008 &&
+                force>.15
+            ){
+
+                person.userData.caught =
+                    true;
+            }
+
+            if(
+                person.userData.caught
+            ){
+
+                person.position.z +=
+                    force*
+                    delta*
+                    3.3;
+
+                person.position.x +=
+                    Math.sin(
+                        elapsed*10+i
+                    )*
+                    delta*
+                    .65;
+
+                person.position.y +=
+                    Math.sin(
+                        elapsed*12+i
+                    )*
+                    delta*
+                    .08;
+
+                person.rotation.z +=
+                    force*
+                    delta*
+                    2.4;
+            }
+        }
+    );
+}
+
+/* =========================================================
+   MAIN FLOOD
+========================================================= */
+
+function updateFlood(
+    delta
+){
+
+    if(
+        !running
+    ){
+        return;
+    }
+
+    const m =
+        metrics();
+
+    /*
+        Tốc độ lũ tăng đáng kể.
+    */
+    floodProgress +=
+        delta*
+        (
+            .065+
+            m.speed*.016
+        );
+
+    floodProgress =
+        Math.min(
+            floodProgress,
+            1.02
+        );
+
+    const frontT =
+        THREE.MathUtils.clamp(
+            floodProgress,
+            .01,
+            .995
+        );
+
+    updateFloodRibbon(
+        frontT,
+        m
+    );
+
+    updateFoam(
+        frontT,
+        m,
+        delta
+    );
+
+    updateRocks(
+        frontT,
+        m,
+        delta
+    );
+
+    updateLogs(
+        frontT,
+        m,
+        delta
+    );
+
+    updateTrees(
+        m,
+        delta
+    );
+
+    updateHouses(
+        m,
+        delta
+    );
+
+    updatePeople(
+        m,
+        delta
+    );
+
+    if(
+        floodProgress>.28 &&
+        floodProgress<.57
+    ){
+
+        statusTitle.textContent =
+            "DÒNG LŨ ĐANG TĂNG TỐC";
+
+        statusText.textContent =
+            "Khối nước lớn đang lao xuống sườn dốc và khe suối nhỏ.";
+
+    }
+
+    if(
+        floodProgress>=.57 &&
+        floodProgress<.82
+    ){
+
+        statusTitle.textContent =
+            "LŨ QUÉT ĐANG LAO VÀO KHU DÂN CƯ";
+
+        statusText.textContent =
+            "Bùn đá, cây gỗ và nước chảy xiết đang phá hủy khu vực hạ lưu.";
+
+    }
+
+    if(
+        floodProgress>=.82
+    ){
+
+        statusTitle.textContent =
+            "DÒNG LŨ ĐANG CUỐN QUA KHU DÂN CƯ";
+
+        statusText.textContent =
+            "Nhà, cây và vật liệu nằm gần dòng chảy đang bị tác động mạnh.";
+
+    }
+
+    updateAudio();
+}
+
+/* =========================================================
+   RAIN UPDATE
+========================================================= */
+
+function updateRain(
+    delta
+){
+
+    const arr =
+        rainGeo
+        .attributes
+        .position
+        .array;
+
+    const intensity =
+        settings.rain/250;
+
+    const speed =
+        10+
+        intensity*38;
+
+    for(
+        let i=0;
+        i<rainCount;
+        i++
+    ){
+
+        arr[i*3+1] -=
+            speed*
+            delta;
+
+        if(
+            arr[i*3+1]<
+            terrainHeight(
+                arr[i*3],
+                arr[i*3+2]
+            )
+        ){
+
+            arr[i*3+1] =
+                36+
+                Math.random()*25;
+        }
+    }
+
+    rainGeo
+        .attributes
+        .position
+        .needsUpdate =
+        true;
+}
+
+/* =========================================================
+   RESET WORLD
+========================================================= */
+
+function restoreWorld(){
+
+    houses.forEach(
+        house=>{
+
+            house.position.copy(
+                house.userData.origin
+            );
+
+            house.rotation.copy(
+                house.userData.rotation
+            );
+
+            house.userData.damaged =
+                false;
+        }
+    );
+
+    trees.forEach(
+        tree=>{
+
+            tree.position.copy(
+                tree.userData.origin
+            );
+
+            tree.rotation.set(
+                0,
+                0,
+                0
+            );
+
+            tree.userData.fallen =
+                false;
+        }
+    );
+
+    people.forEach(
+        person=>{
+
+            person.position.copy(
+                person.userData.origin
+            );
+
+            person.rotation.copy(
+                person.userData.rotation
+            );
+
+            person.userData.caught =
+                false;
+        }
+    );
+
+    bridge.position.copy(
+        bridge.userData.origin
+    );
+
+    bridge.rotation.copy(
+        bridge.userData.rotation
+    );
+}
+
+/* =========================================================
+   GLOBAL CONTROLS
+========================================================= */
+
+window.startSimulation =
+async function(){
+
+    /*
+        Bắt buộc gọi audio từ click của người dùng.
+    */
+    await initAudio();
+
+    if(
+        audioContext &&
+        audioContext.state==="suspended"
+    ){
+
+        try{
+            await audioContext.resume();
+        }
+        catch(e){}
+    }
+
+    running =
+        true;
+
+    statusTitle.textContent =
+        "LŨ QUÉT ĐANG HÌNH THÀNH";
+
+    statusText.textContent =
+        "Dòng nước lớn đang tích tụ và chuẩn bị lao xuống lưu vực.";
+
+    updateAudio();
+};
+
+window.pauseSimulation =
+function(){
+
+    running =
+        false;
+
+    statusTitle.textContent =
+        "ĐÃ TẠM DỪNG";
+
+    statusText.textContent =
+        "Bạn có thể xoay mô hình để quan sát khu vực bị tác động.";
+
+    updateAudio();
+};
+
+window.resetSimulation =
+function(){
+
+    running =
+        false;
+
+    floodProgress =
+        0;
+
+    floodRibbon.visible =
+        false;
+
+    foamParticles.forEach(
+        p=>{
+
+            p.visible =
+                false;
+
+            p.userData.t =
+                Math.random()*.02;
+        }
+    );
+
+    rocks.forEach(
+        p=>{
+
+            p.visible =
+                false;
+
+            p.userData.t =
+                Math.random()*.02;
+        }
+    );
+
+    logs.forEach(
+        p=>{
+
+            p.visible =
+                false;
+
+            p.userData.t =
+                Math.random()*.02;
+        }
+    );
+
+    restoreWorld();
+
+    statusTitle.textContent =
+        "SẴN SÀNG MÔ PHỎNG";
+
+    statusText.textContent =
+        "Bấm Bắt đầu để kích hoạt dòng lũ và âm thanh.";
+
+    updateAudio();
+};
+
+/* =========================================================
+   CAMERA RESET
+========================================================= */
+
+window.resetCamera =
+function(){
+
+    camera.position.set(
+        34,
+        26,
+        47
+    );
+
+    controls.target.set(
+        0,
+        3,
+        -4
+    );
+
+    controls.update();
+};
+
+/* =========================================================
+   PRESET
+========================================================= */
+
+window.setPreset =
+function(
+    type,
+    button
+){
+
+    document
+        .querySelectorAll(
+            ".preset"
+        )
+        .forEach(
+            b=>
+                b.classList.remove(
+                    "active"
+                )
+        );
+
+    button.classList.add(
+        "active"
+    );
+
+    if(
+        type==="safe"
+    ){
+
+        rainEl.value =
+            40;
+
+        soilEl.value =
+            30;
+
+        forestEl.value =
+            85;
+
+        slopeEl.value =
+            22;
+    }
+
+    if(
+        type==="high"
+    ){
+
+        rainEl.value =
+            185;
+
+        soilEl.value =
+            86;
+
+        forestEl.value =
+            42;
+
+        slopeEl.value =
+            45;
+    }
+
+    if(
+        type==="extreme"
+    ){
+
+        rainEl.value =
+            250;
+
+        soilEl.value =
+            100;
+
+        forestEl.value =
+            12;
+
+        slopeEl.value =
+            58;
+    }
+
+    resetSimulation();
+
+    updateUI();
+};
+
+/* =========================================================
+   SOUND BUTTON
+========================================================= */
+
+window.toggleSound =
+async function(){
+
+    await initAudio();
+
+    if(
+        audioContext &&
+        audioContext.state==="suspended"
+    ){
+
+        try{
+            await audioContext.resume();
+        }
+        catch(e){}
+    }
+
+    soundEnabled =
+        !soundEnabled;
+
+    const btn =
+        document.getElementById(
+            "soundBtn"
+        );
+
+    btn.textContent =
+        soundEnabled
+        ? "🔊 Âm thanh"
+        : "🔇 Tắt tiếng";
+
+    updateAudio();
+};
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+[
+    rainEl,
+    soilEl,
+    forestEl,
+    slopeEl
+]
+.forEach(
+    input=>{
+
+        input.addEventListener(
+            "input",
+            updateUI
+        );
+
+    }
+);
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+window.addEventListener(
+    "resize",
+    ()=>{
+
+        camera.aspect =
+            innerWidth/
+            innerHeight;
+
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(
+            innerWidth,
+            innerHeight
+        );
+    }
+);
+
+/* =========================================================
+   LOOP
+========================================================= */
+
+const clock =
+    new THREE.Clock();
+
+function animate(){
+
+    requestAnimationFrame(
+        animate
+    );
+
+    const delta =
+        Math.min(
+            clock.getDelta(),
+            .033
+        );
+
+    elapsed +=
+        delta;
+
+    updateRain(
+        delta
+    );
+
+    updateFlood(
+        delta
+    );
+
+    controls.update();
+
+    renderer.render(
+        scene,
+        camera
+    );
+}
+
+animate();
+
+/* =========================================================
+   INIT
+========================================================= */
+
+updateUI();
+
+setTimeout(
+    ()=>{
+
+        document
+            .getElementById(
+                "loading"
+            )
+            .classList
+            .add(
+                "hide"
+            );
+
+    },
+    700
+);
+
+</script>
+
+</body>
+</html>
